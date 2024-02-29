@@ -38,9 +38,9 @@
         })
         (builtins.readDir ./hosts);
       devShells.${system}.default = pkgs.mkShellNoCC {
-        packages = [
+        packages = with pkgs; [
           nixos-anywhere.packages.${system}.default
-          pkgs.nixos-rebuild
+          terraform
         ];
       };
     };
