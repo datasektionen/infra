@@ -16,4 +16,6 @@
   programs.fish.enable = true;
 
   services.openssh.enable = true;
+
+  security.sudo.wheelNeedsPassword = false;
 }

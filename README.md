@@ -15,5 +15,5 @@ Now you should be able to SSH to the server with any user from the nixos config
 ## Update the configuration on an existing server
 
 ```sh
-NIX_SSHOPTS="-o RequestTTY=force" nixos-rebuild --flake .#$HOST_NAME --target-host $USER_NAME@$IP_ADDRESS --use-remote-sudo switch
+nixos-rebuild --flake .#$HOST_NAME --target-host $USER_NAME@$IP_ADDRESS --use-remote-sudo switch
 ```
