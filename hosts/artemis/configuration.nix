@@ -6,8 +6,6 @@
     consul
   ];
 
-  disko.devices.disk.disk1.device = "/dev/vda";
-
-  # No touchy touchy!
+  # Change this if you want to lose all data on this machine!
   system.stateVersion = "23.11";
 }
