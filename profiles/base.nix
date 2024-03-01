@@ -10,6 +10,7 @@
   environment.systemPackages = with pkgs; [
     curl
     htop
+    neovim
   ];
 
   environment.enableAllTerminfo = true;

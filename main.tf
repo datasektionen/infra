@@ -4,6 +4,10 @@ terraform {
       source  = "hetznercloud/hcloud"
       version = "1.45.0"
     }
+    sshkey = {
+      source  = "daveadams/sshkey"
+      version = "0.2.1"
+    }
   }
 }
 
@@ -13,9 +17,13 @@ variable "hcloud_token" {
 
 variable "ssh_user" {}
 
-resource "hcloud_ssh_key" "mathm5nfc" {
-  name       = "mathmyubikey5nfc"
-  public_key = "ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBEdUe7mxGdV/Q37RKndPzDHisFb7q/xm+L97jcGluSDOA8MGt/+wTxpyGxfyEqaMvwV2bakaMVHTB3711dDu5kE= m5nfc"
+resource "sshkey_ed25519_key_pair" "bootstrap" {
+  comment = "dsekt-infra-boostrap"
+}
+
+resource "hcloud_ssh_key" "bootstrap" {
+  name       = "dsekt-infra-bootstrap"
+  public_key = sshkey_ed25519_key_pair.bootstrap.public_key
 }
 
 provider "hcloud" {
@@ -26,10 +34,10 @@ resource "hcloud_server" "artemis" {
   name        = "nixos-test"
   image       = "debian-12"
   server_type = "cx11"
-  ssh_keys    = [hcloud_ssh_key.mathm5nfc.id]
+  ssh_keys    = [hcloud_ssh_key.bootstrap.id]
 }
 
-module "deploy" {
+module "artemis_nixos" {
   source                 = "github.com/nix-community/nixos-anywhere//terraform/all-in-one"
   nixos_system_attr      = ".#nixosConfigurations.artemis.config.system.build.toplevel"
   nixos_partitioner_attr = ".#nixosConfigurations.artemis.config.system.build.diskoScript"
@@ -37,8 +45,11 @@ module "deploy" {
   target_host = hcloud_server.artemis.ipv4_address
   instance_id = hcloud_server.artemis.id
 
-  install_user = "root"
-  target_user  = var.ssh_user
+  # this being marked as sensitive hides all output from nixos-anywhere, but that does not print the private key so this is fine
+  install_ssh_key = nonsensitive(sshkey_ed25519_key_pair.bootstrap.private_key_pem)
+  install_user    = "root"
+
+  target_user = var.ssh_user
 }
 
 output "artemis_ipv4" {
