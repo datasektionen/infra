@@ -3,14 +3,19 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-23.11";
+
     disko.url = "github:nix-community/disko";
     disko.inputs.nixpkgs.follows = "nixpkgs";
+
     nixos-anywhere.url = "github:nix-community/nixos-anywhere";
     nixos-anywhere.inputs.nixpkgs.follows = "nixpkgs";
     nixos-anywhere.inputs.disko.follows = "disko";
+
+    agenix.url = "github:ryantm/agenix";
+    agenix.inputs.nixpkgs.follows = "nixpkgs";
   };
 
-  outputs = { self, nixpkgs, flake-utils, disko, nixos-anywhere }:
+  outputs = { self, nixpkgs, flake-utils, disko, nixos-anywhere, agenix }:
     let
       system = "x86_64-linux";
       pkgs = import nixpkgs {
@@ -25,7 +30,7 @@
         (name: _: nixpkgs.lib.nixosSystem {
           inherit system pkgs;
           specialArgs = {
-            inherit disko nixpkgs;
+            inherit nixpkgs disko agenix;
             profiles = lib.rakeLeaves ./profiles;
           };
           modules = [
@@ -41,6 +46,7 @@
         packages = with pkgs; [
           nixos-anywhere.packages.${system}.default
           terraform
+          agenix.packages.${system}.default
         ];
       };
     };

@@ -25,6 +25,10 @@ provider "aws" {
   region = "eu-north-1"
 }
 
+provider "hcloud" {
+  token = var.hcloud_token
+}
+
 variable "hcloud_token" {
   sensitive = true
 }
@@ -38,10 +42,6 @@ resource "sshkey_ed25519_key_pair" "bootstrap" {
 resource "hcloud_ssh_key" "bootstrap" {
   name       = "dsekt-infra-bootstrap"
   public_key = sshkey_ed25519_key_pair.bootstrap.public_key
-}
-
-provider "hcloud" {
-  token = var.hcloud_token
 }
 
 resource "hcloud_server" "artemis" {

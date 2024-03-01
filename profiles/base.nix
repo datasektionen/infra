@@ -1,8 +1,9 @@
-{ profiles, pkgs, ... }:
+{ profiles, pkgs, agenix, ... }:
 {
   imports = with profiles; [
     nix
     users
+    agenix.nixosModules.default
   ];
 
   time.timeZone = "Europe/Stockholm";
