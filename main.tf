@@ -8,7 +8,21 @@ terraform {
       source  = "daveadams/sshkey"
       version = "0.2.1"
     }
+    aws = {
+      source  = "hashicorp/aws"
+      version = "5.39.0"
+    }
   }
+  backend "s3" {
+    bucket         = "dsekt-terraform-state"
+    key            = "terraform.tfstate"
+    region         = "eu-north-1"
+    dynamodb_table = "terraform-lock"
+  }
+}
+
+provider "aws" {
+  region = "eu-north-1"
 }
 
 variable "hcloud_token" {
