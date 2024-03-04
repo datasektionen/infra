@@ -1,6 +1,5 @@
-{ pkgs }:
+{ lib }:
 let
-  inherit (pkgs) lib;
   # From https://github.com/divnix/digga/blob/baa54f8641ee9128cdda8b508553284c331fc9f1/src/importers.nix#L61-L114
   rakeLeaves =
     /*

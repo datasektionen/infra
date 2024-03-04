@@ -22,7 +22,7 @@
         inherit system;
         config.allowUnfree = true;
       };
-      lib = import ./lib.nix { inherit pkgs; };
+      lib = import ./lib.nix { inherit (nixpkgs) lib; };
     in
     {
       formatter.${system} = pkgs.nixpkgs-fmt;
