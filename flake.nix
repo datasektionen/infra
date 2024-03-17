@@ -26,28 +26,30 @@
     in
     {
       formatter.${system} = pkgs.nixpkgs-fmt;
-      nixosConfigurations = builtins.mapAttrs
-        (name: _: nixpkgs.lib.nixosSystem {
-          inherit system pkgs;
-          specialArgs = {
-            inherit nixpkgs disko agenix;
-            profiles = lib.rakeLeaves ./profiles;
-          };
-          modules = [
-            (./hosts + "/${name}/configuration.nix")
-            (_: {
-              networking.hostName = name;
-              hardware.enableRedistributableFirmware = true;
-            })
-          ];
-        })
+      nixosConfigurations = nixpkgs.lib.mapAttrs'
+        (name: _:
+          let hostname = nixpkgs.lib.removeSuffix ".nix" name; in {
+            name = hostname;
+            value = nixpkgs.lib.nixosSystem {
+              inherit system pkgs;
+              specialArgs = {
+                inherit nixpkgs disko agenix;
+                profiles = lib.rakeLeaves ./profiles;
+              };
+              modules = [
+                (./hosts + "/${name}")
+                (_: { networking.hostName = hostname; })
+              ];
+            };
+          })
         (builtins.readDir ./hosts);
       devShells.${system}.default = pkgs.mkShellNoCC {
-        packages = with pkgs; [
+        packages = [
           nixos-anywhere.packages.${system}.default
-          terraform
           agenix.packages.${system}.default
-        ];
+        ] ++ (with pkgs; [
+          terraform
+        ]);
       };
     };
 }
