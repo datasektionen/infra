@@ -4,9 +4,10 @@ let
     "age1yubikey1qtppenqpqjtll78q0tfcgnm4dczy7nakmj5l2z3syyqfcq27kqx32hh72rt"
   ];
 
-  artemis = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIbs8rhtszom2dNh/rxwH6fXAQVfgS4e6+1kE4OPOBb0";
+  artemis = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIN3xEFePyg+IyPPJdZxgfmmkDMupJJa1oBRHDozNIMvf";
 in
 {
-  # must be formatted as `encrypt = "base64keythatis32byteslong"`
   "consul-gossip-key.hcl.age".publicKeys = mathm ++ [ artemis ];
+  "authentik-postgres-password.env.age".publicKeys = mathm ++ [ artemis ];
+  "authentik-secret-key.env.age".publicKeys = mathm ++ [ artemis ];
 }

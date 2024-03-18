@@ -3,6 +3,7 @@ let
   device = "ens3";
 in
 {
+  # `encrypt = "base64keythatis32byteslong"`
   age.secrets.consul-gossip-key = {
     file = ../secrets/consul-gossip-key.hcl.age;
     name = "gossip-key.hcl";
