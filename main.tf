@@ -1,5 +1,13 @@
 terraform {
   required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "5.39.0"
+    }
+    cloudflare = {
+      source  = "cloudflare/cloudflare"
+      version = "4.26.0"
+    }
     hcloud = {
       source  = "hetznercloud/hcloud"
       version = "1.45.0"
@@ -7,10 +15,6 @@ terraform {
     sshkey = {
       source  = "daveadams/sshkey"
       version = "0.2.1"
-    }
-    aws = {
-      source  = "hashicorp/aws"
-      version = "5.39.0"
     }
   }
   backend "s3" {
@@ -25,8 +29,16 @@ provider "aws" {
   region = "eu-north-1"
 }
 
+provider "cloudflare" {
+  api_token = var.cloudflare_api_token
+}
+
 provider "hcloud" {
   token = var.hcloud_token
+}
+
+variable "cloudflare_api_token" {
+  sensitive = true
 }
 
 variable "hcloud_token" {
@@ -64,6 +76,17 @@ module "artemis_nixos" {
   install_user    = "root"
 
   target_user = var.ssh_user
+}
+
+data "cloudflare_zone" "betasektionen" {
+  name = "betasektionen.se"
+}
+
+resource "cloudflare_record" "artemis" {
+  name = "artemis"
+  type = "A"
+  zone_id = data.cloudflare_zone.betasektionen.id
+  value = hcloud_server.artemis.ipv4_address
 }
 
 output "artemis_ipv4" {
