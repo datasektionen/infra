@@ -1,19 +1,30 @@
 { config, ... }:
+let
+  authentikEnv = {
+    AUTHENTIK_REDIS__HOST = "host.docker.internal";
+    AUTHENTIK_REDIS__PASSWORD = "authentik";
+    AUTHENTIK_REDIS__PORT = toString config.services.redis.servers.authentik.port;
+    AUTHENTIK_POSTGRESQL__HOST = "host.docker.internal";
+    AUTHENTIK_POSTGRESQL__USER = "authentik";
+    AUTHENTIK_POSTGRESQL__NAME = "authentik";
+
+    AUTHENTIK_EMAIL__HOST = "email-smtp.eu-north-1.amazonaws.com";
+    AUTHENTIK_EMAIL__PORT = "587";
+    AUTHENTIK_EMAIL__USE_TLS = "true";
+    AUTHENTIK_EMAIL__USE_SSL = "false";
+    AUTHENTIK_EMAIL__TIMEOUT = "10";
+    AUTHENTIK_EMAIL__FROM = "no-reply@datasektionen.se";
+  };
+in
 {
   virtualisation.oci-containers.containers.authentik-server = {
     image = "ghcr.io/goauthentik/server:2024.2.2";
     cmd = [ "server" ];
-    environment = {
-      AUTHENTIK_REDIS__HOST = "host.docker.internal";
-      AUTHENTIK_REDIS__PASSWORD = "authentik";
-      AUTHENTIK_REDIS__PORT = toString config.services.redis.servers.authentik.port;
-      AUTHENTIK_POSTGRESQL__HOST = "host.docker.internal";
-      AUTHENTIK_POSTGRESQL__USER = "authentik";
-      AUTHENTIK_POSTGRESQL__NAME = "authentik";
-    };
+    environment = authentikEnv;
     environmentFiles = [
       config.age.secrets.authentik-postgres-password.path
       config.age.secrets.authentik-secret-key.path
+      config.age.secrets.authentik-email-credentials.path
     ];
     volumes = [
       "authentik-media:/media"
@@ -25,17 +36,11 @@
   virtualisation.oci-containers.containers.authentik-worker = {
     image = "ghcr.io/goauthentik/server:2024.2.2";
     cmd = [ "worker" ];
-    environment = {
-      AUTHENTIK_REDIS__HOST = "host.docker.internal";
-      AUTHENTIK_REDIS__PASSWORD = "authentik";
-      AUTHENTIK_REDIS__PORT = toString config.services.redis.servers.authentik.port;
-      AUTHENTIK_POSTGRESQL__HOST = "host.docker.internal";
-      AUTHENTIK_POSTGRESQL__USER = "authentik";
-      AUTHENTIK_POSTGRESQL__NAME = "authentik";
-    };
+    environment = authentikEnv;
     environmentFiles = [
       config.age.secrets.authentik-postgres-password.path
       config.age.secrets.authentik-secret-key.path
+      config.age.secrets.authentik-email-credentials.path
     ];
     user = "root";
     volumes = [
@@ -102,4 +107,6 @@
   # `AUTHENTIK_POSTGRESQL__PASSWORD=...`
   age.secrets.authentik-postgres-password.file = ../secrets/authentik-postgres-password.env.age;
   age.secrets.authentik-secret-key.file = ../secrets/authentik-secret-key.env.age;
+  # `AUTHENTIK_EMAIL__USERNAME=...` & `AUTHENTIK_EMAIL__PASSWORD=...`
+  age.secrets.authentik-email-credentials.file = ../secrets/authentik-email-credentials.env.age;
 }

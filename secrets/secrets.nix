@@ -10,4 +10,5 @@ in
   "consul-gossip-key.hcl.age".publicKeys = mathm ++ [ artemis ];
   "authentik-postgres-password.env.age".publicKeys = mathm ++ [ artemis ];
   "authentik-secret-key.env.age".publicKeys = mathm ++ [ artemis ];
+  "authentik-email-credentials.env.age".publicKeys = mathm ++ [ artemis ];
 }
