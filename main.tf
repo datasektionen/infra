@@ -57,7 +57,7 @@ resource "hcloud_ssh_key" "bootstrap" {
 }
 
 resource "hcloud_server" "artemis" {
-  name        = "nixos-test"
+  name        = "artemis"
   image       = "debian-12"
   server_type = "cx11"
   ssh_keys    = [hcloud_ssh_key.bootstrap.id]

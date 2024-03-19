@@ -74,6 +74,8 @@
     bind = "10.88.0.1";
     openFirewall = true;
   };
+  # This ensured that the podman network interface exists, which is needed to bind to that address
+  systemd.services.redis-authentik.after = [ "podman-authentik-server.service" ];
 
   networking.firewall.allowedTCPPorts = [ 5432 80 443 ];
 

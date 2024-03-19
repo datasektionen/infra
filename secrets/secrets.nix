@@ -4,7 +4,7 @@ let
     "age1yubikey1qtppenqpqjtll78q0tfcgnm4dczy7nakmj5l2z3syyqfcq27kqx32hh72rt"
   ];
 
-  artemis = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIN3xEFePyg+IyPPJdZxgfmmkDMupJJa1oBRHDozNIMvf";
+  artemis = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGGbzS7zU/PTWtsXhBymFN570ZPU1c2OenEy6+rXjWoC";
 in
 {
   "consul-gossip-key.hcl.age".publicKeys = mathm ++ [ artemis ];
