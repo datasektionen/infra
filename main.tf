@@ -89,6 +89,9 @@ resource "cloudflare_record" "artemis" {
   value = hcloud_server.artemis.ipv4_address
 }
 
-output "artemis_ipv4" {
-  value = hcloud_server.artemis.ipv4_address
+resource "cloudflare_record" "artemis_wildcard" {
+  name = "*.artemis"
+  type = "CNAME"
+  zone_id = data.cloudflare_zone.betasektionen.id
+  value = cloudflare_record.artemis.hostname
 }
