@@ -30,7 +30,7 @@ in
       "authentik-media:/media"
       "authentik-templates:/templates"
     ];
-    ports = [ "9000:9000" "9443:9443" ];
+    ports = [ "127.0.0.1:9000:9000" ];
   };
 
   virtualisation.oci-containers.containers.authentik-worker = {
