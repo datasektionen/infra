@@ -7,8 +7,13 @@ let
   artemis = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGGbzS7zU/PTWtsXhBymFN570ZPU1c2OenEy6+rXjWoC";
 in
 {
+  # `encrypt = "base64keythatis32byteslong"`
   "consul-gossip-key.hcl.age".publicKeys = mathm ++ [ artemis ];
+
+  # `AUTHENTIK_POSTGRESQL__PASSWORD=...`
   "authentik-postgres-password.env.age".publicKeys = mathm ++ [ artemis ];
+  # `AUTHENTIK_SECRET_KEY=base64string`
   "authentik-secret-key.env.age".publicKeys = mathm ++ [ artemis ];
+  # `AUTHENTIK_EMAIL__USERNAME=string\nAUTHENTIK_EMAIL__PASSWORD=string`
   "authentik-email-credentials.env.age".publicKeys = mathm ++ [ artemis ];
 }

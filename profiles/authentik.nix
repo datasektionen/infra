@@ -1,4 +1,4 @@
-{ config, ... }:
+{ config, secretsDir, ... }:
 let
   authentikEnv = {
     AUTHENTIK_REDIS__HOST = "host.docker.internal";
@@ -53,7 +53,7 @@ in
   services.postgresql = {
     enable = true;
     ensureDatabases = [ "authentik" ];
-    ensureUsers = [ { name = "authentik"; ensureDBOwnership = true; } ];
+    ensureUsers = [{ name = "authentik"; ensureDBOwnership = true; }];
     enableTCPIP = true;
     authentication = ''
       host authentik authentik 10.88.0.0/16 trust
@@ -63,7 +63,7 @@ in
   systemd.services.postgresql-set-authentik-password = {
     serviceConfig.Type = "oneshot";
     requiredBy = [ "podman-authentik-server.service" "podman-authentik-worker.service" ];
-    after = ["postgresql.service"];
+    after = [ "postgresql.service" ];
     path = [ config.services.postgresql.package ];
     script = ''
       source ${config.age.secrets.authentik-postgres-password.path}
@@ -79,7 +79,7 @@ in
     bind = "10.88.0.1";
     openFirewall = true;
   };
-  # This ensured that the podman network interface exists, which is needed to bind to that address
+  # This ensures that the podman network interface exists, which is needed to bind to that address
   systemd.services.redis-authentik.after = [ "podman-authentik-server.service" ];
 
   networking.firewall.allowedTCPPorts = [ 5432 80 443 ];
@@ -104,9 +104,7 @@ in
   };
   users.users.nginx.extraGroups = [ "acme" ];
 
-  # `AUTHENTIK_POSTGRESQL__PASSWORD=...`
-  age.secrets.authentik-postgres-password.file = ../secrets/authentik-postgres-password.env.age;
-  age.secrets.authentik-secret-key.file = ../secrets/authentik-secret-key.env.age;
-  # `AUTHENTIK_EMAIL__USERNAME=...` & `AUTHENTIK_EMAIL__PASSWORD=...`
-  age.secrets.authentik-email-credentials.file = ../secrets/authentik-email-credentials.env.age;
+  age.secrets.authentik-postgres-password.file = "${secretsDir}/authentik-postgres-password.env.age";
+  age.secrets.authentik-secret-key.file = "${secretsDir}/authentik-secret-key.env.age";
+  age.secrets.authentik-email-credentials.file = "${secretsDir}/authentik-email-credentials.env.age";
 }

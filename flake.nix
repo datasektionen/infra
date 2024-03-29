@@ -35,6 +35,7 @@
               specialArgs = {
                 inherit nixpkgs disko agenix;
                 profiles = lib.rakeLeaves ./profiles;
+                secretsDir = ./secrets;
               };
               modules = [
                 (./hosts + "/${name}")
