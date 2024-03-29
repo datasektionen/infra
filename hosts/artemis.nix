@@ -3,7 +3,7 @@
   imports = with profiles; [
     hetzner-cloud
     base
-    consul
+    consul.server
     authentik
   ];
 
