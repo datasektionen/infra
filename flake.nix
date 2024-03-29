@@ -15,7 +15,7 @@
     agenix.inputs.nixpkgs.follows = "nixpkgs";
   };
 
-  outputs = { self, nixpkgs, flake-utils, disko, nixos-anywhere, agenix }:
+  outputs = { self, nixpkgs, disko, nixos-anywhere, agenix }:
     let
       system = "x86_64-linux";
       pkgs = import nixpkgs {
@@ -50,6 +50,7 @@
           agenix.packages.${system}.default
         ] ++ (with pkgs; [
           terraform
+          consul
         ]);
       };
     };
