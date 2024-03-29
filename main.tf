@@ -51,6 +51,14 @@ variable "hcloud_token" {
 
 variable "ssh_user" {}
 
+data "cloudflare_zone" "betasektionen" {
+  name = "betasektionen.se"
+}
+
+data "cloudflare_zone" "datasektionen" {
+  name = "datasektionen.se"
+}
+
 resource "sshkey_ed25519_key_pair" "bootstrap" {
   comment = "dsekt-infra-boostrap"
 }
@@ -60,20 +68,23 @@ resource "hcloud_ssh_key" "bootstrap" {
   public_key = sshkey_ed25519_key_pair.bootstrap.public_key
 }
 
-resource "hcloud_server" "artemis" {
-  name        = "artemis"
+resource "hcloud_server" "servers" {
+  for_each    = toset(["artemis"])
+  name        = each.key
   image       = "debian-12"
   server_type = "cx11"
   ssh_keys    = [hcloud_ssh_key.bootstrap.id]
 }
 
-module "artemis_nixos" {
-  source                 = "github.com/nix-community/nixos-anywhere//terraform/all-in-one"
-  nixos_system_attr      = ".#nixosConfigurations.artemis.config.system.build.toplevel"
-  nixos_partitioner_attr = ".#nixosConfigurations.artemis.config.system.build.diskoScript"
+module "nixos_install" {
+  for_each = hcloud_server.servers
 
-  target_host = hcloud_server.artemis.ipv4_address
-  instance_id = hcloud_server.artemis.id
+  source                 = "github.com/nix-community/nixos-anywhere//terraform/all-in-one"
+  nixos_system_attr      = ".#nixosConfigurations.${each.value.name}.config.system.build.toplevel"
+  nixos_partitioner_attr = ".#nixosConfigurations.${each.value.name}.config.system.build.diskoScript"
+
+  target_host = each.value.ipv4_address
+  instance_id = each.value.id
 
   # this being marked as sensitive hides all output from nixos-anywhere, but that does not print the private key so this is fine
   install_ssh_key = nonsensitive(sshkey_ed25519_key_pair.bootstrap.private_key_pem)
@@ -82,26 +93,22 @@ module "artemis_nixos" {
   target_user = var.ssh_user
 }
 
-data "cloudflare_zone" "betasektionen" {
-  name = "betasektionen.se"
-}
+resource "cloudflare_record" "server_name" {
+  for_each = hcloud_server.servers
 
-data "cloudflare_zone" "datasektionen" {
-  name = "datasektionen.se"
-}
-
-resource "cloudflare_record" "artemis" {
-  name    = "artemis"
+  name    = each.value.name
   type    = "A"
   zone_id = data.cloudflare_zone.betasektionen.id
-  value   = hcloud_server.artemis.ipv4_address
+  value   = each.value.ipv4_address
 }
 
-resource "cloudflare_record" "artemis_wildcard" {
-  name    = "*.artemis"
-  type    = "CNAME"
+resource "cloudflare_record" "server_wildcard" {
+  for_each = hcloud_server.servers
+
+  name    = "*.${each.value.name}"
+  type    = "A"
   zone_id = data.cloudflare_zone.betasektionen.id
-  value   = cloudflare_record.artemis.hostname
+  value   = each.value.ipv4_address
 }
 
 resource "aws_ses_domain_identity" "datasektionen" {
