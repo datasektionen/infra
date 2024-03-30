@@ -51,6 +51,7 @@
         ] ++ (with pkgs; [
           terraform
           consul
+          age
         ]);
       };
     };
