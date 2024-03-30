@@ -1,6 +1,7 @@
 { config, secretsDir, ... }:
 let
   device = "ens3";
+  servers = [ "zeus.betasektionen.se" "poseidon.betasektionen.se" "hades.betasektionen.se" ];
 in
 {
   age.secrets.consul-gossip-key = {
@@ -18,7 +19,8 @@ in
     extraConfig = {
       node_name = config.networking.hostName;
       server = true;
-      bootstrap_expect = 1;
+      bootstrap_expect = builtins.length servers;
+      retry_join = servers;
       client_addr = "0.0.0.0";
       bind_addr = "0.0.0.0";
       acl = {

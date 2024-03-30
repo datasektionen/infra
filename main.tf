@@ -69,7 +69,7 @@ resource "hcloud_ssh_key" "bootstrap" {
 }
 
 resource "hcloud_server" "servers" {
-  for_each    = toset(["artemis"])
+  for_each    = toset(["artemis", "zeus", "hades", "poseidon"])
   name        = each.key
   image       = "debian-12"
   server_type = "cx11"
