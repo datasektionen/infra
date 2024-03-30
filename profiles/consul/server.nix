@@ -4,14 +4,6 @@ let
   servers = [ "zeus.betasektionen.se" "poseidon.betasektionen.se" "hades.betasektionen.se" ];
 in
 {
-  age.secrets.consul-gossip-key = {
-    file = "${secretsDir}/consul-gossip-key.hcl.age";
-    name = "gossip-key.hcl";
-    owner = "consul";
-    group = "consul";
-    mode = "440";
-  };
-
   services.consul = {
     enable = true;
     webUi = true;
@@ -33,4 +25,12 @@ in
   };
 
   networking.firewall.allowedTCPPorts = [ 8600 8500 8501 8502 8503 8300 8301 8302 ];
+
+  age.secrets.consul-gossip-key = {
+    file = secretsDir + "/consul-gossip-key.hcl.age";
+    name = "gossip-key.hcl";
+    owner = "consul";
+    group = "consul";
+    mode = "440";
+  };
 }

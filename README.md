@@ -25,3 +25,43 @@ To access this state (and locking), you need valid credentials to do so. These a
 Secrets that need to be deployed are handled with [agenix](https://github.com/ryantm/agenix).
 
 They are stored in `secrets/<name>.age` and encrypted with the ssh/age keys specified in `secrets/secrets.nix`.
+
+## Nomad
+
+Nomad agents need permission to talk to consul. They need a policy created like:
+```sh
+consul acl policy create -name "nomad-auto-join" -rules=- <<HCL
+acl = "write"
+
+agent_prefix "" {
+    policy = "write"
+}
+
+event_prefix "" {
+    policy = "write"
+}
+
+key_prefix "" {
+    policy = "write"
+}
+
+node_prefix "" {
+    policy = "write"
+}
+
+query_prefix "" {
+    policy = "write"
+}
+
+service_prefix "" {
+    policy = "write"
+}
+HCL
+```
+
+And a token can be created with (last line only needed if you want to reuse a saved secret):
+```sh
+consul acl token create \
+  -description "Nomad auto-join token" -policy-name "nomad-auto-join" \
+  -secret=$(age -i "$AGE_IDENTITY" -d secrets/nomad-consul-token.env.age | awk -F= '{print $2}')
+```

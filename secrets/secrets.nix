@@ -12,6 +12,8 @@ in
 {
   # `encrypt = "base64keythatis32byteslong"`
   "consul-gossip-key.hcl.age".publicKeys = mathm ++ [ zeus poseidon hades ];
+  # `CONSUL_HTTP_TOKEN=uuid`
+  "nomad-consul-token.env.age".publicKeys = mathm ++ [ zeus poseidon hades ];
 
   # `AUTHENTIK_POSTGRESQL__PASSWORD=...`
   "authentik-postgres-password.env.age".publicKeys = mathm ++ [ artemis ];

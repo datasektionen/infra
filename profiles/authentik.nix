@@ -104,7 +104,7 @@ in
   };
   users.users.nginx.extraGroups = [ "acme" ];
 
-  age.secrets.authentik-postgres-password.file = "${secretsDir}/authentik-postgres-password.env.age";
-  age.secrets.authentik-secret-key.file = "${secretsDir}/authentik-secret-key.env.age";
-  age.secrets.authentik-email-credentials.file = "${secretsDir}/authentik-email-credentials.env.age";
+  age.secrets.authentik-postgres-password.file = secretsDir + "/authentik-postgres-password.env.age";
+  age.secrets.authentik-secret-key.file = secretsDir + "/authentik-secret-key.env.age";
+  age.secrets.authentik-email-credentials.file = secretsDir + "/authentik-email-credentials.env.age";
 }
