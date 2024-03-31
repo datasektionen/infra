@@ -21,6 +21,7 @@
         http = true;
         rpc = true;
       };
+      acl.enabled = true;
     };
     credentials."gossip_key.json" = config.age.secrets.nomad-gossip-key.path;
   };

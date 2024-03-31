@@ -26,7 +26,13 @@ Secrets that need to be deployed are handled with [agenix](https://github.com/ry
 
 They are stored in `secrets/<name>.age` and encrypted with the ssh/age keys specified in `secrets/secrets.nix`.
 
-## Nomad
+## ACLs
+
+After starting up the consul cluster, it's ACL must be bootstrapped with:
+```sh
+consul acl bootstrap
+```
+This will print out the `SecretID` of a token with all permissions. This should be saved somewhere safe. (You can put in in the environment variable `CONSUL_HTTP_TOKEN`) to get permission to run the following `consul` commands.
 
 Nomad agents need permission to talk to consul. They need a policy created like:
 ```sh
@@ -64,6 +70,11 @@ And a token can be created with (last line only needed if you want to reuse a sa
 consul acl token create \
   -description "Nomad auto-join token" -policy-name "nomad-auto-join" \
   -secret=$(age -i "$AGE_IDENTITY" -d secrets/nomad-consul-token.env.age | awk -F= '{print $2}')
+```
+
+Then Nomad's ACL also needs to be bootstrapped with:
+```sh
+nomad acl bootstrap
 ```
 
 ## Certificates
