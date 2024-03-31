@@ -13,6 +13,7 @@ user="$2"
 age -d -i "$AGE_IDENTITY" "secrets/consul-agent-ca-key.pem.age" | consul tls cert create \
     -ca=./files/consul-agent-ca.pem -key=/dev/stdin \
     -additional-dnsname="$host.betasektionen.se" \
+    -additional-dnsname="server.global.nomad" \
     -node="$host" \
     -server
 

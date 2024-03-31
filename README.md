@@ -65,3 +65,10 @@ consul acl token create \
   -description "Nomad auto-join token" -policy-name "nomad-auto-join" \
   -secret=$(age -i "$AGE_IDENTITY" -d secrets/nomad-consul-token.env.age | awk -F= '{print $2}')
 ```
+
+## Certificates
+
+Both Consul and Nomad need certificates to communicate within a cluster securely. We have a CA created by the consul cli located at `files/consul-agent-ca.pem` with the key (encrypted) at `secrets/consul-agent-ca-key.pem.age`. You can create a certificate and key and move it to a server so that both consul and nomad can use it using:
+```sh
+./scripts/provision-cert.sh <hostname> <your ssh user>
+```
