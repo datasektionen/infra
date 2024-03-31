@@ -1,9 +1,8 @@
 #!/bin/sh
 
-set -eou pipefail
+set -euo pipefail
 
 host="$1"
-user="$2"
 
 [ -f "dc1-server-consul-0.pem" ] && echo "Found existing cert. Remove or rename it first!" && exit 1
 
@@ -18,11 +17,11 @@ age -d -i "$AGE_IDENTITY" "secrets/consul-agent-ca-key.pem.age" | consul tls cer
     -server
 
 scp dc1-server-consul-0.pem dc1-server-consul-0-key.pem \
-    "$user@$host.betasektionen.se":/tmp/
+    "$SSH_USER@$host.betasektionen.se":/tmp/
 
 rm dc1-server-consul-0.pem dc1-server-consul-0-key.pem
 
-ssh "$user@$host.betasektionen.se" sudo rsync \
+ssh "$SSH_USER@$host.betasektionen.se" sudo rsync \
     --remove-source-files --chown=consul:consul \
     /tmp/dc1-server-consul-0.pem /tmp/dc1-server-consul-0-key.pem \
     /var/lib/consul-certs/
