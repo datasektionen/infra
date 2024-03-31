@@ -2,3 +2,4 @@
 .terraform/
 .env
 secrets/identity*
+*-key.pem

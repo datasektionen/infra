@@ -27,5 +27,7 @@ in
   "zeus_ssh_host_ed25519_key.age".publicKeys = mathm;
   "poseidon_ssh_host_ed25519_key.age".publicKeys = mathm;
   "hades_ssh_host_ed25519_key.age".publicKeys = mathm;
+
+  "consul-agent-ca-key.pem.age".publicKeys = mathm;
 }
 
