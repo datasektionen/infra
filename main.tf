@@ -92,7 +92,7 @@ module "nixos_install" {
 
   target_user = var.ssh_user
 
-  extra_files_script = "${path.module}/get_host_keys.sh"
+  extra_files_script = "${path.module}/scripts/get-host-keys.sh"
   extra_environment  = { host = each.value.name }
 }
 
