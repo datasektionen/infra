@@ -14,6 +14,8 @@ in
   "consul-gossip-key.hcl.age".publicKeys = mathm ++ [ zeus poseidon hades ];
   # `CONSUL_HTTP_TOKEN=uuid`
   "nomad-consul-token.env.age".publicKeys = mathm ++ [ zeus poseidon hades ];
+  # `{"server":{"encrypt":"base64urlkeythatis32byteslong"}}`
+  "nomad-gossip-key.json.age".publicKeys = mathm ++ [ zeus poseidon hades ];
 
   # `AUTHENTIK_POSTGRESQL__PASSWORD=...`
   "authentik-postgres-password.env.age".publicKeys = mathm ++ [ artemis ];
@@ -26,3 +28,4 @@ in
   "poseidon_ssh_host_ed25519_key.age".publicKeys = mathm;
   "hades_ssh_host_ed25519_key.age".publicKeys = mathm;
 }
+
