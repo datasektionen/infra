@@ -17,8 +17,8 @@
       };
       tls.defaults = {
         ca_file = ../../files/consul-agent-ca.pem;
-        cert_file = "/var/lib/consul-certs/dc1-server-consul-0.pem";
-        key_file = "/var/lib/consul-certs/dc1-server-consul-0-key.pem";
+        cert_file = "/var/lib/consul-certs/dc1-consul-0.pem";
+        key_file = "/var/lib/consul-certs/dc1-consul-0-key.pem";
         verify_outgoing = true;
       };
     };

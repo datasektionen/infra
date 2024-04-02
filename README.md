@@ -81,5 +81,5 @@ nomad acl bootstrap
 
 Both Consul and Nomad need certificates to communicate within a cluster securely. We have a CA created by the consul cli located at `files/consul-agent-ca.pem` with the key (encrypted) at `secrets/consul-agent-ca-key.pem.age`. You can create a certificate and key and move it to a server so that both consul and nomad can use it using:
 ```sh
-./scripts/provision-cert.sh <hostname>
+./scripts/provision-cert.sh <"client"|"server"> <hostname>
 ```
