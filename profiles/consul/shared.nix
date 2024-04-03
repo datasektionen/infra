@@ -10,7 +10,10 @@
       client_addr = "0.0.0.0";
       bind_addr = "0.0.0.0";
       advertise_addr = "{{ GetPublicIP }}";
-      ports.https = 8501;
+      ports = {
+        https = 8501;
+        grpc_tls = 8503;
+      };
       acl = {
         enabled = true;
         default_policy = "deny";
