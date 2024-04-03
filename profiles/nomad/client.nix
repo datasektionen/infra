@@ -1,4 +1,4 @@
-{ profiles, ... }:
+{ pkgs, profiles, ... }:
 {
   imports = [ profiles.nomad.shared ];
 
@@ -6,7 +6,11 @@
     dropPrivileges = false;
     enableDocker = true;
     settings = {
-      client.enabled = true;
+      client = {
+        enabled = true;
+        cni_path = "${pkgs.cni-plugins}/bin";
+      };
     };
+    extraPackages = with pkgs; [ consul ];
   };
 }
