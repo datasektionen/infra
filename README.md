@@ -36,7 +36,7 @@ This will print out the `SecretID` of a token with all permissions. This should 
 
 Nomad agents need permission to talk to consul. They need a policy created like:
 ```sh
-consul acl policy create -name "nomad-auto-join" -rules=- <<HCL
+echo '
 acl = "write"
 
 agent_prefix "" {
@@ -62,7 +62,7 @@ query_prefix "" {
 service_prefix "" {
     policy = "write"
 }
-HCL
+' | consul acl policy create -name "nomad-auto-join" -rules=-
 ```
 
 And a token can be created with (last line only needed if you want to reuse a saved secret):
