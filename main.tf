@@ -69,15 +69,41 @@ resource "hcloud_ssh_key" "bootstrap" {
 }
 
 resource "hcloud_server" "servers" {
-  for_each    = toset(["artemis", "zeus", "poseidon", "hades", "ares"])
+  for_each    = toset(["artemis"])
   name        = each.key
   image       = "debian-12"
   server_type = "cx11"
   ssh_keys    = [hcloud_ssh_key.bootstrap.id]
 }
 
+resource "hcloud_server" "cluster_servers" {
+  for_each    = toset(["zeus", "poseidon", "hades"])
+  name        = each.key
+  image       = "debian-12"
+  server_type = "cx11"
+  ssh_keys    = [hcloud_ssh_key.bootstrap.id]
+}
+
+resource "hcloud_server" "cluster_clients" {
+  for_each    = toset(["ares"])
+  name        = each.key
+  image       = "debian-12"
+  server_type = "cx11"
+  ssh_keys    = [hcloud_ssh_key.bootstrap.id]
+}
+
+locals {
+  all_hosts = merge(hcloud_server.servers, hcloud_server.cluster_servers, hcloud_server.cluster_clients)
+  cluster_roles = {
+    for h, _ in local.all_hosts : h =>
+    contains(keys(hcloud_server.cluster_servers), h) ? "server"
+    : contains(keys(hcloud_server.cluster_clients), h) ? "client"
+    : ""
+  }
+}
+
 module "nixos_install" {
-  for_each = hcloud_server.servers
+  for_each = local.all_hosts
 
   source                 = "github.com/nix-community/nixos-anywhere//terraform/all-in-one"
   nixos_system_attr      = ".#nixosConfigurations.${each.value.name}.config.system.build.toplevel"
@@ -92,12 +118,15 @@ module "nixos_install" {
 
   target_user = var.ssh_user
 
-  extra_files_script = "${path.module}/scripts/get-host-keys.sh"
-  extra_environment  = { host = each.value.name }
+  extra_files_script = "${path.module}/scripts/get_new_host_files.sh"
+  extra_environment = {
+    host = each.value.name,
+    role = local.cluster_roles[each.value.name],
+  }
 }
 
 resource "cloudflare_record" "server_name" {
-  for_each = hcloud_server.servers
+  for_each = local.all_hosts
 
   name    = each.value.name
   type    = "A"
@@ -106,7 +135,7 @@ resource "cloudflare_record" "server_name" {
 }
 
 resource "cloudflare_record" "server_wildcard" {
-  for_each = hcloud_server.servers
+  for_each = local.all_hosts
 
   name    = "*.${each.value.name}"
   type    = "A"

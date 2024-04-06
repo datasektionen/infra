@@ -28,8 +28,8 @@
   systemd.services.nomad.serviceConfig = {
     EnvironmentFile = config.age.secrets.nomad-consul-token.path;
     LoadCredential = [
-      "cert.pem:/var/lib/consul-certs/dc1-consul-0.pem"
-      "key.pem:/var/lib/consul-certs/dc1-consul-0-key.pem"
+      "cert.pem:/var/lib/consul-certs/nomad-consul-cert.pem"
+      "key.pem:/var/lib/consul-certs/nomad-consul-key.pem"
     ];
   };
 

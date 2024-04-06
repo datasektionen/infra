@@ -79,7 +79,7 @@ nomad acl bootstrap
 
 ## Certificates
 
-Both Consul and Nomad need certificates to communicate within a cluster securely. We have a CA created by the consul cli located at `files/consul-agent-ca.pem` with the key (encrypted) at `secrets/consul-agent-ca-key.pem.age`. You can create a certificate and key and move it to a server so that both consul and nomad can use it using:
+Both Consul and Nomad need certificates to communicate within a cluster securely. We have a CA created by the consul cli located at `files/consul-agent-ca.pem` with the key at `secrets/consul-agent-ca-key.pem.age` (encrypted). When a server is created anew by terraform, a certificate for it will automatically be created and moved to the correct place, but it will need to be renewed after some time, which can be done bu running:
 ```sh
 ./scripts/provision-cert.sh <"client"|"server"> <hostname>
 ```

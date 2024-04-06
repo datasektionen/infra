@@ -17,27 +17,27 @@ case "$kind" in
     *) usage;;
 esac
 
+repo=$(realpath "$(dirname $0)/..")
+
+[ -f "$repo/consul-agent-ca-key.pem" ] || age -d -i "$AGE_IDENTITY" \
+    -o "$repo/consul-agent-ca-key.pem" "$repo/secrets/consul-agent-ca-key.pem.age"
+
 [ -f "dc1-server-consul-0.pem" ] && echo "Found existing cert. Remove or rename it first!" && exit 1
 [ -f "dc1-client-consul-0.pem" ] && echo "Found existing cert. Remove or rename it first!" && exit 1
 
-[ -f "consul-agent-ca-key.pem" ] || age -d -i "$AGE_IDENTITY" \
-    -o "consul-agent-ca-key.pem" "secrets/consul-agent-ca-key.pem.age"
-
 consul tls cert create \
-    -ca=./files/consul-agent-ca.pem -key=./consul-agent-ca-key.pem \
+    -ca=$repo/files/consul-agent-ca.pem -key=$repo/consul-agent-ca-key.pem \
     -additional-dnsname="$host.betasektionen.se" \
-    -additional-dnsname=$([ "$kind" = "server" ] && echo "server.global.nomad" || eho "client.global.nomad") \
+    -additional-dnsname=$([ "$kind" = "server" ] && echo "server.global.nomad" || echo "client.global.nomad") \
     $([ "$kind" = "server" ] && echo -node="$host" -server || echo -client)
 
-mv dc1-$([ "$kind" = "server" ] && echo server || echo client)-consul-0.pem     dc1-consul-0.pem
-mv dc1-$([ "$kind" = "server" ] && echo server || echo client)-consul-0-key.pem dc1-consul-0-key.pem
+mv dc1-$([ "$kind" = "server" ] && echo server || echo client)-consul-0.pem \
+    nomad-consul-cert.pem
+mv dc1-$([ "$kind" = "server" ] && echo server || echo client)-consul-0-key.pem \
+    nomad-consul-key.pem
 
-scp dc1-consul-0.pem dc1-consul-0-key.pem \
-    "$SSH_USER@$host.betasektionen.se":/tmp/
-
-rm dc1-consul-0.pem dc1-consul-0-key.pem
-
-ssh "$SSH_USER@$host.betasektionen.se" sudo rsync \
-    --remove-source-files --chown=consul:consul \
-    /tmp/dc1-consul-0.pem /tmp/dc1-consul-0-key.pem \
-    /var/lib/consul-certs/
+if [[ "${DONT_MOVE:-"0"}" == "0" ]]; then
+    rsync --rsync-path="sudo rsync" --remove-source-files --chown=root:root \
+        nomad-consul-cert.pem nomad-consul-key.pem \
+        mathm@ares.betasektionen.se:/var/lib/consul-certs/
+fi

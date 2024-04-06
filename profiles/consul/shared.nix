@@ -20,13 +20,17 @@
       };
       tls.defaults = {
         ca_file = ../../files/consul-agent-ca.pem;
-        cert_file = "/var/lib/consul-certs/dc1-consul-0.pem";
-        key_file = "/var/lib/consul-certs/dc1-consul-0-key.pem";
+        cert_file = "/run/credentials/consul.service/cert.pem";
+        key_file = "/run/credentials/consul.service/key.pem";
         verify_outgoing = true;
       };
     };
     extraConfigFiles = [ config.age.secrets.consul-gossip-key.path ];
   };
+  systemd.services.consul.serviceConfig.LoadCredential = [
+    "cert.pem:/var/lib/consul-certs/nomad-consul-cert.pem"
+    "key.pem:/var/lib/consul-certs/nomad-consul-key.pem"
+  ];
 
   networking.firewall.allowedTCPPorts = [
     8600 # dns
