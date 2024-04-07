@@ -18,10 +18,10 @@ terraform {
     }
   }
   backend "s3" {
-    bucket         = "dsekt-terraform-state"
+    bucket         = "dsekt-tf-state"
     key            = "terraform.tfstate"
     region         = "eu-north-1"
-    dynamodb_table = "terraform-lock"
+    dynamodb_table = "tf-lock"
   }
 }
 

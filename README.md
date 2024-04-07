@@ -1,6 +1,6 @@
 ## State
 
-State is stored in the S3 bucket `dsekt-terraform-state`. It was created with the following settings:
+State is stored in the S3 bucket `dsekt-tf-state`. It was created with the following settings:
 - region: eu-north-1
 - object ownership: acls disabled
 - block all public access
@@ -10,7 +10,7 @@ State is stored in the S3 bucket `dsekt-terraform-state`. It was created with th
   - bucket key: enable
 - advanced settings: object lock: disable
 
-State locking is done with the DynamoDB table `terraform-lock`. It was created with the following settings:
+State locking is done with the DynamoDB table `tf-lock`. It was created with the following settings:
 - partition key: `LockID`, type `String`
 - sort key: (blank)
 - table settings: customize
@@ -18,7 +18,7 @@ State locking is done with the DynamoDB table `terraform-lock`. It was created w
 - read/write capacity settings: on-demand
 - encryption key management: owned by Amazon DynamoDB
 
-To access this state (and locking), you need valid credentials to do so. These are sourced the same way as the in aws cli, so either environment variables (`AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY`) or in `~/.aws/credentials`. The required permissions are specified [in the docs](https://developer.hashicorp.com/terraform/language/settings/backends/s3).
+To access this state (and locking), you need valid credentials to do so. These are sourced the same way as the in aws cli, so either environment variables (`AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY`) or in `~/.aws/credentials`. The required permissions are specified [in the docs](https://opentofu.org/docs/language/settings/backends/s3/).
 
 ## Secrets
 
@@ -79,7 +79,7 @@ nomad acl bootstrap
 
 ## Certificates
 
-Both Consul and Nomad need certificates to communicate within a cluster securely. We have a CA created by the consul cli located at `files/consul-agent-ca.pem` with the key at `secrets/consul-agent-ca-key.pem.age` (encrypted). When a server is created anew by terraform, a certificate for it will automatically be created and moved to the correct place, but it will need to be renewed after some time, which can be done bu running:
+Both Consul and Nomad need certificates to communicate within a cluster securely. We have a CA created by the consul cli located at `files/consul-agent-ca.pem` with the key at `secrets/consul-agent-ca-key.pem.age` (encrypted). When a server is created anew by OpenTofu, a certificate for it will automatically be created and moved to the correct place, but it will need to be renewed after some time, which can be done bu running:
 ```sh
 ./scripts/provision-cert.sh <"client"|"server"> <hostname>
 ```

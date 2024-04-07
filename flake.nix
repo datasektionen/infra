@@ -49,9 +49,10 @@
           nixos-anywhere.packages.${system}.default
           agenix.packages.${system}.default
         ] ++ (with pkgs; [
-          terraform
-          consul
           age
+          opentofu
+          consul
+          nomad
         ]);
       };
     };
