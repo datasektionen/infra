@@ -41,6 +41,11 @@
     8301 # lan serf
   ];
 
+  networking.firewall.allowedUDPPorts = [
+    8600 # dns
+    8301 # lan serf
+  ];
+
   systemd.tmpfiles.rules = [
     "d /var/lib/consul-certs 0750 consul consul"
   ];

@@ -13,4 +13,8 @@
     8300 # server rpc
     8302 # wan serf
   ];
+
+  networking.firewall.allowedUDPPorts = [
+    8302 # wan serf
+  ];
 }
