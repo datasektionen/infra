@@ -5,6 +5,8 @@
     base
     consul.client
     nomad.client
+
+    postgresql
   ];
 
   # Change this if you want to lose all data on this machine!
