@@ -62,14 +62,14 @@ query_prefix "" {
 service_prefix "" {
     policy = "write"
 }
-' | consul acl policy create -name "nomad-auto-join" -rules=-
+' | consul acl policy create -name "admin" -rules=-
 ```
 
 And a token can be created with (last line only needed if you want to reuse a saved secret):
 ```sh
 consul acl token create \
-  -description "Nomad auto-join token" -policy-name "nomad-auto-join" \
-  -secret=$(age -i "$AGE_IDENTITY" -d secrets/nomad-consul-token.env.age | awk -F= '{print $2}')
+  -description "Token used by nomad and postgresql to register services 'n' stuff" -policy-name "admin" \
+  -secret=$(age -i "$AGE_IDENTITY" -d secrets/consul-admin-token.env.age | awk -F= '{print $2}')
 ```
 
 Then Nomad's ACL also needs to be bootstrapped with:

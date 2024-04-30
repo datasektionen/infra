@@ -1,4 +1,4 @@
-{ config, secretsDir, ... }:
+{ config, ... }:
 {
   services.nomad = {
     enable = true;
@@ -26,7 +26,7 @@
     };
   };
   systemd.services.nomad.serviceConfig = {
-    EnvironmentFile = config.age.secrets.nomad-consul-token.path;
+    EnvironmentFile = config.age.secrets.consul-admin-token.path;
     LoadCredential = [
       "cert.pem:/var/lib/consul-certs/nomad-consul-cert.pem"
       "key.pem:/var/lib/consul-certs/nomad-consul-key.pem"
@@ -34,6 +34,4 @@
   };
 
   networking.firewall.allowedTCPPorts = [ 4646 4647 ];
-
-  age.secrets.nomad-consul-token.file = secretsDir + "/nomad-consul-token.env.age";
 }

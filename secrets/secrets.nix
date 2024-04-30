@@ -14,7 +14,7 @@ in
   # `encrypt = "base64keythatis32byteslong"`
   "consul-gossip-key.hcl.age".publicKeys = mathm ++ [ zeus poseidon hades ares ];
   # `CONSUL_HTTP_TOKEN=uuid`
-  "nomad-consul-token.env.age".publicKeys = mathm ++ [ zeus poseidon hades ares ];
+  "consul-admin-token.env.age".publicKeys = mathm ++ [ zeus poseidon hades ares ];
   # `{"server":{"encrypt":"base64urlkeythatis32byteslong"}}`
   "nomad-gossip-key.json.age".publicKeys = mathm ++ [ zeus poseidon hades ];
 

@@ -57,4 +57,6 @@
     group = "consul";
     mode = "440";
   };
+
+  age.secrets.consul-admin-token.file = secretsDir + "/consul-admin-token.env.age";
 }
