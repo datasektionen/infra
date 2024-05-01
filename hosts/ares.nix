@@ -4,6 +4,7 @@
     hetzner-cloud
     base
     nomad.client
+    postgres
   ];
 
   # Change this if you want to lose all data on this machine!

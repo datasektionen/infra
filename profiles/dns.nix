@@ -47,6 +47,8 @@ in
         ${lib.concatStringsSep "\n" (lib.mapAttrsToList
           (hostname: address: "${hostname} A ${address}")
           config.dsekt.addresses.hosts)}
+
+        postgres CNAME ares
       '';
       allowQuery = allowedNetworks;
     };
