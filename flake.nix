@@ -51,7 +51,6 @@
         ] ++ (with pkgs; [
           age
           opentofu
-          consul
           nomad
         ]);
       };

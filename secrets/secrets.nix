@@ -10,10 +10,6 @@ let
   ares = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOvT+r/mtIDTsTjccGXYpkA/3VQED9WHNU1NB9Hjh0Me";
 in
 {
-  # `encrypt = "base64keythatis32byteslong"`
-  "consul-gossip-key.hcl.age".publicKeys = mathm ++ [ zeus poseidon hades ares ];
-  # `CONSUL_HTTP_TOKEN=uuid`
-  "consul-admin-token.env.age".publicKeys = mathm ++ [ zeus poseidon hades ares ];
   # `{"server":{"encrypt":"base64urlkeythatis32byteslong"}}`
   "nomad-gossip-key.json.age".publicKeys = mathm ++ [ zeus poseidon hades ];
 
@@ -22,6 +18,6 @@ in
   "hades_ssh_host_ed25519_key.age".publicKeys = mathm;
   "ares_ssh_host_ed25519_key.age".publicKeys = mathm;
 
-  "consul-agent-ca-key.pem.age".publicKeys = mathm;
+  "nomad-agent-ca-key.pem.age".publicKeys = mathm;
 }
 

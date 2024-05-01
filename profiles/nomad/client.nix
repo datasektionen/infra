@@ -1,4 +1,4 @@
-{ pkgs, profiles, ... }:
+{ config, profiles, ... }:
 {
   imports = [ profiles.nomad.shared ];
 
@@ -8,9 +8,8 @@
     settings = {
       client = {
         enabled = true;
-        cni_path = "${pkgs.cni-plugins}/bin";
+        server_join.retry_join = config.dsekt.addresses.private.cluster-servers;
       };
     };
-    extraPackages = with pkgs; [ consul ];
   };
 }

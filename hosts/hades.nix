@@ -3,7 +3,6 @@
   imports = with profiles; [
     hetzner-cloud
     base
-    consul.server
     nomad.server
   ];
 

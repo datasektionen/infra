@@ -19,25 +19,24 @@ esac
 
 repo=$(realpath "$(dirname $0)/..")
 
-[ -f "$repo/consul-agent-ca-key.pem" ] || age -d -i "$AGE_IDENTITY" \
-    -o "$repo/consul-agent-ca-key.pem" "$repo/secrets/consul-agent-ca-key.pem.age"
+[ -f "$repo/nomad-agent-ca-key.pem" ] || age -d -i "$AGE_IDENTITY" \
+    -o "$repo/nomad-agent-ca-key.pem" "$repo/secrets/nomad-agent-ca-key.pem.age"
 
-[ -f "dc1-server-consul-0.pem" ] && echo "Found existing cert. Remove or rename it first!" && exit 1
-[ -f "dc1-client-consul-0.pem" ] && echo "Found existing cert. Remove or rename it first!" && exit 1
+[ -f "global-server-nomad.pem" ] && echo "Found existing cert. Remove or rename it first!" && exit 1
+[ -f "global-client-nomad.pem" ] && echo "Found existing cert. Remove or rename it first!" && exit 1
 
-consul tls cert create \
-    -ca=$repo/files/consul-agent-ca.pem -key=$repo/consul-agent-ca-key.pem \
+nomad tls cert create \
+    -ca=$repo/files/nomad-agent-ca.pem -key=$repo/nomad-agent-ca-key.pem \
     -additional-dnsname="$host.betasektionen.se" \
-    -additional-dnsname=$([ "$kind" = "server" ] && echo "server.global.nomad" || echo "client.global.nomad") \
-    $([ "$kind" = "server" ] && echo -node="$host" -server || echo -client)
+    $([ "$kind" = "server" ] && echo "-server" || echo "-client")
 
-mv dc1-$([ "$kind" = "server" ] && echo server || echo client)-consul-0.pem \
-    nomad-consul-cert.pem
-mv dc1-$([ "$kind" = "server" ] && echo server || echo client)-consul-0-key.pem \
-    nomad-consul-key.pem
+mv global-$([ "$kind" = "server" ] && echo server || echo client)-nomad.pem \
+    cert.pem
+mv global-$([ "$kind" = "server" ] && echo server || echo client)-nomad-key.pem \
+    key.pem
 
 if [[ "${DONT_MOVE:-"0"}" == "0" ]]; then
     rsync --rsync-path="sudo rsync" --remove-source-files --chown=root:root \
-        nomad-consul-cert.pem nomad-consul-key.pem \
-        mathm@ares.betasektionen.se:/var/lib/consul-certs/
+        cert.pem key.pem \
+        "$SSH_USER@$host.betasektionen.se":/var/lib/nomad-certs/
 fi

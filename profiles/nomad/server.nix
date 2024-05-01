@@ -6,9 +6,14 @@
     dropPrivileges = true;
     enableDocker = false;
     settings = {
+      addresses = {
+        rpc = "{{ GetPrivateInterfaces | include `address` `^10[.]83[.]` | attr `address` }}";
+        serf = "{{ GetPrivateInterfaces | include `address` `^10[.]83[.]` | attr `address` }}";
+      };
       server = {
         enabled = true;
-        bootstrap_expect = config.services.consul.extraConfig.bootstrap_expect;
+        bootstrap_expect = builtins.length config.dsekt.addresses.private.cluster-servers;
+        server_join.retry_join = config.dsekt.addresses.private.cluster-servers;
       };
     };
     credentials."gossip_key.json" = config.age.secrets.nomad-gossip-key.path;

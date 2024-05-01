@@ -28,58 +28,15 @@ They are stored in `secrets/<name>.age` and encrypted with the ssh/age keys spec
 
 ## ACLs
 
-After starting up the consul cluster, it's ACL must be bootstrapped with:
-```sh
-consul acl bootstrap
-```
-This will print out the `SecretID` of a token with all permissions. This should be saved somewhere safe. (You can put in in the environment variable `CONSUL_HTTP_TOKEN`) to get permission to run the following `consul` commands.
-
-Nomad agents need permission to talk to consul. They need a policy created like:
-```sh
-echo '
-acl = "write"
-
-agent_prefix "" {
-    policy = "write"
-}
-
-event_prefix "" {
-    policy = "write"
-}
-
-key_prefix "" {
-    policy = "write"
-}
-
-node_prefix "" {
-    policy = "write"
-}
-
-query_prefix "" {
-    policy = "write"
-}
-
-service_prefix "" {
-    policy = "write"
-}
-' | consul acl policy create -name "admin" -rules=-
-```
-
-And a token can be created with (last line only needed if you want to reuse a saved secret):
-```sh
-consul acl token create \
-  -description "Token used by nomad and postgresql to register services 'n' stuff" -policy-name "admin" \
-  -secret=$(age -i "$AGE_IDENTITY" -d secrets/consul-admin-token.env.age | awk -F= '{print $2}')
-```
-
-Then Nomad's ACL also needs to be bootstrapped with:
+After starting up the nomad cluster, it's ACL must be bootstrapped with:
 ```sh
 nomad acl bootstrap
 ```
+This will print out the `Secret ID` of a token with all permissions. This should be saved somewhere safe, like a `.env`-file. There is no real need to save online, since the acl system can be [re-bootstrapped](https://developer.hashicorp.com/nomad/tutorials/access-control/access-control-bootstrap#re-bootstrap-acl-system) if the token is lost.
 
 ## Certificates
 
-Both Consul and Nomad need certificates to communicate within a cluster securely. We have a CA created by the consul cli located at `files/consul-agent-ca.pem` with the key at `secrets/consul-agent-ca-key.pem.age` (encrypted). When a server is created anew by OpenTofu, a certificate for it will automatically be created and moved to the correct place, but it will need to be renewed after some time, which can be done bu running:
+Nomad needs certificates to communicate within a cluster securely. There is a CA created by the nomad cli located at `files/nomad-agent-ca.pem` with the key at `secrets/nomad-agent-ca-key.pem.age` (encrypted). When a server is created anew by OpenTofu, a certificate for it will automatically be created and moved to the correct place, but it will need to be renewed after some time, which can be done by running:
 ```sh
 ./scripts/provision-cert.sh <"client"|"server"> <hostname>
 ```

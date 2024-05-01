@@ -19,7 +19,7 @@ fi
 if [ -n "$role" ]; then
     DONT_MOVE=1 $repo/scripts/provision-cert.sh "$role" "$host"
 
-    mkdir -p ./var/lib/consul-certs
+    mkdir -p ./var/lib/nomad-certs
 
-    mv nomad-consul-cert.pem nomad-consul-key.pem ./var/lib/consul-certs
+    mv cert.pem key.pem ./var/lib/nomad-certs/
 fi

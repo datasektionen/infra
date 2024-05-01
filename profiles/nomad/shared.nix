@@ -3,18 +3,10 @@
   services.nomad = {
     enable = true;
     settings = {
-      bind_addr = "{{ GetPublicIP }}";
-      consul = {
-        ssl = true;
-        address = "127.0.0.1:8501";
-        ca_file = ../../files/consul-agent-ca.pem;
-
-        grpc_ca_file = ../../files/consul-agent-ca.pem;
-        grpc_address = "127.0.0.1:8503";
-      };
+      addresses.http = "{{ GetPublicIP }}";
       tls = {
-        ca_file = ../../files/consul-agent-ca.pem;
-        # TODO: not sure if these paths are stable, but you can read env
+        ca_file = ../../files/nomad-agent-ca.pem;
+        # WARNING: not sure if these paths are stable, but you can't read env
         # variables in the config file... The ideal solution would probably be
         # to generate this config at run time using $CREDENTIALS_DIRECTORY.
         cert_file = "/run/credentials/nomad.service/cert.pem";
@@ -26,12 +18,15 @@
     };
   };
   systemd.services.nomad.serviceConfig = {
-    EnvironmentFile = config.age.secrets.consul-admin-token.path;
     LoadCredential = [
-      "cert.pem:/var/lib/consul-certs/nomad-consul-cert.pem"
-      "key.pem:/var/lib/consul-certs/nomad-consul-key.pem"
+      "cert.pem:/var/lib/nomad-certs/cert.pem"
+      "key.pem:/var/lib/nomad-certs/key.pem"
     ];
   };
 
   networking.firewall.allowedTCPPorts = [ 4646 4647 ];
+
+  systemd.tmpfiles.rules = [
+    "d /var/lib/nomad-certs 0750 root root"
+  ];
 }

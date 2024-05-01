@@ -58,3 +58,15 @@ data "cloudflare_zone" "betasektionen" {
 data "cloudflare_zone" "datasektionen" {
   name = "datasektionen.se"
 }
+
+resource "hcloud_network" "cluster" {
+  name     = "nomad-cluster-network"
+  ip_range = "10.83.0.0/16"
+}
+
+resource "hcloud_network_subnet" "cluster-main" {
+  network_id   = hcloud_network.cluster.id
+  type         = "cloud"
+  ip_range     = "10.83.0.0/16"
+  network_zone = "eu-central"
+}
