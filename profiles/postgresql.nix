@@ -47,7 +47,7 @@ in
       exec docker run --rm \
         --name=$SERVICE_ID-sidecar-proxy \
         -v"$config/envoy.json:/envoy.json" \
-        -p$port:$port \
+        --network=host \
         envoyproxy/envoy:v1.26.8  \
         -c /envoy.json
     '';
