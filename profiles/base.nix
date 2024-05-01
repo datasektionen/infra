@@ -3,6 +3,7 @@
   imports = with profiles; [
     nix
     users
+    dns
     agenix.nixosModules.default
   ];
 

@@ -12,8 +12,8 @@
       };
       server = {
         enabled = true;
-        bootstrap_expect = builtins.length config.dsekt.addresses.private.cluster-servers;
-        server_join.retry_join = config.dsekt.addresses.private.cluster-servers;
+        bootstrap_expect = builtins.length config.dsekt.addresses.groups.cluster-servers;
+        server_join.retry_join = config.dsekt.addresses.groups.cluster-servers;
       };
     };
     credentials."gossip_key.json" = config.age.secrets.nomad-gossip-key.path;

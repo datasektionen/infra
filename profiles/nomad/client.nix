@@ -8,7 +8,7 @@
     settings = {
       client = {
         enabled = true;
-        server_join.retry_join = config.dsekt.addresses.private.cluster-servers;
+        server_join.retry_join = config.dsekt.addresses.groups.cluster-servers;
       };
     };
   };
