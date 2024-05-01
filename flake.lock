@@ -65,6 +65,22 @@
         "type": "github"
       }
     },
+    "envoy-nixpkgs": {
+      "locked": {
+        "lastModified": 1697219917,
+        "narHash": "sha256-THoo0Ipms67oLT7XSlyP1y+hW9NX3ysOUUrO4LbGHrA=",
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "96896946ddc8d6d8ab0893667d2d609170617dbc",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nixos",
+        "ref": "96896946ddc8d6d8ab0893667d2d609170617dbc",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
     "flake-parts": {
       "inputs": {
         "nixpkgs-lib": [
@@ -195,6 +211,7 @@
       "inputs": {
         "agenix": "agenix",
         "disko": "disko",
+        "envoy-nixpkgs": "envoy-nixpkgs",
         "nixos-anywhere": "nixos-anywhere",
         "nixpkgs": "nixpkgs"
       }

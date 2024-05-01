@@ -29,7 +29,7 @@ in
       SERVICE_ID = consulServiceId;
       CACERT = ../files/consul-agent-ca.pem;
     };
-    path = with pkgs; [ consul docker curl jq ];
+    path = with pkgs; [ consul curl jq envoy ];
     script = ''
       consul services register $SERVICE_CONFIG
       port=$(curl \
@@ -37,22 +37,8 @@ in
         -H "X-Consul-Token: $CONSUL_HTTP_TOKEN" \
         "https://localhost:8501/v1/agent/service/$SERVICE_ID-sidecar-proxy" \
         | jq '.Port')
-
-      # It's important here that the directory isn't world readable, since the
-      # configuration file contains secrets. The file itself must be, since
-      # envoy runs as non-root in its container and it must be able to read it.
-      config=$(mktemp -d)
-      consul connect envoy -bootstrap -sidecar-for=$SERVICE_ID > $config/envoy.json
-      chmod 644 $config/envoy.json
-      exec docker run --rm \
-        --name=$SERVICE_ID-sidecar-proxy \
-        -v"$config/envoy.json:/envoy.json" \
-        --network=host \
-        envoyproxy/envoy:v1.26.8  \
-        -c /envoy.json
+      consul connect envoy -sidecar-for=$SERVICE_ID -admin-bind=0.0.0.0:19000
     '';
-    # TODO: get envoy version from consul/nomad, since that should be a
-    # supported version we don't need to keep track of manually here
     preStop = ''
       consul services deregister $SERVICE_CONFIG
     '';

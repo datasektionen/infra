@@ -4,6 +4,8 @@
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-23.11";
 
+    envoy-nixpkgs.url = "github:nixos/nixpkgs?ref=96896946ddc8d6d8ab0893667d2d609170617dbc";
+
     disko.url = "github:nix-community/disko";
     disko.inputs.nixpkgs.follows = "nixpkgs";
 
@@ -15,12 +17,17 @@
     agenix.inputs.nixpkgs.follows = "nixpkgs";
   };
 
-  outputs = { self, nixpkgs, disko, nixos-anywhere, agenix }:
+  outputs = { self, nixpkgs, envoy-nixpkgs, disko, nixos-anywhere, agenix }:
     let
       system = "x86_64-linux";
       pkgs = import nixpkgs {
         inherit system;
         config.allowUnfree = true;
+        overlays = [
+          (final: prev: {
+            inherit (import envoy-nixpkgs { inherit system; }) envoy;
+          })
+        ];
       };
       lib = import ./lib.nix { inherit (nixpkgs) lib; };
     in
