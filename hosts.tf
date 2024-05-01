@@ -1,10 +1,3 @@
-resource "hcloud_server" "artemis" {
-  name        = "artemis"
-  image       = "debian-12"
-  server_type = "cx11"
-  ssh_keys    = [hcloud_ssh_key.bootstrap.id]
-}
-
 resource "hcloud_server" "cluster_servers" {
   for_each    = toset(["zeus", "poseidon", "hades"])
   name        = each.key
@@ -23,7 +16,6 @@ resource "hcloud_server" "cluster_clients" {
 
 locals {
   all_hosts = merge(
-    { "artemis" = { instance = hcloud_server.artemis, role = "" } },
     { for name, instance in hcloud_server.cluster_servers: name => { instance = instance, role = "server" } },
     { for name, instance in hcloud_server.cluster_clients: name => { instance = instance, role = "client" } },
   )
