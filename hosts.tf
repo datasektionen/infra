@@ -6,8 +6,6 @@ locals {
     hades    = { role = "server", private_ip_addr = "10.83.0.4" },
     ares     = { role = "client", private_ip_addr = "10.83.0.5" },
   }
-  cluster_servers = { for k, v in local.cluster_hosts : k => v if v.role == "server" }
-  cluster_clients = { for k, v in local.cluster_hosts : k => v if v.role == "client" }
 }
 
 resource "hcloud_server" "cluster_hosts" {

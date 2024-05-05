@@ -10,14 +10,20 @@ let
   ares = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOvT+r/mtIDTsTjccGXYpkA/3VQED9WHNU1NB9Hjh0Me";
 in
 {
-  # `{"server":{"encrypt":"base64urlkeythatis32byteslong"}}`
-  "nomad-gossip-key.json.age".publicKeys = mathm ++ [ zeus poseidon hades ];
-
   "zeus_ssh_host_ed25519_key.age".publicKeys = mathm;
   "poseidon_ssh_host_ed25519_key.age".publicKeys = mathm;
   "hades_ssh_host_ed25519_key.age".publicKeys = mathm;
   "ares_ssh_host_ed25519_key.age".publicKeys = mathm;
 
+  # `{"server":{"encrypt":"base64urlkeythatis32byteslong"}}`
+  "nomad-gossip-key.json.age".publicKeys = mathm ++ [ zeus poseidon hades ];
   "nomad-agent-ca-key.pem.age".publicKeys = mathm;
-}
 
+  # created with:
+  # ```
+  # nomad acl policy apply traefik-read-all-jobs ./profiles/traefik/policy.hcl
+  # nomad acl token create -name="traefik" -policy=traefik-read-all-jobs
+  # ```
+  # `NOMAD_TOKEN=uuid-with-dashes`
+  "nomad-traefik-acl-token.env.age".publicKeys = mathm ++ [ ares ];
+}

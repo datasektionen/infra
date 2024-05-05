@@ -3,7 +3,8 @@
   services.nomad = {
     enable = true;
     settings = {
-      addresses.http = "{{ GetPublicIP }}";
+      addresses.http = "0.0.0.0";
+      advertise.http = "{{ GetPublicIP }}";
       tls = {
         ca_file = ../../files/nomad-agent-ca.pem;
         # WARNING: not sure if these paths are stable, but you can't read env

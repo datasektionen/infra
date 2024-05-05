@@ -1,0 +1,3 @@
+namespace "*" {
+  capabilities = ["read-job"]
+}

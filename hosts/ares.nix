@@ -5,6 +5,7 @@
     base
     nomad.client
     postgres
+    traefik
   ];
 
   # Change this if you want to lose all data on this machine!
