@@ -1,10 +1,10 @@
 locals {
   # NOTE: Must be kept in sync with `config.dsekt.addresses.hosts` in nix
   cluster_hosts = {
-    zeus     = { role = "server", private_ip_addr = "10.83.0.2" },
-    poseidon = { role = "server", private_ip_addr = "10.83.0.3" },
-    hades    = { role = "server", private_ip_addr = "10.83.0.4" },
-    ares     = { role = "client", private_ip_addr = "10.83.0.5" },
+    zeus     = { role = "server", private_ip_addr = "10.83.0.2", server_type = "cx11" },
+    poseidon = { role = "server", private_ip_addr = "10.83.0.3", server_type = "cx11" },
+    hades    = { role = "server", private_ip_addr = "10.83.0.4", server_type = "cx11" },
+    ares     = { role = "client", private_ip_addr = "10.83.0.5", server_type = "cx21" },
   }
 }
 
@@ -12,7 +12,7 @@ resource "hcloud_server" "cluster_hosts" {
   for_each    = local.cluster_hosts
   name        = each.key
   image       = "debian-12"
-  server_type = "cx11"
+  server_type = each.value.server_type
   ssh_keys    = [hcloud_ssh_key.bootstrap.id]
   network {
     network_id = hcloud_network.cluster.id

@@ -12,7 +12,7 @@ job "keycloak" {
       tags = [
         "traefik.enable=true",
         "traefik.http.routers.keycloak.rule=Host(`keycloak.betasektionen.se`)",
-        "traefik.http.routers.keycloak.entrypoints.websecure",
+        "traefik.http.routers.keycloak.entrypoints=websecure",
         "traefik.http.routers.keycloak.tls.certresolver=default",
       ]
     }

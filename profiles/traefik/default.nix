@@ -4,6 +4,7 @@
     enable = true;
     environmentFiles = [ config.age.secrets.nomad-traefik-acl-token.path ];
     staticConfigOptions = {
+      api.dashboard = true;
       entryPoints.web = {
         address = ":80";
         http.redirections.entryPoint = {
@@ -13,7 +14,8 @@
         };
       };
       entryPoints.websecure.address = ":443";
-      api.dashboard = true;
+      entryPoints.mattermost-calls-tcp.address = ":8443/tcp";
+      entryPoints.mattermost-calls-udp.address = ":8443/udp";
 
       log.level = "INFO";
       accessLog = { };
@@ -40,6 +42,7 @@
           service = "api@internal";
           middlewares = [ "auth" ];
           tls.certResolver = "default";
+          entrypoints = [ "websecure" ];
         };
         # Temporary, use something better in the future
         middlewares.auth.basicAuth.users = [
@@ -48,7 +51,8 @@
       };
     };
   };
-  networking.firewall.allowedTCPPorts = [ 80 443 ];
+  networking.firewall.allowedTCPPorts = [ 80 443 8443 ];
+  networking.firewall.allowedUDPPorts = [ 8443 ];
 
   age.secrets.nomad-traefik-acl-token.file = secretsDir + "/nomad-traefik-acl-token.env.age";
 }
