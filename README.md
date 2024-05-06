@@ -26,13 +26,27 @@ Secrets that need to be deployed are handled with [agenix](https://github.com/ry
 
 They are stored in `secrets/<name>.age` and encrypted with the ssh/age keys specified in `secrets/secrets.nix`.
 
-## ACLs
+## Starting the cluster from nothing
 
-After starting up the nomad cluster, it's ACL must be bootstrapped with:
+Some resources in the OpenTofu configuration are required to start the nomad cluster and some require the nomad cluster to be running but there is no way (?) to bootstrap nomad's ACL system in OpenTofu, so this has to be split up in multiple steps.
+
+First, run
+```sh
+tofu apply -target='random_pet.stage1_nomad_cluster'
+```
+
+Then, the cluster should be ready, so bootstrap it's ACL system with:
 ```sh
 nomad acl bootstrap
 ```
 This will print out the `Secret ID` of a token with all permissions. This should be saved somewhere safe, like a `.env`-file. There is no real need to save online, since the acl system can be [re-bootstrapped](https://developer.hashicorp.com/nomad/tutorials/access-control/access-control-bootstrap#re-bootstrap-acl-system) if the token is lost.
+
+Lastly, apply the rest of the OpenTofu configuration:
+```sh
+tofu apply
+```
+
+But this will override `secrets/nomad-traefik-acl-token.env.age`, so you must now run the last command again :^)
 
 ## Certificates
 

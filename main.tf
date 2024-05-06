@@ -12,9 +12,17 @@ terraform {
       source  = "hetznercloud/hcloud"
       version = "1.45.0"
     }
+    nomad = {
+      source = "hashicorp/nomad"
+      version = "2.2.0"
+    }
     sshkey = {
       source  = "daveadams/sshkey"
       version = "0.2.1"
+    }
+    random = {
+      source = "hashicorp/random"
+      version = "3.6.1"
     }
   }
   backend "s3" {

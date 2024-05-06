@@ -70,3 +70,17 @@ resource "hcloud_ssh_key" "bootstrap" {
   name       = "dsekt-infra-bootstrap"
   public_key = sshkey_ed25519_key_pair.bootstrap.public_key
 }
+
+# This should depend on everything that's needed for the nomad cluster to be ready for getting it's
+# ACL bootstrapped. The resources referenced here will be created when running with
+# `-target='random_pet.stage1_nomad_cluster'` even though the result will just become the empty
+# string.
+resource "random_pet" "stage1_nomad_cluster" {
+  keepers = {
+    _ = substr(join(",", concat(
+      [for name, _ in local.cluster_hosts : cloudflare_record.server_name[name].value],
+      [for name, _ in local.cluster_hosts : cloudflare_record.server_wildcard[name].value],
+      [for name, _ in local.cluster_hosts : module.nixos_install[name].result.out],
+    )), 0, 0)
+  }
+}
