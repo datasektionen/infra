@@ -6,10 +6,6 @@
     dropPrivileges = true;
     enableDocker = false;
     settings = {
-      addresses = {
-        rpc = "{{ GetPrivateInterfaces | include `address` `^10[.]83[.]` | attr `address` }}";
-        serf = "{{ GetPrivateInterfaces | include `address` `^10[.]83[.]` | attr `address` }}";
-      };
       server = {
         enabled = true;
         bootstrap_expect = builtins.length config.dsekt.addresses.groups.cluster-servers;

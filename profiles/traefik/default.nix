@@ -48,6 +48,17 @@
         middlewares.auth.basicAuth.users = [
           "mathm:$2y$05$/.Sr1SoOYhGDHK0j7lE37eazHgqHM52eas0QF96EzvJfk6ma5XCzK"
         ];
+        routers.nomad = {
+          rule = "Host(`nomad.betasektionen.se`)";
+          service = "nomad";
+          tls.certResolver = "default";
+          entrypoints = [ "websecure" ];
+        };
+        services.nomad.loadBalancer = {
+          servers = [{ url = "https://127.0.0.1:4646"; }];
+          serversTransport = "nomadTransport";
+        };
+        serversTransports.nomadTransport.rootCAs = "${../../files/nomad-agent-ca.pem}";
       };
     };
   };

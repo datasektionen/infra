@@ -3,8 +3,12 @@
   services.nomad = {
     enable = true;
     settings = {
-      addresses.http = "0.0.0.0";
-      advertise.http = "{{ GetPublicIP }}";
+      bind_addr = "0.0.0.0";
+      advertise = let addr = config.dsekt.addresses.hosts.${config.networking.hostName}; in {
+        http = addr;
+        rpc = addr;
+        serf = addr;
+      };
       tls = {
         ca_file = ../../files/nomad-agent-ca.pem;
         # WARNING: not sure if these paths are stable, but you can't read env
