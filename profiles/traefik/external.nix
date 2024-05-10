@@ -1,12 +1,12 @@
 { config, secretsDir, ... }:
 {
-  services.traefik = {
-    enable = true;
+  dsekt.services.traefik.servers.external = {
     environmentFiles = [ config.age.secrets.nomad-traefik-acl-token.path ];
     staticConfigOptions = {
       api.dashboard = true;
       entryPoints.web = {
-        address = ":80";
+        # This port is also used by traefik.internal, so we need to bind to only the public address.
+        address = "${config.networking.hostName}.betasektionen.se:80";
         http.redirections.entryPoint = {
           to = "websecure";
           scheme = "https";
@@ -27,18 +27,19 @@
           token = "\${NOMAD_TOKEN}";
           tls.ca = "${../../files/nomad-agent-ca.pem}";
         };
+        prefix = "traefik-external";
       };
 
       certificatesResolvers.default.acme = {
         email = "d-sys@datasektionen.se";
-        storage = config.services.traefik.dataDir + "/acme.json";
+        storage = config.dsekt.services.traefik.servers.external.dataDir + "/acme.json";
         httpChallenge.entryPoint = "web";
       };
     };
     dynamicConfigOptions = {
       http = {
         routers.api = {
-          rule = "Host(`traefik.ares.betasektionen.se`)";
+          rule = "Host(`traefik.betasektionen.se`)";
           service = "api@internal";
           middlewares = [ "auth" ];
           tls.certResolver = "default";

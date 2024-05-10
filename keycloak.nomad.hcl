@@ -10,10 +10,10 @@ job "keycloak" {
       provider = "nomad"
 
       tags = [
-        "traefik.enable=true",
-        "traefik.http.routers.keycloak.rule=Host(`keycloak.betasektionen.se`)",
-        "traefik.http.routers.keycloak.entrypoints=websecure",
-        "traefik.http.routers.keycloak.tls.certresolver=default",
+        "traefik-external.enable=true",
+        "traefik-external.http.routers.keycloak.rule=Host(`keycloak.betasektionen.se`)",
+        "traefik-external.http.routers.keycloak.entrypoints=websecure",
+        "traefik-external.http.routers.keycloak.tls.certresolver=default",
       ]
     }
 

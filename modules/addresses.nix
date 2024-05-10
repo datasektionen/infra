@@ -10,12 +10,14 @@ in
 
   config.dsekt.addresses = {
     # Must be kept in sync with `local.cluster_hosts` tf
-    hosts = {
+    hosts = lib.fix (self: {
       zeus = "10.83.0.2";
       poseidon = "10.83.0.3";
       hades = "10.83.0.4";
       ares = "10.83.0.5";
-    };
+
+      self = self.${config.networking.hostName};
+    });
 
     groups.cluster-servers = with cfg.hosts; [ zeus poseidon hades ];
 

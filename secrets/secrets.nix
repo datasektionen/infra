@@ -19,11 +19,6 @@ in
   "nomad-gossip-key.json.age".publicKeys = mathm ++ [ zeus poseidon hades ];
   "nomad-agent-ca-key.pem.age".publicKeys = mathm;
 
-  # created with:
-  # ```
-  # nomad acl policy apply traefik-read-all-jobs ./profiles/traefik/policy.hcl
-  # nomad acl token create -name="traefik" -policy=traefik-read-all-jobs
-  # ```
   # `NOMAD_TOKEN=uuid-with-dashes`
   "nomad-traefik-acl-token.env.age".publicKeys = mathm ++ [ ares ];
 }

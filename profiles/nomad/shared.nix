@@ -4,7 +4,7 @@
     enable = true;
     settings = {
       bind_addr = "0.0.0.0";
-      advertise = let addr = config.dsekt.addresses.hosts.${config.networking.hostName}; in {
+      advertise = let addr = config.dsekt.addresses.hosts.self; in {
         http = addr;
         rpc = addr;
         serf = addr;

@@ -7,7 +7,7 @@ let
 in
 {
   environment.etc."resolv.conf".text = ''
-    nameserver ${config.dsekt.addresses.hosts.${config.networking.hostName}}
+    nameserver ${config.dsekt.addresses.hosts.self}
     options edns0
   '';
 
@@ -42,11 +42,12 @@ in
           2h   ; minimum ttl
         )
                  NS    ns
-        ns       A     ${config.dsekt.addresses.hosts.${config.networking.hostName}}
+        ns       A     ${config.dsekt.addresses.hosts.self}
 
         ${lib.concatStringsSep "\n" (lib.mapAttrsToList
           (hostname: address: "${hostname} A ${address}")
           config.dsekt.addresses.hosts)}
+        *.nomad  A     ${config.dsekt.addresses.hosts.self}
 
         postgres CNAME ares
       '';
