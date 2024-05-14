@@ -13,7 +13,7 @@ terraform {
       version = "1.45.0"
     }
     nomad = {
-      source = "hashicorp/nomad"
+      source  = "hashicorp/nomad"
       version = "2.2.0"
     }
     sshkey = {
@@ -21,7 +21,7 @@ terraform {
       version = "0.2.1"
     }
     random = {
-      source = "hashicorp/random"
+      source  = "hashicorp/random"
       version = "3.6.1"
     }
   }
@@ -83,5 +83,12 @@ resource "cloudflare_record" "zone_wildcard" {
   name    = "*"
   type    = "A"
   zone_id = data.cloudflare_zone.betasektionen.id
+  value   = hcloud_server.cluster_hosts["ares"].ipv4_address
+}
+
+resource "cloudflare_record" "mattermost" {
+  name    = "mattermost"
+  type    = "A"
+  zone_id = data.cloudflare_zone.datasektionen.id
   value   = hcloud_server.cluster_hosts["ares"].ipv4_address
 }

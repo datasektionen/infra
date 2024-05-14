@@ -1,3 +1,8 @@
+variable "domain_name" {
+  type    = string
+  default = "mattermost.datasektionen.se"
+}
+
 job "mattermost" {
   group "mattermost" {
     network {
@@ -8,20 +13,20 @@ job "mattermost" {
     }
 
     service {
-      name = "mattermost"
-      port = "http"
+      name     = "mattermost"
+      port     = "http"
       provider = "nomad"
       tags = [
         "traefik-external.enable=true",
-        "traefik-external.http.routers.mattermost.rule=Host(`mattermost.ares.betasektionen.se`)",
+        "traefik-external.http.routers.mattermost.rule=Host(`${var.domain_name}`)",
         "traefik-external.http.routers.mattermost.entrypoints=websecure",
         "traefik-external.http.routers.mattermost.tls.certresolver=default",
       ]
     }
 
     service {
-      name = "mattermost-calls"
-      port = "calls"
+      name     = "mattermost-calls"
+      port     = "calls"
       provider = "nomad"
       tags = [
         "traefik-external.enable=true",
@@ -67,13 +72,21 @@ job "mattermost" {
       template {
         data = <<EOH
 TZ=Europe/Stockholm
-DOMAIN=mattermost.ares.betasektionen.se
+DOMAIN=${var.domain_name}
 MM_SQLSETTINGS_DRIVERNAME=postgres
 {{ with nomadVar "nomad/jobs/mattermost" }}
 MM_SQLSETTINGS_DATASOURCE=postgres://mattermost:{{ .database_password }}@postgres.dsekt.internal:5432/mattermost?sslmode=disable&connect_timeout=10
+MM_EMAILSETTINGS_SMTPPASSWORD={{ .smtp_password }}
+MM_EMAILSETTINGS_SMTPUSERNAME={{ .smtp_username }}
 {{ end }}
-MM_SERVICESETTINGS_SITEURL=https://mattermost.ares.betasektionen.se
+MM_SERVICESETTINGS_SITEURL=https://${var.domain_name}
 MM_SERVICESETTINGS_LISTENADDRESS=:{{ env "NOMAD_PORT_http" }}
+MM_EMAILSETTINGS_SMTPSERVER=email-smtp.eu-north-1.amazonaws.com
+MM_EMAILSETTINGS_SMTPPORT=2465
+MM_EMAILSETTINGS_CONNECTIONSECURITY=TLS
+MM_EMAILSETTINGS_ENABLESMTPAUTH=true
+MM_EMAILSETTINGS_FEEDBACKEMAIL=mattermost@datasektionen.se
+MM_EMAILSETTINGS_REPLYTOADDRESS=no-reply@datasektionen.se
 EOH
         destination = "local/.env"
         env = true

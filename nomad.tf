@@ -1,7 +1,7 @@
 resource "nomad_acl_policy" "read_all_jobs" {
-  name = "read-all-jobs"
+  name        = "read-all-jobs"
   description = "Has the `read-job` capability in all namespaces"
-  rules_hcl = <<HCL
+  rules_hcl   = <<HCL
     namespace "*" {
       capabilities = ["read-job"]
     }
@@ -9,11 +9,11 @@ resource "nomad_acl_policy" "read_all_jobs" {
 }
 
 resource "nomad_acl_token" "traefik" {
-  name = "traefik"
+  name     = "traefik"
   policies = [nomad_acl_policy.read_all_jobs.name]
-  type = "client"
+  type     = "client"
   provisioner "local-exec" {
-    command = <<BASH
+    command     = <<BASH
       echo NOMAD_TOKEN=${self.secret_id} | \
         agenix -i $AGE_IDENTITY -e nomad-traefik-acl-token.env.age
     BASH
@@ -21,10 +21,18 @@ resource "nomad_acl_token" "traefik" {
   }
 }
 
-resource "nomad_job" "keycloak" {
-  jobspec = file("${path.module}/keycloak.nomad.hcl")
+resource "nomad_variable" "jobs_mattermost" {
+  path = "nomad/jobs/mattermost"
+  items = {
+    smtp_username = aws_iam_access_key.mattermost_smtp.id
+    smtp_password = aws_iam_access_key.mattermost_smtp.ses_smtp_password_v4
+  }
 }
 
-resource "nomad_job" "mattermost" {
-  jobspec = file("${path.module}/mattermost.nomad.hcl")
-}
+# resource "nomad_job" "keycloak" {
+#   jobspec = file("${path.module}/keycloak.nomad.hcl")
+# }
+#
+# resource "nomad_job" "mattermost" {
+#   jobspec = file("${path.module}/mattermost.nomad.hcl")
+# }
