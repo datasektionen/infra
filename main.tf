@@ -8,6 +8,10 @@ terraform {
       source  = "cloudflare/cloudflare"
       version = "4.26.0"
     }
+    github = {
+      source  = "integrations/github"
+      version = "6.2.1"
+    }
     hcloud = {
       source  = "hetznercloud/hcloud"
       version = "1.45.0"
@@ -16,13 +20,13 @@ terraform {
       source  = "hashicorp/nomad"
       version = "2.2.0"
     }
-    sshkey = {
-      source  = "daveadams/sshkey"
-      version = "0.2.1"
-    }
     random = {
       source  = "hashicorp/random"
       version = "3.6.1"
+    }
+    sshkey = {
+      source  = "daveadams/sshkey"
+      version = "0.2.1"
     }
   }
   backend "s3" {
@@ -43,6 +47,10 @@ provider "cloudflare" {
 
 provider "hcloud" {
   token = var.hcloud_token
+}
+
+provider "github" {
+  owner = "datasektionen"
 }
 
 variable "cloudflare_api_token" {

@@ -21,13 +21,13 @@ resource "nomad_acl_token" "traefik" {
   }
 }
 
-resource "nomad_variable" "jobs_mattermost" {
-  path = "nomad/jobs/mattermost"
-  items = {
-    smtp_username = aws_iam_access_key.mattermost_smtp.id
-    smtp_password = aws_iam_access_key.mattermost_smtp.ses_smtp_password_v4
-  }
-}
+# resource "nomad_variable" "jobs_mattermost" {
+#   path = "nomad/jobs/mattermost"
+#   items = {
+#     smtp_username = aws_iam_access_key.mattermost_smtp.id
+#     smtp_password = aws_iam_access_key.mattermost_smtp.ses_smtp_password_v4
+#   }
+# }
 
 # resource "nomad_job" "keycloak" {
 #   jobspec = file("${path.module}/keycloak.nomad.hcl")

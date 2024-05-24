@@ -54,3 +54,35 @@ Nomad needs certificates to communicate within a cluster securely. There is a CA
 ```sh
 ./scripts/provision-cert.sh <"client"|"server"> <hostname>
 ```
+
+## Authentication
+
+### AWS
+
+Either set the `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` environment variables or put something like:
+```ini
+[default]
+aws_access_key_id = ...
+aws_secret_access_key = ...
+```
+in `~/.aws/credentials`.
+
+### Cloudflare
+
+Set the `cloudflare_api_token` tf variable, e.g. by setting the `TF_VAR_cloudflare_api_token` environment variable.
+
+### Hetzner Cloud
+
+Set the `hcloud_token` tf variable, e.g. by setting the `TF_VAR_hcloud_token` environment variable.
+
+### GitHub
+
+Authenticate with the github cli using:
+
+```sh
+gh auth login -s admin:org
+```
+
+When asked about preferred protocol for git operations, pick any and then pick `no` or `Skip` on the following option. (And then wonder how they managed to make such a horrible cli tool).
+
+The `admin:org` scope is needed to set github actions secrets and variables.
