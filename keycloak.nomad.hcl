@@ -11,7 +11,7 @@ job "keycloak" {
 
       tags = [
         "traefik-external.enable=true",
-        "traefik-external.http.routers.keycloak.rule=Host(`keycloak.betasektionen.se`)",
+        "traefik-external.http.routers.keycloak.rule=Host(`keycloak.datasektionen.se`)",
         "traefik-external.http.routers.keycloak.entrypoints=websecure",
         "traefik-external.http.routers.keycloak.tls.certresolver=default",
       ]
@@ -42,7 +42,7 @@ db-url=jdbc:postgresql://postgres.dsekt.internal/keycloak
 http-enabled=true
 http-port={{ env "NOMAD_PORT_http" }}
 proxy-headers=xforwarded
-hostname-url=https://keycloak.betasektionen.se
+hostname-url=https://keycloak.datasektionen.se
 EOH
         destination = "local/keycloak.conf"
       }

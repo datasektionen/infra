@@ -27,7 +27,7 @@ repo=$(realpath "$(dirname $0)/..")
 
 nomad tls cert create \
     -ca=$repo/files/nomad-agent-ca.pem -key=$repo/nomad-agent-ca-key.pem \
-    -additional-dnsname="$host.betasektionen.se" -additional-dnsname="$host.dsekt.internal" \
+    -additional-dnsname="$host.datasektionen.se" -additional-dnsname="$host.dsekt.internal" \
     $([ "$kind" = "server" ] && echo "-server" || echo "-client")
 
 mv global-$([ "$kind" = "server" ] && echo server || echo client)-nomad.pem \
@@ -38,5 +38,5 @@ mv global-$([ "$kind" = "server" ] && echo server || echo client)-nomad-key.pem 
 if [[ "${DONT_MOVE:-"0"}" == "0" ]]; then
     rsync --rsync-path="sudo rsync" --remove-source-files --chown=root:root \
         cert.pem key.pem \
-        "$SSH_USER@$host.betasektionen.se":/var/lib/nomad-certs/
+        "$SSH_USER@$host.datasektionen.se":/var/lib/nomad-certs/
 fi

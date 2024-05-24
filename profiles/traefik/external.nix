@@ -10,7 +10,7 @@
       api.dashboard = true;
       entryPoints.web = {
         # This port is also used by traefik.internal, so we need to bind to only the public address.
-        address = "${config.networking.hostName}.betasektionen.se:80";
+        address = "${config.networking.hostName}.datasektionen.se:80";
         http.redirections.entryPoint = {
           to = "websecure";
           scheme = "https";
@@ -50,7 +50,7 @@
     dynamicConfigOptions = {
       http = {
         routers.api = {
-          rule = "Host(`traefik.betasektionen.se`)";
+          rule = "Host(`traefik.datasektionen.se`)";
           service = "api@internal";
           middlewares = [ "auth" ];
           tls.certresolver = "default";
@@ -61,7 +61,7 @@
           "mathm:$2y$05$/.Sr1SoOYhGDHK0j7lE37eazHgqHM52eas0QF96EzvJfk6ma5XCzK"
         ];
         routers.nomad = {
-          rule = "Host(`nomad.betasektionen.se`)";
+          rule = "Host(`nomad.datasektionen.se`)";
           service = "nomad";
           tls.certresolver = "default";
           entrypoints = [ "websecure" ];
@@ -75,8 +75,8 @@
       tls.stores.default.defaultGeneratedCert = {
         resolver = "default";
         domain = {
-          main = "betasektionen.se";
-          sans = [ "*.betasektionen.se" ];
+          main = "datasektionen.se";
+          sans = [ "*.datasektionen.se" ];
         };
       };
     };

@@ -49,7 +49,7 @@ resource "cloudflare_record" "server_name" {
 
   name    = each.key
   type    = "A"
-  zone_id = data.cloudflare_zone.betasektionen.id
+  zone_id = data.cloudflare_zone.datasektionen.id
   value   = hcloud_server.cluster_hosts[each.key].ipv4_address
 }
 
@@ -58,7 +58,7 @@ resource "cloudflare_record" "server_wildcard" {
 
   name    = "*.${each.key}"
   type    = "A"
-  zone_id = data.cloudflare_zone.betasektionen.id
+  zone_id = data.cloudflare_zone.datasektionen.id
   value   = hcloud_server.cluster_hosts[each.key].ipv4_address
 }
 
