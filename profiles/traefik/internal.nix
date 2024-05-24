@@ -17,6 +17,8 @@
           tls.ca = "${../../files/nomad-agent-ca.pem}";
         };
         prefix = "traefik-internal";
+        # NOTE: keep in sync with the same option in external.nix
+        namespaces = [ "default" "mattermost" ];
       };
     };
   };

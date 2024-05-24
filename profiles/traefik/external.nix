@@ -28,6 +28,9 @@
           tls.ca = "${../../files/nomad-agent-ca.pem}";
         };
         prefix = "traefik-external";
+        # TODO: get all namespaces dynamically, e.g. using `nomad namespace list -json | jq '.[].Name' -r`
+        # NOTE: keep in sync with the same option in internal.nix
+        namespaces = [ "default" "mattermost" ];
       };
 
       certificatesResolvers.default.acme = {

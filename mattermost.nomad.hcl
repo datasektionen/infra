@@ -4,6 +4,8 @@ variable "domain_name" {
 }
 
 job "mattermost" {
+  namespace = "mattermost"
+
   group "mattermost" {
     network {
       port "http" { }
