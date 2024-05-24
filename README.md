@@ -71,6 +71,14 @@ in `~/.aws/credentials`.
 
 Set the `cloudflare_api_token` tf variable, e.g. by setting the `TF_VAR_cloudflare_api_token` environment variable.
 
+To create a token
+- Go to `https://dash.cloudflare.com/profile/api-tokens`;
+- click *Create Token*;
+- pick the *Create Additional Tokens* template;
+- at the top, change it's name to (something like) "$USER Admin Token";
+- under permissions, add *Zone* -> *DNS* -> *Edit*; and
+- set the TTL to a reasonable date.
+
 ### Hetzner Cloud
 
 Set the `hcloud_token` tf variable, e.g. by setting the `TF_VAR_hcloud_token` environment variable.

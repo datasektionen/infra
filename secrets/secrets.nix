@@ -21,4 +21,7 @@ in
 
   # `NOMAD_TOKEN=uuid-with-dashes`
   "nomad-traefik-acl-token.env.age".publicKeys = mathm ++ [ ares ];
+
+  # `CLOUDFLARE_DNS_API_TOKEN=...`
+  "cloudflare-dns-api-token.env.age".publicKeys = mathm ++ [ ares ];
 }

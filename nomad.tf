@@ -14,8 +14,9 @@ resource "nomad_acl_token" "traefik" {
   type     = "client"
   provisioner "local-exec" {
     command     = <<BASH
+      rm nomad-traefik-acl-token.env.age
       echo NOMAD_TOKEN=${self.secret_id} | \
-        agenix -i $AGE_IDENTITY -e nomad-traefik-acl-token.env.age
+        agenix -e nomad-traefik-acl-token.env.age
     BASH
     working_dir = "./secrets"
   }

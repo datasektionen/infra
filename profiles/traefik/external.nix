@@ -1,7 +1,11 @@
-{ config, secretsDir, ... }:
+{ config, pkgs, secretsDir, ... }:
 {
   dsekt.services.traefik.servers.external = {
-    environmentFiles = [ config.age.secrets.nomad-traefik-acl-token.path ];
+    environmentFiles = [
+      config.age.secrets.nomad-traefik-acl-token.path
+      config.age.secrets.cloudflare-dns-api-token.path
+      (pkgs.writeText "traefik-cloudflare-config" "CLOUDFLARE_EMAIL=d-sys@datasektionen.se")
+    ];
     staticConfigOptions = {
       api.dashboard = true;
       entryPoints.web = {
@@ -33,10 +37,14 @@
         namespaces = [ "default" "mattermost" ];
       };
 
-      certificatesResolvers.default.acme = {
+      certificatesresolvers.default.acme = {
+        # Good for testing: caserver = "https://acme-staging-v02.api.letsencrypt.org/directory";
         email = "d-sys@datasektionen.se";
         storage = config.dsekt.services.traefik.servers.external.dataDir + "/acme.json";
-        httpChallenge.entryPoint = "web";
+        dnschallenge = {
+          provider = "cloudflare";
+          resolvers = [ "1.1.1.1:53" ];
+        };
       };
     };
     dynamicConfigOptions = {
@@ -45,7 +53,7 @@
           rule = "Host(`traefik.betasektionen.se`)";
           service = "api@internal";
           middlewares = [ "auth" ];
-          tls.certResolver = "default";
+          tls.certresolver = "default";
           entrypoints = [ "websecure" ];
         };
         # Temporary, use something better in the future
@@ -55,7 +63,7 @@
         routers.nomad = {
           rule = "Host(`nomad.betasektionen.se`)";
           service = "nomad";
-          tls.certResolver = "default";
+          tls.certresolver = "default";
           entrypoints = [ "websecure" ];
         };
         services.nomad.loadBalancer = {
@@ -64,10 +72,18 @@
         };
         serversTransports.nomadTransport.rootCAs = "${../../files/nomad-agent-ca.pem}";
       };
+      tls.stores.default.defaultGeneratedCert = {
+        resolver = "default";
+        domain = {
+          main = "betasektionen.se";
+          sans = [ "*.betasektionen.se" ];
+        };
+      };
     };
   };
   networking.firewall.allowedTCPPorts = [ 80 443 8443 ];
   networking.firewall.allowedUDPPorts = [ 8443 ];
 
   age.secrets.nomad-traefik-acl-token.file = secretsDir + "/nomad-traefik-acl-token.env.age";
+  age.secrets.cloudflare-dns-api-token.file = secretsDir + "/cloudflare-dns-api-token.env.age";
 }

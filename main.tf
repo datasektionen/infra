@@ -107,3 +107,24 @@ resource "cloudflare_record" "mattermost" {
   zone_id = data.cloudflare_zone.datasektionen.id
   value   = hcloud_server.cluster_hosts["ares"].ipv4_address
 }
+
+data "cloudflare_api_token_permission_groups" "all" {}
+resource "cloudflare_api_token" "acme_dns_challenge" {
+  name = "tf-acme-dns-challenge"
+  policy {
+    permission_groups = [
+      data.cloudflare_api_token_permission_groups.all.zone["DNS Write"],
+    ]
+    resources = {
+      "com.cloudflare.api.account.zone.*" = "*"
+    }
+  }
+  provisioner "local-exec" {
+    command     = <<BASH
+      rm cloudflare-dns-api-token.env.age
+      echo "CLOUDFLARE_DNS_API_TOKEN=${self.value}" | \
+        agenix -e cloudflare-dns-api-token.env.age
+    BASH
+    working_dir = "./secrets"
+  }
+}
