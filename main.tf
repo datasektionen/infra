@@ -87,6 +87,13 @@ resource "hcloud_network_subnet" "cluster-main" {
   network_zone = "eu-central"
 }
 
+resource "cloudflare_record" "zone_apex" {
+  name    = "@"
+  type    = "A"
+  zone_id = data.cloudflare_zone.betasektionen.id
+  value   = hcloud_server.cluster_hosts["ares"].ipv4_address
+}
+
 resource "cloudflare_record" "zone_wildcard" {
   name    = "*"
   type    = "A"

@@ -1,10 +1,10 @@
 locals {
   # NOTE: Must be kept in sync with `config.dsekt.addresses.hosts` in nix
   cluster_hosts = {
-    zeus     = { role = "server", private_ip_addr = "10.83.0.2", server_type = "cx11" },
-    poseidon = { role = "server", private_ip_addr = "10.83.0.3", server_type = "cx11" },
-    hades    = { role = "server", private_ip_addr = "10.83.0.4", server_type = "cx11" },
-    ares     = { role = "client", private_ip_addr = "10.83.0.5", server_type = "cx21" },
+    zeus     = { role = "server", private_ip_addr = "10.83.0.2", server_type = "cx11" }
+    poseidon = { role = "server", private_ip_addr = "10.83.0.3", server_type = "cx11" }
+    hades    = { role = "server", private_ip_addr = "10.83.0.4", server_type = "cx11" }
+    ares     = { role = "client", private_ip_addr = "10.83.0.5", server_type = "cx21" }
   }
 }
 
