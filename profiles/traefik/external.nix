@@ -34,7 +34,7 @@
         prefix = "traefik-external";
         # TODO: get all namespaces dynamically, e.g. using `nomad namespace list -json | jq '.[].Name' -r`
         # NOTE: keep in sync with the same option in internal.nix
-        namespaces = [ "default" "mattermost" ];
+        namespaces = [ "default" "mattermost" "auth" ];
       };
 
       certificatesresolvers.default.acme = {

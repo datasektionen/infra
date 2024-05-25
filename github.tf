@@ -19,6 +19,21 @@ resource "nomad_acl_token" "deploy_default" {
   type     = "client"
 }
 
+resource "nomad_acl_policy" "deploy_auth" {
+  name      = "deploy-auth"
+  rules_hcl = <<HCL
+    namespace "auth" {
+      capabilities = ["read-job", "submit-job"]
+    }
+  HCL
+}
+
+resource "nomad_acl_token" "deploy_auth" {
+  name     = "deploy-auth"
+  policies = [nomad_acl_policy.deploy_auth.name]
+  type     = "client"
+}
+
 resource "github_actions_secret" "nomad_token_aaallt2" {
   repository      = "aaallt2"
   secret_name     = "NOMAD_TOKEN"
@@ -35,4 +50,10 @@ resource "github_actions_secret" "nomad_token_bawang" {
   repository      = "bawang"
   secret_name     = "NOMAD_TOKEN"
   plaintext_value = nomad_acl_token.deploy_default.secret_id
+}
+
+resource "github_actions_secret" "nomad_token_dfunkt" {
+  repository      = "dfunkt"
+  secret_name     = "NOMAD_TOKEN"
+  plaintext_value = nomad_acl_token.deploy_auth.secret_id
 }

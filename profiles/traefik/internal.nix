@@ -18,7 +18,7 @@
         };
         prefix = "traefik-internal";
         # NOTE: keep in sync with the same option in external.nix
-        namespaces = [ "default" "mattermost" ];
+        namespaces = [ "default" "mattermost" "auth" ];
       };
     };
   };

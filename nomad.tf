@@ -41,3 +41,8 @@ resource "nomad_namespace" "mattermost" {
 resource "nomad_job" "mattermost" {
   jobspec = file("${path.module}/mattermost.nomad.hcl")
 }
+
+resource "nomad_namespace" "auth" {
+  name = "auth"
+  description = "Contains jobs that provide auth{entication,orization} for other jobs"
+}
