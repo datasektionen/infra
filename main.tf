@@ -101,13 +101,6 @@ resource "cloudflare_record" "zone_wildcard" {
   value   = hcloud_server.cluster_hosts["ares"].ipv4_address
 }
 
-resource "cloudflare_record" "mattermost" {
-  name    = "mattermost"
-  type    = "A"
-  zone_id = data.cloudflare_zone.datasektionen.id
-  value   = hcloud_server.cluster_hosts["ares"].ipv4_address
-}
-
 data "cloudflare_api_token_permission_groups" "all" {}
 resource "cloudflare_api_token" "acme_dns_challenge" {
   name = "tf-acme-dns-challenge"
