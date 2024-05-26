@@ -52,6 +52,18 @@ resource "github_actions_secret" "nomad_token_bawang" {
   plaintext_value = nomad_acl_token.deploy_default.secret_id
 }
 
+resource "github_actions_secret" "nomad_token_styrdokument_bawang" {
+  repository      = "styrdokument-bawang"
+  secret_name     = "NOMAD_TOKEN"
+  plaintext_value = nomad_acl_token.deploy_default.secret_id
+}
+
+resource "github_actions_secret" "nomad_token_calypso" {
+  repository      = "calypso"
+  secret_name     = "NOMAD_TOKEN"
+  plaintext_value = nomad_acl_token.deploy_default.secret_id
+}
+
 resource "github_actions_secret" "nomad_token_dfunkt" {
   repository      = "dfunkt"
   secret_name     = "NOMAD_TOKEN"
