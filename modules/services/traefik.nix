@@ -1,4 +1,4 @@
-# Taken from https://github.com/NixOS/nixpkgs/blob/9a9960b98418f8c385f52de3b09a63f9c561427a/nixos/modules/services/web-servers/traefik.nix
+# Taken from https://github.com/NixOS/nixpkgs/blob/49ee0e94463abada1de470c9c07bfc12b36dcf40/nixos/modules/services/web-servers/traefik.nix
 # and modified to allow for running multiple instances of traefik.
 { config, lib, pkgs, ... }:
 with lib;
@@ -62,12 +62,7 @@ let
 in
 {
   options.dsekt.services.traefik = {
-    package = mkOption {
-      default = pkgs.traefik;
-      defaultText = literalExpression "pkgs.traefik";
-      type = types.package;
-      description = lib.mdDoc "Traefik package to use.";
-    };
+    package = mkPackageOption pkgs "traefik" { };
 
     servers = mkOption {
       type = types.attrsOf (types.submodule ({ config, name, ... }: {
@@ -76,14 +71,14 @@ in
             default = null;
             example = literalExpression "/path/to/static_config.toml";
             type = types.nullOr types.path;
-            description = lib.mdDoc ''
+            description = ''
               Path to traefik's static configuration to use.
               (Using that option has precedence over `staticConfigOptions` and `dynamicConfigOptions`)
             '';
           };
 
           staticConfigOptions = mkOption {
-            description = lib.mdDoc ''
+            description = ''
               Static configuration for Traefik.
             '';
             type = jsonValue;
@@ -100,14 +95,14 @@ in
             default = null;
             example = literalExpression "/path/to/dynamic_config.toml";
             type = types.nullOr types.path;
-            description = lib.mdDoc ''
+            description = ''
               Path to traefik's dynamic configuration to use.
               (Using that option has precedence over `dynamicConfigOptions`)
             '';
           };
 
           dynamicConfigOptions = mkOption {
-            description = lib.mdDoc ''
+            description = ''
               Dynamic configuration for Traefik.
             '';
             type = jsonValue;
@@ -126,7 +121,7 @@ in
           dataDir = mkOption {
             default = "/var/lib/traefik-${name}";
             type = types.path;
-            description = lib.mdDoc ''
+            description = ''
               Location for any persistent data traefik creates, ie. acme
             '';
           };
@@ -135,7 +130,7 @@ in
             default = "traefik";
             type = types.str;
             example = "docker";
-            description = lib.mdDoc ''
+            description = ''
               Set the group that traefik runs under.
               For the docker backend this needs to be set to `docker` instead.
             '';
@@ -145,7 +140,7 @@ in
             default = [ ];
             type = types.listOf types.path;
             example = [ "/run/secrets/traefik.env" ];
-            description = lib.mdDoc ''
+            description = ''
               Files to load as environment file. Environment variables from this file
               will be substituted into the static configuration file using envsubst.
             '';
@@ -166,6 +161,7 @@ in
     systemd.services = lib.mapAttrs'
       (name: c: lib.nameValuePair "traefik-${name}" {
         description = "Traefik web server";
+        wants = [ "network-online.target" ];
         after = [ "network-online.target" ];
         wantedBy = [ "multi-user.target" ];
         startLimitIntervalSec = 86400;
@@ -191,7 +187,7 @@ in
           PrivateDevices = true;
           ProtectHome = true;
           ProtectSystem = "full";
-          ReadWriteDirectories = c.dataDir;
+          ReadWritePaths = [ c.dataDir ];
           RuntimeDirectory = "traefik-${name}";
         };
       })
