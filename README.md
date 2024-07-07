@@ -1,3 +1,21 @@
+# Infra(structure) 🛣️
+
+Each server runs NixOS and is defined by the file called `hosts/$hostname.nix` and those that are VMs on Hetzner Cloud have their existence defined at the top of `hosts.tf`. They all live in the cloud project called "Informationsorganet".
+
+They are all on the same private network with the network prefix `10.83.0.0/16`. It is defined within Hetzner, which means that `10.83.0.1` is reserved by them.
+
+Systems are ran by nomad and deployed by a job file in their own repository. Unfortunately, it's not possible to give someone access to interact with just some specific jobs, but rather with some specific namespaces. Jobs in different namespaces can however not talk with each other using Nomad's built-in networking. To let jobs talk with each other we use an internal traefik instance running on each nomad client node (those that run jobs). For this instance, jobs should have the hostname `<job name>.nomad.dsekt.internal` as this will point to the current server's ip address in the private network where traefik will listen on port 80 and proxy the request to the job, no matter which namespace or host it's on.
+
+We also host some third party websites in nomad (e.g. mattermost) and these have their job specs in this repository and are referenced in `nomad.tf`.
+
+All servers run bind9, a DNS server. Within it, each host get the domain name `$hostname.dsekt.internal`. Additionally, services/programs running on a specific host (i.e. not in nomad) should get a CNAME record at `$name.dsekt.internal` pointing to it's host.
+
+A postgres(ql) instance is running on the host _ares_. It should have scheduled backups, but doesn't yet.
+
+Life would be easier if programs never needed persistent storage as a file system directory/file, but that's not always the case. One could probably invest some time in [CSI](https://github.com/hetznercloud/csi-driver/blob/main/docs/nomad/README.md) to store those in a Hetzner volume or something like that, but currently host volumes are used. They can be defined using the option `services.nomad.settings.client.host_volume` in a host's NixOS config and then be referenced in a job spec. Note that this locks the job to that host.
+
+Tokens for auth{enticating,orizing} deployments from GitHub actions are defined in `github.tf`. They are uploaded to GitHub automatically. To add a deployment action to a repository, add an entry there for the appropriate namespace and copy the deployment action and job spec from some other repository. (Would it maybe be nice to have a template/reference action and job spec?)
+
 ## State
 
 State is stored in the S3 bucket `dsekt-tf-state`. It was created with the following settings:
@@ -85,7 +103,7 @@ Set the `hcloud_token` tf variable, e.g. by setting the `TF_VAR_hcloud_token` en
 
 ### GitHub
 
-Authenticate with the github cli using:
+Authenticate with the GitHub cli using:
 
 ```sh
 gh auth login -s admin:org
@@ -93,4 +111,4 @@ gh auth login -s admin:org
 
 When asked about preferred protocol for git operations, pick any and then pick `no` or `Skip` on the following option. (And then wonder how they managed to make such a horrible cli tool).
 
-The `admin:org` scope is needed to set github actions secrets and variables.
+The `admin:org` scope is needed to set GitHub actions secrets and variables.
