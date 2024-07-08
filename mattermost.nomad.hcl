@@ -19,10 +19,9 @@ job "mattermost" {
       port     = "http"
       provider = "nomad"
       tags = [
-        "traefik-external.enable=true",
-        "traefik-external.http.routers.mattermost.rule=Host(`${var.domain_name}`)",
-        "traefik-external.http.routers.mattermost.entrypoints=websecure",
-        "traefik-external.http.routers.mattermost.tls.certresolver=default",
+        "traefik.enable=true",
+        "traefik.http.routers.mattermost.rule=Host(`${var.domain_name}`)",
+        "traefik.http.routers.mattermost.tls.certresolver=default",
       ]
     }
 
@@ -31,10 +30,10 @@ job "mattermost" {
       port     = "calls"
       provider = "nomad"
       tags = [
-        "traefik-external.enable=true",
-        "traefik-external.tcp.routers.calls-tcp.entrypoints=mattermost-calls-tcp",
-        "traefik-external.tcp.routers.calls-tcp.rule=ClientIP(`0.0.0.0/0`)",
-        "traefik-external.udp.routers.calls-udp.entrypoints=mattermost-calls-udp",
+        "traefik.enable=true",
+        "traefik.tcp.routers.calls-tcp.rule=ClientIP(`0.0.0.0/0`)",
+        "traefik.tcp.routers.calls-tcp.entrypoints=mattermost-calls-tcp",
+        "traefik.udp.routers.calls-udp.entrypoints=mattermost-calls-udp",
       ]
     }
 

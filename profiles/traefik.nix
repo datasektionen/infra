@@ -1,6 +1,7 @@
 { config, pkgs, secretsDir, ... }:
 {
-  dsekt.services.traefik.servers.external = {
+  services.traefik = {
+    enable = true;
     environmentFiles = [
       config.age.secrets.nomad-traefik-acl-token.path
       config.age.secrets.cloudflare-dns-api-token.path
@@ -8,7 +9,7 @@
     ];
     staticConfigOptions = {
       api.dashboard = true;
-      entryPoints.web = {
+      entryPoints.httpredirect = {
         # This port is also used by traefik.internal, so we need to bind to only the public address.
         address = "${config.networking.hostName}.datasektionen.se:80";
         http.redirections.entryPoint = {
@@ -17,7 +18,11 @@
           permanent = "true";
         };
       };
-      entryPoints.websecure.address = ":443";
+      entryPoints.web = {
+        address = ":443";
+        asDefault = true;
+      };
+      entryPoints.web-internal.address = "${config.dsekt.addresses.hosts.self}:80";
       entryPoints.mattermost-calls-tcp.address = ":8443/tcp";
       entryPoints.mattermost-calls-udp.address = ":8443/udp";
 
@@ -29,9 +34,8 @@
         endpoint = {
           address = "https://127.0.0.1:4646";
           token = "\${NOMAD_TOKEN}";
-          tls.ca = "${../../files/nomad-agent-ca.pem}";
+          tls.ca = "${../files/nomad-agent-ca.pem}";
         };
-        prefix = "traefik-external";
         # TODO: get all namespaces dynamically, e.g. using `nomad namespace list -json | jq '.[].Name' -r`
         # NOTE: keep in sync with the same option in internal.nix
         namespaces = [ "default" "mattermost" "auth" ];
@@ -40,7 +44,7 @@
       certificatesresolvers.default.acme = {
         # Good for testing: caserver = "https://acme-staging-v02.api.letsencrypt.org/directory";
         email = "d-sys@datasektionen.se";
-        storage = config.dsekt.services.traefik.servers.external.dataDir + "/acme.json";
+        storage = config.services.traefik.dataDir + "/acme.json";
         dnschallenge = {
           provider = "cloudflare";
           resolvers = [ "1.1.1.1:53" ];
@@ -54,7 +58,6 @@
           service = "api@internal";
           middlewares = [ "auth" ];
           tls.certresolver = "default";
-          entrypoints = [ "websecure" ];
         };
         # Temporary, use something better in the future
         middlewares.auth.basicAuth.users = [
@@ -64,13 +67,12 @@
           rule = "Host(`nomad.datasektionen.se`)";
           service = "nomad";
           tls.certresolver = "default";
-          entrypoints = [ "websecure" ];
         };
         services.nomad.loadBalancer = {
           servers = [{ url = "https://127.0.0.1:4646"; }];
           serversTransport = "nomadTransport";
         };
-        serversTransports.nomadTransport.rootCAs = "${../../files/nomad-agent-ca.pem}";
+        serversTransports.nomadTransport.rootCAs = "${../files/nomad-agent-ca.pem}";
       };
       tls.stores.default.defaultGeneratedCert = {
         resolver = "default";

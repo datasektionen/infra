@@ -8,8 +8,7 @@ in
     base
     nomad.client
     postgres
-    traefik.external
-    traefik.internal
+    traefik
   ];
 
   services.nomad.settings.client.host_volume = lib.listToAttrs (lib.forEach mattermost-dirs
