@@ -9,15 +9,6 @@
     ];
     staticConfigOptions = {
       api.dashboard = true;
-      entryPoints.httpredirect = {
-        # This port is also used by traefik.internal, so we need to bind to only the public address.
-        address = "${config.networking.hostName}.datasektionen.se:80";
-        http.redirections.entryPoint = {
-          to = "websecure";
-          scheme = "https";
-          permanent = "true";
-        };
-      };
       entryPoints.web = {
         address = ":443";
         asDefault = true;
@@ -25,6 +16,15 @@
       entryPoints.web-internal.address = "${config.dsekt.addresses.hosts.self}:80";
       entryPoints.mattermost-calls-tcp.address = ":8443/tcp";
       entryPoints.mattermost-calls-udp.address = ":8443/udp";
+      entryPoints.httpredirect = {
+        # This port is also used by the web-internal entrypoint, so we need to bind to only the public address.
+        address = "${config.networking.hostName}.datasektionen.se:80";
+        http.redirections.entryPoint = {
+          to = "websecure";
+          scheme = "https";
+          permanent = "true";
+        };
+      };
 
       log.level = "INFO";
       accessLog = { };
@@ -37,7 +37,6 @@
           tls.ca = "${../files/nomad-agent-ca.pem}";
         };
         # TODO: get all namespaces dynamically, e.g. using `nomad namespace list -json | jq '.[].Name' -r`
-        # NOTE: keep in sync with the same option in internal.nix
         namespaces = [ "default" "mattermost" "auth" ];
       };
 
