@@ -20,7 +20,7 @@
         # This port is also used by the web-internal entrypoint, so we need to bind to only the public address.
         address = "${config.networking.hostName}.datasektionen.se:80";
         http.redirections.entryPoint = {
-          to = "websecure";
+          to = "web";
           scheme = "https";
           permanent = "true";
         };
