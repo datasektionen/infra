@@ -14,4 +14,15 @@
     hashedPassword = "$y$j9T$JKUgC8EQsXkh08UQaB/ZA1$SH/lW5hNQqgHfhIdB/8si3tWpwYMy4gm6GgV6CcaWxC";
     shell = pkgs.fish;
   };
+
+  users.users.rmfseo = {
+    isNormalUser = true;
+    group = "users";
+    extraGroups = [ "wheel" ];
+    openssh.authorizedKeys.keys = [
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIG5LP3Zg7IfsuPElwU/QTYG1Mz5WROTKP7h4cT2MQeza raf@amsterdam"
+    ];
+    hashedPassword = "$y$j9T$wGjTUbozJn.GeZyKWYgBc/$U9zB.YZUX5jbmN429t46UmLeFp/CNMf1GMoKOFoUG25";
+    shell = pkgs.zsh;
+  };
 }

@@ -19,6 +19,7 @@
 
   programs.command-not-found.enable = false;
   programs.fish.enable = true;
+  programs.zsh.enable = true;
 
   services.openssh.enable = true;
 
