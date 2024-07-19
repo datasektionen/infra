@@ -1,5 +1,5 @@
 {
-  description = "NixOS configurations for Konglig Datasektionens servers";
+  description = "NixOS configurations for Konglig Datasektionen's servers";
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-24.05";

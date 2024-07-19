@@ -8,7 +8,7 @@ Systems are ran by nomad and deployed by a job file in their own repository. Unf
 
 We also host some third party websites in nomad (e.g. mattermost) and these have their job specs in this repository and are referenced in `nomad.tf`.
 
-All servers run bind9, a DNS server. Within it, each host get the domain name `$hostname.dsekt.internal`. Additionally, services/programs running on a specific host (i.e. not in nomad) should get a CNAME record at `$name.dsekt.internal` pointing to it's host.
+All servers run bind9, a DNS server. Within it, each host get the domain name `$hostname.dsekt.internal`. Additionally, services/programs running on a specific host (i.e. not in nomad) should get a CNAME record at `$name.dsekt.internal` pointing to its host.
 
 A postgres(ql) instance is running on the host _ares_. It should have scheduled backups, but doesn't yet.
 
@@ -53,7 +53,7 @@ First, run
 tofu apply -target='random_pet.stage1_nomad_cluster'
 ```
 
-Then, the cluster should be ready, so bootstrap it's ACL system with:
+Then, the cluster should be ready, so bootstrap its ACL system with:
 ```sh
 nomad acl bootstrap
 ```
@@ -93,7 +93,7 @@ To create a token
 - Go to `https://dash.cloudflare.com/profile/api-tokens`;
 - click *Create Token*;
 - pick the *Create Additional Tokens* template;
-- at the top, change it's name to (something like) "$USER Admin Token";
+- at the top, change its name to (something like) "$USER Admin Token";
 - under permissions, add *Zone* -> *DNS* -> *Edit*; and
 - set the TTL to a reasonable date.
 
