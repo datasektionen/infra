@@ -1,4 +1,9 @@
-{ config, pkgs, secretsDir, ... }:
+{
+  config,
+  pkgs,
+  secretsDir,
+  ...
+}:
 {
   services.traefik = {
     enable = true;
@@ -37,7 +42,11 @@
           tls.ca = "${../files/nomad-agent-ca.pem}";
         };
         # TODO: get all namespaces dynamically, e.g. using `nomad namespace list -json | jq '.[].Name' -r`
-        namespaces = [ "default" "mattermost" "auth" ];
+        namespaces = [
+          "default"
+          "mattermost"
+          "auth"
+        ];
       };
 
       certificatesresolvers.default.acme = {
@@ -68,7 +77,7 @@
           tls.certresolver = "default";
         };
         services.nomad.loadBalancer = {
-          servers = [{ url = "https://127.0.0.1:4646"; }];
+          servers = [ { url = "https://127.0.0.1:4646"; } ];
           serversTransport = "nomadTransport";
         };
         serversTransports.nomadTransport.rootCAs = "${../files/nomad-agent-ca.pem}";
@@ -82,7 +91,11 @@
       };
     };
   };
-  networking.firewall.allowedTCPPorts = [ 80 443 8443 ];
+  networking.firewall.allowedTCPPorts = [
+    80
+    443
+    8443
+  ];
   networking.firewall.allowedUDPPorts = [ 8443 ];
 
   age.secrets.nomad-traefik-acl-token.file = secretsDir + "/nomad-traefik-acl-token.env.age";

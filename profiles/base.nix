@@ -1,4 +1,9 @@
-{ profiles, pkgs, agenix, ... }:
+{
+  profiles,
+  pkgs,
+  agenix,
+  ...
+}:
 {
   imports = with profiles; [
     nix

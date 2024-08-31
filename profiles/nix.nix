@@ -1,9 +1,7 @@
 { pkgs, nixpkgs, ... }:
 {
   nix.registry.nixpkgs.flake = nixpkgs;
-  nix.nixPath = [
-    "nixpkgs=${nixpkgs}"
-  ];
+  nix.nixPath = [ "nixpkgs=${nixpkgs}" ];
 
   nix.settings.trusted-users = [ "@wheel" ];
 

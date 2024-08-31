@@ -20,7 +20,11 @@ in
   "ares_ssh_host_ed25519_key.age".publicKeys = sysadmins;
 
   # `{"server":{"encrypt":"base64urlkeythatis32byteslong"}}`
-  "nomad-gossip-key.json.age".publicKeys = sysadmins ++ [ zeus poseidon hades ];
+  "nomad-gossip-key.json.age".publicKeys = sysadmins ++ [
+    zeus
+    poseidon
+    hades
+  ];
   "nomad-agent-ca-key.pem.age".publicKeys = sysadmins;
 
   # `NOMAD_TOKEN=uuid-with-dashes`

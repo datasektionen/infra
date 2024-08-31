@@ -1,9 +1,18 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 let
   # We must allow the 83-address, otherwise queries from the host are denied. The 127-address
   # probably doesn't have to be allowed, but it's probably be nice if `host some-domain.name
   # localhost` works. The 172-address is needed to allow docker containers to make queries.
-  allowedNetworks = [ config.dsekt.addresses.subnet "127.0.0.0/24" "172.16.0.0/12" ];
+  allowedNetworks = [
+    config.dsekt.addresses.subnet
+    "127.0.0.0/24"
+    "172.16.0.0/12"
+  ];
 in
 {
   environment.etc."resolv.conf".text = ''
@@ -27,7 +36,10 @@ in
     cacheNetworks = allowedNetworks;
 
     forward = "first";
-    forwarders = [ "1.1.1.1" "1.0.0.1" ];
+    forwarders = [
+      "1.1.1.1"
+      "1.0.0.1"
+    ];
 
     zones."dsekt.internal" = {
       master = true;
@@ -44,9 +56,9 @@ in
                  NS    ns
         ns       A     ${config.dsekt.addresses.hosts.self}
 
-        ${lib.concatStringsSep "\n" (lib.mapAttrsToList
-          (hostname: address: "${hostname} A ${address}")
-          config.dsekt.addresses.hosts)}
+        ${lib.concatStringsSep "\n" (
+          lib.mapAttrsToList (hostname: address: "${hostname} A ${address}") config.dsekt.addresses.hosts
+        )}
         *.nomad  A     ${config.dsekt.addresses.hosts.self}
 
         postgres CNAME ares

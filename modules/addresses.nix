@@ -1,7 +1,12 @@
 { config, lib, ... }:
 let
   cfg = config.dsekt.addresses;
-  opt = type: lib.mkOption { inherit type; readOnly = true; };
+  opt =
+    type:
+    lib.mkOption {
+      inherit type;
+      readOnly = true;
+    };
 in
 {
   options.dsekt.addresses.hosts = opt (lib.types.attrsOf lib.types.str);
@@ -19,7 +24,11 @@ in
       self = self.${config.networking.hostName};
     });
 
-    groups.cluster-servers = with cfg.hosts; [ zeus poseidon hades ];
+    groups.cluster-servers = with cfg.hosts; [
+      zeus
+      poseidon
+      hades
+    ];
 
     # Must be kept in sync with `hcloud_network_subnet.cluster-main.ip_range` in tf
     subnet = "10.83.0.0/16";

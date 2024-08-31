@@ -1,4 +1,5 @@
-{ modulesPath, disko, ... }: {
+{ modulesPath, disko, ... }:
+{
   imports = [
     (modulesPath + "/profiles/qemu-guest.nix")
     disko.nixosModules.disko

@@ -1,4 +1,9 @@
-{ config, profiles, secretsDir, ... }:
+{
+  config,
+  profiles,
+  secretsDir,
+  ...
+}:
 {
   imports = [ profiles.nomad.shared ];
 

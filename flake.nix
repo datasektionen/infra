@@ -15,7 +15,14 @@
     agenix.inputs.nixpkgs.follows = "nixpkgs";
   };
 
-  outputs = { self, nixpkgs, disko, nixos-anywhere, agenix }:
+  outputs =
+    {
+      self,
+      nixpkgs,
+      disko,
+      nixos-anywhere,
+      agenix,
+    }:
     let
       system = "x86_64-linux";
       pkgs = import nixpkgs {
@@ -25,35 +32,40 @@
       lib = import ./lib.nix { inherit (nixpkgs) lib; };
     in
     {
-      formatter.${system} = pkgs.nixpkgs-fmt;
-      nixosConfigurations = nixpkgs.lib.mapAttrs'
-        (name: _:
-          let hostname = nixpkgs.lib.removeSuffix ".nix" name; in {
-            name = hostname;
-            value = nixpkgs.lib.nixosSystem {
-              inherit system pkgs;
-              specialArgs = {
-                inherit nixpkgs disko agenix;
-                profiles = lib.rakeLeaves ./profiles;
-                secretsDir = ./secrets;
-              };
-              modules = [
-                (./hosts + "/${name}")
-                (_: { networking.hostName = hostname; })
-              ] ++ (nixpkgs.lib.collect builtins.isPath (lib.rakeLeaves ./modules));
+      formatter.${system} = pkgs.nixfmt-rfc-style;
+      nixosConfigurations = nixpkgs.lib.mapAttrs' (
+        name: _:
+        let
+          hostname = nixpkgs.lib.removeSuffix ".nix" name;
+        in
+        {
+          name = hostname;
+          value = nixpkgs.lib.nixosSystem {
+            inherit system pkgs;
+            specialArgs = {
+              inherit nixpkgs disko agenix;
+              profiles = lib.rakeLeaves ./profiles;
+              secretsDir = ./secrets;
             };
-          })
-        (builtins.readDir ./hosts);
+            modules = [
+              (./hosts + "/${name}")
+              (_: { networking.hostName = hostname; })
+            ] ++ (nixpkgs.lib.collect builtins.isPath (lib.rakeLeaves ./modules));
+          };
+        }
+      ) (builtins.readDir ./hosts);
       devShells.${system}.default = pkgs.mkShellNoCC {
-        packages = [
-          nixos-anywhere.packages.${system}.default
-          agenix.packages.${system}.default
-        ] ++ (with pkgs; [
-          age
-          opentofu
-          nomad
-          gh
-        ]);
+        packages =
+          [
+            nixos-anywhere.packages.${system}.default
+            agenix.packages.${system}.default
+          ]
+          ++ (with pkgs; [
+            age
+            opentofu
+            nomad
+            gh
+          ]);
       };
     };
 }

@@ -4,11 +4,15 @@
     enable = true;
     settings = {
       bind_addr = "0.0.0.0";
-      advertise = let addr = config.dsekt.addresses.hosts.self; in {
-        http = addr;
-        rpc = addr;
-        serf = addr;
-      };
+      advertise =
+        let
+          addr = config.dsekt.addresses.hosts.self;
+        in
+        {
+          http = addr;
+          rpc = addr;
+          serf = addr;
+        };
       tls = {
         ca_file = ../../files/nomad-agent-ca.pem;
         # WARNING: not sure if these paths are stable, but you can't read env
@@ -29,9 +33,10 @@
     ];
   };
 
-  networking.firewall.allowedTCPPorts = [ 4646 4647 ];
-
-  systemd.tmpfiles.rules = [
-    "d /var/lib/nomad-certs 0750 root root"
+  networking.firewall.allowedTCPPorts = [
+    4646
+    4647
   ];
+
+  systemd.tmpfiles.rules = [ "d /var/lib/nomad-certs 0750 root root" ];
 }

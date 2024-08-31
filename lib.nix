@@ -34,7 +34,8 @@ let
     */
     dirPath:
     let
-      seive = file: type:
+      seive =
+        file: type:
         # Only rake `.nix` files or directories
         (type == "regular" && lib.hasSuffix ".nix" file) || (type == "directory");
 
@@ -44,12 +45,11 @@ let
           let
             path = dirPath + "/${file}";
           in
-          if
-            (type == "regular")
-            || (type == "directory" && builtins.pathExists (path + "/default.nix"))
-          then path
+          if (type == "regular") || (type == "directory" && builtins.pathExists (path + "/default.nix")) then
+            path
           # recurse on directories that don't contain a `default.nix`
-          else rakeLeaves path;
+          else
+            rakeLeaves path;
       };
 
       files = lib.filterAttrs seive (builtins.readDir dirPath);
