@@ -64,6 +64,12 @@ resource "github_actions_secret" "nomad_token_calypso" {
   plaintext_value = nomad_acl_token.deploy_default.secret_id
 }
 
+resource "github_actions_secret" "nomad_token_skywhale" {
+  repository      = "skywhale"
+  secret_name     = "NOMAD_TOKEN"
+  plaintext_value = nomad_acl_token.deploy_default.secret_id
+}
+
 resource "github_actions_secret" "nomad_token_dfunkt" {
   repository      = "dfunkt"
   secret_name     = "NOMAD_TOKEN"
