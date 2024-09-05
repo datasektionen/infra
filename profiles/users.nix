@@ -21,6 +21,7 @@
     extraGroups = [ "wheel" ];
     openssh.authorizedKeys.keys = [
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIG5LP3Zg7IfsuPElwU/QTYG1Mz5WROTKP7h4cT2MQeza raf@amsterdam"
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOwaEu0TGRXhxjk1+Pz2LP66Vfvvgr3IvxkRfkcRiP0Y raf@rotterdam"
     ];
     hashedPassword = "$y$j9T$wGjTUbozJn.GeZyKWYgBc/$U9zB.YZUX5jbmN429t46UmLeFp/CNMf1GMoKOFoUG25";
     shell = pkgs.zsh;
