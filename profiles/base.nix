@@ -26,7 +26,12 @@
   programs.fish.enable = true;
   programs.zsh.enable = true;
 
-  services.openssh.enable = true;
+  services.openssh = {
+    enable = true;
+    settings = {
+      PasswordAuthentication = false;
+    };
+  };
 
   security.sudo.wheelNeedsPassword = false;
 
