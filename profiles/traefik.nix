@@ -70,6 +70,7 @@
         # Temporary, use something better in the future
         middlewares.auth.basicAuth.users = [
           "mathm:$2y$05$/.Sr1SoOYhGDHK0j7lE37eazHgqHM52eas0QF96EzvJfk6ma5XCzK"
+          "rmfseo:$2y$05$PoyrRBezOjCyO6bVYx/L5e7/u3oSIUhZVTraMOc2AT8h7k/.S.I2y"
         ];
         routers.nomad = {
           rule = "Host(`nomad.datasektionen.se`)";
