@@ -26,4 +26,16 @@
     hashedPassword = "$y$j9T$wGjTUbozJn.GeZyKWYgBc/$U9zB.YZUX5jbmN429t46UmLeFp/CNMf1GMoKOFoUG25";
     shell = pkgs.zsh;
   };
+
+  # for GitHub actions
+  users.users.deploy = {
+    isNormalUser = true;
+    group = "deploy";
+    extraGroups = [ "wheel" ];
+    openssh.authorizedKeys.keys = [
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIeUB4ftByjQKLMG2cADvuwr0DU+rD+CNCstrSyzCzG+ deploy@infra-gh"
+    ];
+    shell = pkgs.bash;
+  };
+  users.groups.deploy = {};
 }

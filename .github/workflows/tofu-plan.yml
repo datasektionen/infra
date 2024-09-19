@@ -1,0 +1,47 @@
+name: Create OpenTofu plan
+
+on: pull_request
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  plan:
+    runs-on: ubuntu-latest
+    name: Create a plan for the changes introduced
+    env:
+      # tofu needs a token with more perms,
+      GITHUB_TOKEN: ${{ secrets.TF_GITHUB_TOKEN }}
+      # but this action should write PR comments using a bot account
+      TERRAFORM_ACTIONS_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      NOMAD_ADDR: ${{ vars.NOMAD_ADDR }}
+      NOMAD_TOKEN: ${{ secrets.NOMAD_TOKEN }}
+
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+      # dflook/tofu-* actions run inside a debian:bullseye container,
+      # so we cannot use another action to prep the environment
+      TERRAFORM_PRE_RUN: |
+        # install nix
+        curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix | sh -s -- install linux --no-confirm --init none
+        . /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
+        ln -s $(which nix) /bin/nix
+
+        # allow accessing host-owned repo files inside container
+        git config --global --add safe.directory '*'
+
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+
+      - name: tofu plan
+        uses: dflook/tofu-plan@v1.44.0
+        with:
+          label: dsekt-infra
+          variables: |
+            hcloud_token = "${{ secrets.TF_HCLOUD_TOKEN }}"
+            cloudflare_api_token = "${{ secrets.TF_CLOUDFLARE_TOKEN }}"
+            ssh_user = "${{ vars.TF_SSH_USER }}"
