@@ -65,6 +65,7 @@
             opentofu
             nomad
             gh
+            jq
           ]);
       };
     };
