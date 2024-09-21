@@ -44,8 +44,8 @@
         # TODO: get all namespaces dynamically, e.g. using `nomad namespace list -json | jq '.[].Name' -r`
         namespaces = [
           "default"
-          "mattermost"
           "auth"
+          "mattermost"
         ];
       };
 

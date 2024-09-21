@@ -41,14 +41,6 @@ resource "cloudflare_record" "datasektionen_mail_from_spf" {
   value   = "v=spf1 include:amazonses.com -all"
 }
 
-resource "aws_iam_user" "mattermost_smtp" {
-  name = "mattermost_smtp"
-}
-
-resource "aws_iam_access_key" "mattermost_smtp" {
-  user = aws_iam_user.mattermost_smtp.name
-}
-
 data "aws_iam_policy_document" "send_email" {
   statement {
     actions   = ["ses:SendRawEmail"]
@@ -60,6 +52,16 @@ resource "aws_iam_policy" "send_email" {
   name        = "send_email"
   description = "Allows sending emails via SES"
   policy      = data.aws_iam_policy_document.send_email.json
+}
+
+# Mattermost
+
+resource "aws_iam_user" "mattermost_smtp" {
+  name = "mattermost_smtp"
+}
+
+resource "aws_iam_access_key" "mattermost_smtp" {
+  user = aws_iam_user.mattermost_smtp.name
 }
 
 resource "aws_iam_user_policy_attachment" "mattermost_smtp" {
