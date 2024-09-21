@@ -68,3 +68,18 @@ resource "aws_iam_user_policy_attachment" "mattermost_smtp" {
   user       = aws_iam_user.mattermost_smtp.name
   policy_arn = aws_iam_policy.send_email.arn
 }
+
+# Vaultwarden
+
+resource "aws_iam_user" "vaultwarden_smtp" {
+  name = "vaultwarden_smtp"
+}
+
+resource "aws_iam_access_key" "vaultwarden_smtp" {
+  user = aws_iam_user.vaultwarden_smtp.name
+}
+
+resource "aws_iam_user_policy_attachment" "vaultwarden_smtp" {
+  user       = aws_iam_user.vaultwarden_smtp.name
+  policy_arn = aws_iam_policy.send_email.arn
+}

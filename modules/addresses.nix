@@ -20,6 +20,7 @@ in
       poseidon = "10.83.0.3";
       hades = "10.83.0.4";
       ares = "10.83.0.5";
+      artemis = "10.83.0.6";
 
       self = self.${config.networking.hostName};
     });

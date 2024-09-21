@@ -49,6 +49,7 @@ jobs:
         with:
             label: dsekt-infra
             variables: |
+              ssh_user = "${{ vars.TF_SSH_USER }}"
               hcloud_token = "${{ secrets.TF_HCLOUD_TOKEN }}"
               cloudflare_api_token = "${{ secrets.TF_CLOUDFLARE_TOKEN }}"
-              ssh_user = "${{ vars.TF_SSH_USER }}"
+              vault_db_password = "${{ secrets.TF_VAULT_DB_PASSWORD }}"

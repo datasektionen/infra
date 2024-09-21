@@ -32,6 +32,30 @@ resource "nomad_job" "mattermost" {
   jobspec = file("${path.module}/jobs/mattermost.nomad.hcl")
 }
 
+# Vault
+
+variable "vault_db_password" {
+  sensitive = true
+}
+
+resource "nomad_namespace" "vault" {
+  name = "vault"
+}
+
+resource "nomad_job" "vault" {
+  jobspec = file("${path.module}/jobs/vaultwarden.nomad.hcl")
+}
+
+resource "nomad_variable" "jobs_vault" {
+  path = "nomad/jobs/vault"
+  namespace = "vault"
+  items = {
+    db_password = var.vault_db_password
+    smtp_username = aws_iam_access_key.vaultwarden_smtp.id
+    smtp_password = aws_iam_access_key.vaultwarden_smtp.ses_smtp_password_v4
+  }
+}
+
 # Auth
 
 resource "nomad_namespace" "auth" {

@@ -46,6 +46,7 @@
           "default"
           "auth"
           "mattermost"
+          "vault"
         ];
       };
 
