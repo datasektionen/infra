@@ -14,6 +14,9 @@ resource "hcloud_server" "cluster_hosts" {
   image       = "debian-12"
   server_type = each.value.server_type
   ssh_keys    = [hcloud_ssh_key.bootstrap.id]
+  lifecycle {
+    ignore_changes = [ ssh_keys ]
+  }
   network {
     network_id = hcloud_network.cluster.id
     ip         = each.value.private_ip_addr
