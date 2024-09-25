@@ -32,7 +32,7 @@ module "nixos_install" {
   instance_id = hcloud_server.cluster_hosts[each.key].id
 
   # this being marked as sensitive hides all output from nixos-anywhere, but that does not print the private key so this is fine
-  install_ssh_key = nonsensitive(sshkey_ed25519_key_pair.bootstrap.private_key_pem)
+  install_ssh_key = nonsensitive(tls_private_key.bootstrap.private_key_pem)
   install_user    = "root"
 
   target_user = var.ssh_user
@@ -62,13 +62,13 @@ resource "cloudflare_record" "server_wildcard" {
   value   = hcloud_server.cluster_hosts[each.key].ipv4_address
 }
 
-resource "sshkey_ed25519_key_pair" "bootstrap" {
-  comment = "dsekt-infra-boostrap"
+resource "tls_private_key" "bootstrap" {
+  algorithm = "ED25519"
 }
 
 resource "hcloud_ssh_key" "bootstrap" {
   name       = "dsekt-infra-bootstrap"
-  public_key = sshkey_ed25519_key_pair.bootstrap.public_key
+  public_key = tls_private_key.bootstrap.public_key_openssh
 }
 
 # This should depend on everything that's needed for the nomad cluster to be ready for getting it's

@@ -24,9 +24,9 @@ terraform {
       source  = "hashicorp/random"
       version = "3.6.1"
     }
-    sshkey = {
-      source  = "daveadams/sshkey"
-      version = "0.2.1"
+    tls = {
+      source  = "hashicorp/tls"
+      version = "4.0.5"
     }
   }
   backend "s3" {
