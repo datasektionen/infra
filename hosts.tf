@@ -35,7 +35,7 @@ module "nixos_install" {
   instance_id = hcloud_server.cluster_hosts[each.key].id
 
   # this being marked as sensitive hides all output from nixos-anywhere, but that does not print the private key so this is fine
-  install_ssh_key = nonsensitive(tls_private_key.bootstrap.private_key_pem)
+  install_ssh_key = nonsensitive(tls_private_key.bootstrap.private_key_openssh)
   install_user    = "root"
 
   target_user = var.ssh_user
