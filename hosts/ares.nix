@@ -49,10 +49,12 @@ in
 
     targets.s3 = {
       repository = "s3:https://s3.amazonaws.com/dsekt-restic-ares";
+      passwordFile = config.age.secrets.restic-s3-repo-pwd-ares.path;
       credentialsEnvFile = config.age.secrets.restic-s3-creds-ares.path;
     };
   };
 
+  age.secrets.restic-s3-repo-pwd-ares.file = secretsDir + "/restic-s3-repo-pwd-ares.age";
   age.secrets.restic-s3-creds-ares.file = secretsDir + "/restic-s3-creds-ares.env.age";
 
   # Change this if you want to lose all data on this machine!

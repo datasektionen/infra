@@ -44,24 +44,32 @@
                 '';
               };
 
+              passwordFile = lib.mkOption {
+                type = lib.types.singleLineStr;
+                example = "/etc/restic/repo-pwd";
+                description = lib.mdDoc ''
+                  Path to file containing the password to
+                  unlock the specified repository.
+                '';
+              };
+
               credentialsEnvFile = lib.mkOption {
                 type = lib.types.singleLineStr;
                 example = "/etc/restic/creds";
                 description = lib.mdDoc ''
-                  Credentials to authenticate with. Must be in env-file format,
-                  understandable by systemd.
+                  Credentials to authenticate with to the server (not to
+                  be confused with the repository's actual password).
+                  Must be in env-file format, understandable by systemd.
 
                   Example for S3 (`s3:https://s3.amazonaws.com/bucket-name`):
                   ```
                   AWS_DEFAULT_REGION=eu-north-1
                   AWS_ACCESS_KEY_ID=something
                   AWS_SECRET_ACCESS_KEY=something-else
-                  RESTIC_PASSWORD=secret
                   ```
 
                   Example for restic REST server (`rest:https://example.com/path`):
                   ```
-                  RESTIC_PASSWORD=secret
                   RESTIC_REST_USERNAME=client-hostname
                   RESTIC_REST_PASSWORD=password123
                   ```
@@ -93,7 +101,7 @@
 
       services.restic.backups = builtins.mapAttrs (name: target: {
         inherit (cfg) paths backupPrepareCommand;
-        inherit (target) repository;
+        inherit (target) repository passwordFile;
 
         initialize = true;
         timerConfig = {
@@ -102,7 +110,6 @@
           Persistent = true;
         };
 
-        passwordFile = "/no-repo-password-set"; # environmentFile (hopefully) overrides this
         environmentFile = target.credentialsEnvFile;
         pruneOpts = [
           "--keep-within-daily 7d" # keep one snapshot for each of the last 7 days
