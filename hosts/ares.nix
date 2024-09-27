@@ -1,5 +1,6 @@
 {
   lib,
+  pkgs,
   config,
   profiles,
   secretsDir,
@@ -38,7 +39,7 @@ in
 
   dsekt.restic = {
     backupPrepareCommand = ''
-      sudo -u postgres pg_dumpall > /root/postgres_dump.sql
+      ${pkgs.sudo}/bin/sudo -u postgres ${pkgs.postgresql}/bin/pg_dumpall > /root/postgres_dump.sql
     '';
 
     paths = [
