@@ -105,10 +105,10 @@
         passwordFile = "/no-repo-password-set"; # environmentFile (hopefully) overrides this
         environmentFile = target.credentialsEnvFile;
         pruneOpts = [
-          "--keep-within-daily 7d"
-          "--keep-within-weekly 5w"
-          "--keep-within-monthly 12m"
-          "--keep-within-yearly 10y"
+          "--keep-within-daily 7d" # keep one snapshot for each of the last 7 days
+          "--keep-within-weekly 2m" # +, keep one for each week in the last 2 months
+          "--keep-within-monthly 1y" # +, keep one for each month in the last year
+          "--keep-within-yearly 10y" # +, keep one for each year in the last decade
         ];
       }) cfg.targets;
     };
