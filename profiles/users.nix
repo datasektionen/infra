@@ -37,5 +37,5 @@
     ];
     shell = pkgs.bash;
   };
-  users.groups.deploy = {};
+  users.groups.deploy = { };
 }

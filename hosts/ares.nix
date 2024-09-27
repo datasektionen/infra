@@ -1,4 +1,10 @@
-{ lib, profiles, ... }:
+{
+  lib,
+  config,
+  profiles,
+  secretsDir,
+  ...
+}:
 let
   mattermost-dirs = [
     "config"
@@ -29,6 +35,24 @@ in
   systemd.tmpfiles.rules = lib.forEach mattermost-dirs (
     x: "d /var/lib/mattermost/${x} 0750 2000 2000"
   );
+
+  dsekt.restic = {
+    backupPrepareCommand = ''
+      sudo -u postgres pg_dumpall > /root/postgres_dump.sql
+    '';
+
+    paths = [
+      "/root/postgres_dump.sql"
+      "/var/lib/mattermost"
+    ];
+
+    targets.s3 = {
+      repository = "s3:https://s3.amazonaws.com/dsekt-restic-ares";
+      credentialsEnvFile = config.age.secrets.restic-s3-creds-ares.path;
+    };
+  };
+
+  age.secrets.restic-s3-creds-ares.file = secretsDir + "/restic-s3-creds-ares.env.age";
 
   # Change this if you want to lose all data on this machine!
   system.stateVersion = "23.11";

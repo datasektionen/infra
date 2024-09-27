@@ -33,4 +33,7 @@ in
 
   # `CLOUDFLARE_DNS_API_TOKEN=...`
   "cloudflare-dns-api-token.env.age".publicKeys = sysadmins ++ [ ares ];
+
+  # `AWS_DEFAULT_REGION`, `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `RESTIC_PASSWORD`
+  "restic-s3-creds-ares.env.age".publicKeys = sysadmins ++ [ ares ];
 }

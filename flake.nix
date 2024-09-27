@@ -62,6 +62,7 @@
           ]
           ++ (with pkgs; [
             age
+            age-plugin-yubikey
             opentofu
             nomad
             gh
