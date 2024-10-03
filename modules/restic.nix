@@ -18,6 +18,15 @@
       '';
     };
 
+    passwordFile = lib.mkOption {
+      type = lib.types.singleLineStr;
+      example = "/etc/restic/repo-pwd";
+      description = lib.mdDoc ''
+        Path to file containing the password to
+        unlock all target repositories.
+      '';
+    };
+
     backupPrepareCommand = lib.mkOption {
       type = with lib.types; nullOr str;
       default = null;
@@ -41,15 +50,6 @@
                 example = "s3:https://s3.amazonaws.com/bucket-name";
                 description = lib.mdDoc ''
                   Restic repository to back up to.
-                '';
-              };
-
-              passwordFile = lib.mkOption {
-                type = lib.types.singleLineStr;
-                example = "/etc/restic/repo-pwd";
-                description = lib.mdDoc ''
-                  Path to file containing the password to
-                  unlock the specified repository.
                 '';
               };
 
@@ -100,8 +100,8 @@
     lib.mkIf (builtins.length cfg.paths != 0) {
 
       services.restic.backups = builtins.mapAttrs (name: target: {
-        inherit (cfg) paths backupPrepareCommand;
-        inherit (target) repository passwordFile;
+        inherit (cfg) paths passwordFile backupPrepareCommand;
+        inherit (target) repository;
 
         initialize = true;
         timerConfig = {
