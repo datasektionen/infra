@@ -81,3 +81,9 @@ resource "github_actions_secret" "nomad_token_logout" {
   secret_name     = "NOMAD_TOKEN"
   plaintext_value = nomad_acl_token.deploy_auth.secret_id
 }
+
+resource "github_actions_secret" "nomad_token_pls" {
+  repository      = "pls"
+  secret_name     = "NOMAD_TOKEN"
+  plaintext_value = nomad_acl_token.deploy_auth.secret_id
+}
