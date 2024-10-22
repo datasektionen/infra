@@ -62,3 +62,20 @@ resource "nomad_namespace" "auth" {
   name = "auth"
   description = "Contains jobs that provide auth{entication,orization} for other jobs"
 }
+
+# Policies for humans
+
+locals {
+  namespaces_for_humans = toset(["default", "auth"])
+}
+
+resource "nomad_acl_policy" "manage_jobs" {
+  for_each    = local.namespaces_for_humans
+  name        = "manage-jobs-in-${each.value}"
+  description = "Can manage jobs in the ${each.value} namespace"
+  rules_hcl   = <<HCL
+    namespace "${each.value}" {
+      policies = ["read", "write"]
+    }
+  HCL
+}
