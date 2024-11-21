@@ -37,7 +37,10 @@
       providers.nomad = {
         exposedByDefault = false;
         endpoint = {
-          address = "https://127.0.0.1:4646";
+          # We're making nomad bind to the internal IP address so we can't use
+          # 127.0.0.1. We also can't use ${config.dsekt.addresses.hosts.self}
+          # since the certificate isn't valid for that address.
+          address = "https://${config.networking.hostName}.dsekt.internal:4646";
           token = "\${NOMAD_TOKEN}";
           tls.ca = "${../files/nomad-agent-ca.pem}";
         };
@@ -79,7 +82,7 @@
           tls.certresolver = "default";
         };
         services.nomad.loadBalancer = {
-          servers = [ { url = "https://127.0.0.1:4646"; } ];
+          servers = [ { url = "https://${config.networking.hostName}.dsekt.internal:4646"; } ];
           serversTransport = "nomadTransport";
         };
         serversTransports.nomadTransport.rootCAs = "${../files/nomad-agent-ca.pem}";

@@ -3,7 +3,7 @@
   services.nomad = {
     enable = true;
     settings = {
-      bind_addr = "0.0.0.0";
+      bind_addr = config.dsekt.addresses.hosts.self;
       advertise =
         let
           addr = config.dsekt.addresses.hosts.self;
