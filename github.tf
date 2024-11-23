@@ -34,6 +34,8 @@ resource "nomad_acl_token" "deploy_auth" {
   type     = "client"
 }
 
+// Workspace default
+
 resource "github_actions_secret" "nomad_token_aaallt2" {
   repository      = "aaallt2"
   secret_name     = "NOMAD_TOKEN"
@@ -81,6 +83,14 @@ resource "github_actions_secret" "nomad_token_wookieleaks" {
   secret_name     = "NOMAD_TOKEN"
   plaintext_value = nomad_acl_token.deploy_default.secret_id
 }
+
+resource "github_actions_secret" "nomad_token_zfinger" {
+  repository      = "zfinger"
+  secret_name     = "NOMAD_TOKEN"
+  plaintext_value = nomad_acl_token.deploy_default.secret_id
+}
+
+// Workspace auth
 
 resource "github_actions_secret" "nomad_token_dfunkt" {
   repository      = "dfunkt"
