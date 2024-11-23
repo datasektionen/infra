@@ -13,6 +13,7 @@ let
   poseidon = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKepaQJNM9zJO/MkX9yju1urpYouTSElz1M01lCeH3Ef";
   hades = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILCFb/uxJljnDlv7QZIqsV8HD337T7bJYWYkGXxf5WCn";
   ares = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOvT+r/mtIDTsTjccGXYpkA/3VQED9WHNU1NB9Hjh0Me";
+  artemis = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDiCbmT5XtIMKT62dmg/O+8x8kms6ELc7GCL9zeK8uTD";
 in
 {
   "zeus_ssh_host_ed25519_key.age".publicKeys = sysadmins;
@@ -29,7 +30,7 @@ in
   "nomad-agent-ca-key.pem.age".publicKeys = sysadmins;
 
   # `NOMAD_TOKEN=uuid-with-dashes`
-  "nomad-traefik-acl-token.env.age".publicKeys = sysadmins ++ [ ares ];
+  "nomad-traefik-acl-token.env.age".publicKeys = sysadmins ++ [ ares artemis ];
 
   # `CLOUDFLARE_DNS_API_TOKEN=...`
   "cloudflare-dns-api-token.env.age".publicKeys = sysadmins ++ [ ares ];

@@ -4,6 +4,7 @@
     hetzner-cloud
     base
     nomad.client
+    traefik
   ];
 
   services.nomad.settings.client.host_volume = {

@@ -1,36 +1,14 @@
-{
-  config,
-  pkgs,
-  secretsDir,
-  ...
-}:
+{ config, secretsDir, ... }:
+let
+  inherit (config.networking) hostName;
+in
 {
   services.traefik = {
     enable = true;
-    environmentFiles = [
-      config.age.secrets.nomad-traefik-acl-token.path
-      config.age.secrets.cloudflare-dns-api-token.path
-      (pkgs.writeText "traefik-cloudflare-config" "CLOUDFLARE_EMAIL=d-sys@datasektionen.se")
-    ];
+    environmentFiles = [ config.age.secrets.nomad-traefik-acl-token.path ];
     staticConfigOptions = {
       api.dashboard = true;
-      entryPoints.web = {
-        address = ":443";
-        asDefault = true;
-      };
       entryPoints.web-internal.address = "${config.dsekt.addresses.hosts.self}:80";
-      entryPoints.mattermost-calls-tcp.address = ":8443/tcp";
-      entryPoints.mattermost-calls-udp.address = ":8443/udp";
-      entryPoints.httpredirect = {
-        # This port is also used by the web-internal entrypoint, so we need to bind to only the public address.
-        address = "${config.networking.hostName}.datasektionen.se:80";
-        http.redirections.entryPoint = {
-          to = "web";
-          scheme = "https";
-          permanent = "true";
-        };
-      };
-
       log.level = "INFO";
       accessLog = { };
 
@@ -40,7 +18,7 @@
           # We're making nomad bind to the internal IP address so we can't use
           # 127.0.0.1. We also can't use ${config.dsekt.addresses.hosts.self}
           # since the certificate isn't valid for that address.
-          address = "https://${config.networking.hostName}.dsekt.internal:4646";
+          address = "https://${hostName}.dsekt.internal:4646";
           token = "\${NOMAD_TOKEN}";
           tls.ca = "${../files/nomad-agent-ca.pem}";
         };
@@ -53,56 +31,23 @@
         ];
       };
 
-      certificatesresolvers.default.acme = {
-        # Good for testing: caserver = "https://acme-staging-v02.api.letsencrypt.org/directory";
-        email = "d-sys@datasektionen.se";
-        storage = config.services.traefik.dataDir + "/acme.json";
-        dnschallenge = {
-          provider = "cloudflare";
-          resolvers = [ "1.1.1.1:53" ];
-        };
-      };
     };
     dynamicConfigOptions = {
       http = {
         routers.api = {
-          rule = "Host(`traefik.datasektionen.se`)";
+          rule = "Host(`traefik.${hostName}.dsekt.internal`)";
           service = "api@internal";
           middlewares = [ "auth" ];
-          tls.certresolver = "default";
         };
         # Temporary, use something better in the future
         middlewares.auth.basicAuth.users = [
           "mathm:$2y$05$/.Sr1SoOYhGDHK0j7lE37eazHgqHM52eas0QF96EzvJfk6ma5XCzK"
           "rmfseo:$2y$05$PoyrRBezOjCyO6bVYx/L5e7/u3oSIUhZVTraMOc2AT8h7k/.S.I2y"
         ];
-        routers.nomad = {
-          rule = "Host(`nomad.datasektionen.se`)";
-          service = "nomad";
-          tls.certresolver = "default";
-        };
-        services.nomad.loadBalancer = {
-          servers = [ { url = "https://${config.networking.hostName}.dsekt.internal:4646"; } ];
-          serversTransport = "nomadTransport";
-        };
-        serversTransports.nomadTransport.rootCAs = "${../files/nomad-agent-ca.pem}";
-      };
-      tls.stores.default.defaultGeneratedCert = {
-        resolver = "default";
-        domain = {
-          main = "datasektionen.se";
-          sans = [ "*.datasektionen.se" ];
-        };
       };
     };
   };
-  networking.firewall.allowedTCPPorts = [
-    80
-    443
-    8443
-  ];
-  networking.firewall.allowedUDPPorts = [ 8443 ];
+  networking.firewall.allowedTCPPorts = [ 80 ];
 
   age.secrets.nomad-traefik-acl-token.file = secretsDir + "/nomad-traefik-acl-token.env.age";
-  age.secrets.cloudflare-dns-api-token.file = secretsDir + "/cloudflare-dns-api-token.env.age";
 }
