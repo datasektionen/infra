@@ -108,6 +108,12 @@ resource "github_actions_secret" "nomad_token_ston" {
   plaintext_value = nomad_acl_token.deploy_default.secret_id
 }
 
+resource "github_actions_secret" "nomad_token_methone" {
+  repository      = "methone"
+  secret_name     = "NOMAD_TOKEN"
+  plaintext_value = nomad_acl_token.deploy_default.secret_id
+}
+
 // Workspace auth
 
 resource "github_actions_secret" "nomad_token_dfunkt" {
