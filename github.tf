@@ -90,6 +90,12 @@ resource "github_actions_secret" "nomad_token_zfinger" {
   plaintext_value = nomad_acl_token.deploy_default.secret_id
 }
 
+resource "github_actions_secret" "nomad_token_yoggi" {
+  repository      = "yoggi"
+  secret_name     = "NOMAD_TOKEN"
+  plaintext_value = nomad_acl_token.deploy_default.secret_id
+}
+
 // Workspace auth
 
 resource "github_actions_secret" "nomad_token_dfunkt" {
