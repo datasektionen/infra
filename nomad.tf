@@ -56,6 +56,16 @@ resource "nomad_variable" "jobs_vault" {
   }
 }
 
+# Twenty
+
+resource "nomad_namespace" "twenty" {
+  name = "twenty"
+}
+
+resource "nomad_job" "twenty" {
+  jobspec = file("${path.module}/jobs/twenty.nomad.hcl")
+}
+
 # Auth
 
 resource "nomad_namespace" "auth" {

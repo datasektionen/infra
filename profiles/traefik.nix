@@ -28,6 +28,7 @@ in
           "auth"
           "mattermost"
           "vault"
+          "twenty"
         ];
       };
 
