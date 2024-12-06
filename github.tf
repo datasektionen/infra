@@ -128,8 +128,8 @@ resource "github_actions_secret" "nomad_token_dfunkt" {
   plaintext_value = nomad_acl_token.deploy_auth.secret_id
 }
 
-resource "github_actions_secret" "nomad_token_logout" {
-  repository      = "logout"
+resource "github_actions_secret" "nomad_token_sso" {
+  repository      = "sso"
   secret_name     = "NOMAD_TOKEN"
   plaintext_value = nomad_acl_token.deploy_auth.secret_id
 }
