@@ -130,6 +130,7 @@ EOH
 
       resources {
         memory = 2048
+        cpu    = 400
       }
     }
   }
