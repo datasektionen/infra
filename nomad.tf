@@ -85,7 +85,7 @@ resource "nomad_acl_policy" "manage_jobs" {
   description = "Can manage jobs in the ${each.value} namespace"
   rules_hcl   = <<HCL
     namespace "${each.value}" {
-      policies = ["read", "write"]
+      policy = "write"
     }
   HCL
 }
