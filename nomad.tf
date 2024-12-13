@@ -85,6 +85,13 @@ resource "nomad_acl_policy" "manage_jobs" {
   description = "Can manage jobs in the ${each.value} namespace"
   rules_hcl   = <<HCL
     namespace "${each.value}" {
+      variables {
+        # These can be read anyway by execing into a job and echoing env variables,
+        # though perhaps write access could be more restricted.
+        path "nomad/jobs/*" {
+          capabilities = ["read", "write"]
+        }
+      }
       policy = "write"
     }
   HCL
