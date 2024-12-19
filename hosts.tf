@@ -21,6 +21,16 @@ resource "hcloud_network_subnet" "cluster-main" {
   network_zone = "eu-central"
 }
 
+# See `hosts/hades.nix` for more
+resource "hcloud_network_route" "wireguard-router" {
+  network_id  = hcloud_network.cluster.id
+  destination = "10.83.1.0/24"
+  gateway = [
+    for n in hcloud_server.cluster_hosts["hades"].network : n.ip
+    if tostring(n.network_id) == hcloud_network.cluster.id
+  ][0]
+}
+
 resource "hcloud_server" "cluster_hosts" {
   for_each    = local.cluster_hosts
   name        = each.key
@@ -28,7 +38,7 @@ resource "hcloud_server" "cluster_hosts" {
   server_type = each.value.server_type
   ssh_keys    = [hcloud_ssh_key.bootstrap.id]
   lifecycle {
-    ignore_changes = [ ssh_keys ]
+    ignore_changes = [ssh_keys]
   }
   network {
     network_id = hcloud_network.cluster.id

@@ -39,4 +39,8 @@ in
 
   # `AWS_DEFAULT_REGION`, `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `RESTIC_PASSWORD`
   "restic-s3-creds-ares.env.age".publicKeys = sysadmins ++ [ ares ];
+
+  "wireguard-preshared-key.age".publicKeys = sysadmins ++ [ hades ];
+  # Public key: `BTpGRxLRjCYUiti/5A4uNvKYp0biNkA6PTV7Yck/NxM=`
+  "wireguard-hades-private-key.age".publicKeys = sysadmins ++ [ hades ];
 }
