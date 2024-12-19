@@ -9,6 +9,18 @@ locals {
   }
 }
 
+resource "hcloud_network" "cluster" {
+  name     = "nomad-cluster-network"
+  ip_range = "10.83.0.0/16" # NOTE: Must be kept in sync with `config.dsekt.addresses.subnet` in nix
+}
+
+resource "hcloud_network_subnet" "cluster-main" {
+  network_id   = hcloud_network.cluster.id
+  type         = "cloud"
+  ip_range     = "10.83.0.0/24"
+  network_zone = "eu-central"
+}
+
 resource "hcloud_server" "cluster_hosts" {
   for_each    = local.cluster_hosts
   name        = each.key

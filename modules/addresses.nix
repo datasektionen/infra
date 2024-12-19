@@ -31,7 +31,7 @@ in
       hades
     ];
 
-    # Must be kept in sync with `hcloud_network_subnet.cluster-main.ip_range` in tf
-    subnet = "10.83.0.0/24";
+    # Must be kept in sync with `hcloud_network.cluster.ip_range` in tf
+    subnet = "10.83.0.0/16";
   };
 }

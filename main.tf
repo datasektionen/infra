@@ -75,18 +75,6 @@ data "cloudflare_zone" "datasektionen" {
   name = "datasektionen.se"
 }
 
-resource "hcloud_network" "cluster" {
-  name     = "nomad-cluster-network"
-  ip_range = "10.83.0.0/24"
-}
-
-resource "hcloud_network_subnet" "cluster-main" {
-  network_id   = hcloud_network.cluster.id
-  type         = "cloud"
-  ip_range     = "10.83.0.0/24"
-  network_zone = "eu-central"
-}
-
 resource "cloudflare_record" "zone_apex" {
   name    = "@"
   type    = "A"
