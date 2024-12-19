@@ -14,13 +14,15 @@ in
   options.dsekt.addresses.subnet = opt lib.types.str;
 
   config.dsekt.addresses = {
-    # Must be kept in sync with `local.cluster_hosts` tf
     hosts = lib.fix (self: {
+      # Must be kept in sync with `local.cluster_hosts` tf
       zeus = "10.83.0.2";
       poseidon = "10.83.0.3";
       hades = "10.83.0.4";
       ares = "10.83.0.5";
       artemis = "10.83.0.6";
+
+      mjukglass = "10.83.1.1";
 
       self = self.${config.networking.hostName};
     });

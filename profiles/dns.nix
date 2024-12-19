@@ -61,7 +61,8 @@ in
         )}
         *.nomad  A     ${config.dsekt.addresses.hosts.self}
 
-        postgres CNAME ares
+        postgres   CNAME ares
+        ldap-proxy CNAME mjukglass
       '';
       allowQuery = allowedNetworks;
     };
