@@ -32,6 +32,6 @@ in
     ];
 
     # Must be kept in sync with `hcloud_network_subnet.cluster-main.ip_range` in tf
-    subnet = "10.83.0.0/16";
+    subnet = "10.83.0.0/24";
   };
 }

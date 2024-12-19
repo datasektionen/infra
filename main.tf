@@ -14,7 +14,7 @@ terraform {
     }
     hcloud = {
       source  = "hetznercloud/hcloud"
-      version = "1.45.0"
+      version = "1.49.1"
     }
     nomad = {
       source  = "hashicorp/nomad"
@@ -77,13 +77,13 @@ data "cloudflare_zone" "datasektionen" {
 
 resource "hcloud_network" "cluster" {
   name     = "nomad-cluster-network"
-  ip_range = "10.83.0.0/16"
+  ip_range = "10.83.0.0/24"
 }
 
 resource "hcloud_network_subnet" "cluster-main" {
   network_id   = hcloud_network.cluster.id
   type         = "cloud"
-  ip_range     = "10.83.0.0/16"
+  ip_range     = "10.83.0.0/24"
   network_zone = "eu-central"
 }
 
