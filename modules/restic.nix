@@ -1,7 +1,6 @@
 {
   config,
   lib,
-  secretsDir,
   ...
 }:
 {
@@ -42,7 +41,7 @@
       '';
       type = lib.types.attrsOf (
         lib.types.submodule (
-          { name, ... }:
+          { ... }:
           {
             options = {
               repository = lib.mkOption {
