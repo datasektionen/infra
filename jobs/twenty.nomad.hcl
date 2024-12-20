@@ -73,7 +73,7 @@ job "twenty" {
       }
 
       resources {
-        memory = 600 # oh my god what bloat this is
+        memory = 1024 # OH MY GOD what bloat this is?
       }
     }
 
@@ -93,7 +93,7 @@ job "twenty" {
       }
 
       resources {
-        memory = 600 # oh my god what bloat this is
+        memory = 600 # oh my god what bloat this is?
       }
 
       lifecycle {
