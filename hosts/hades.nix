@@ -36,6 +36,12 @@
         publicKey = "QszePOBh9UBg8v4BNHkY4ZeqBfiLXr5uwDVjTSRqHX0=";
         allowedIPs = [ "10.83.1.1/32" ];
       }
+      {
+        # drifvarkaden
+        presharedKeyFile = config.age.secrets.wireguard-preshared-key.path;
+        publicKey = "9O+wjIbvxZq3sVk6gxfoI4jhSCfPOte0dWnMbG3obT0=";
+        allowedIPs = [ "10.83.2.1/32" ];
+      }
     ];
   };
   networking.firewall.allowedUDPPorts = [ 51800 ];
