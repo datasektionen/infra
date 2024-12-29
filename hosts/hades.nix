@@ -40,7 +40,7 @@
         # drifvarkaden
         presharedKeyFile = config.age.secrets.wireguard-preshared-key.path;
         publicKey = "9O+wjIbvxZq3sVk6gxfoI4jhSCfPOte0dWnMbG3obT0=";
-        allowedIPs = [ "10.83.2.1/32" ];
+        allowedIPs = [ "10.83.1.2/32" ];
       }
     ];
   };
