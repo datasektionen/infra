@@ -43,4 +43,7 @@ in
   "wireguard-preshared-key.age".publicKeys = sysadmins ++ [ hades ];
   # Public key: `BTpGRxLRjCYUiti/5A4uNvKYp0biNkA6PTV7Yck/NxM=`
   "wireguard-hades-private-key.age".publicKeys = sysadmins ++ [ hades ];
+
+  "mediawiki-sso-client-secret.age".publicKeys = sysadmins ++ [ ares ];
+  "mediawiki-password.age".publicKeys = sysadmins ++ [ ares ];
 }

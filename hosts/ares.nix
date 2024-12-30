@@ -23,6 +23,7 @@ in
     nomad.client
     postgres
     traefik-external
+    mediawiki
   ];
 
   services.nomad.settings.client.host_volume = lib.listToAttrs (
