@@ -63,6 +63,7 @@ in
 
         postgres   CNAME ares
         ldap-proxy CNAME mjukglass
+        mediawiki  CNAME ares
       '';
       allowQuery = allowedNetworks;
     };
