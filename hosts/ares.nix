@@ -13,6 +13,7 @@
     nomad.client
     postgres
     traefik-external
+    mediawiki
   ];
 
   dsekt.nomad.volumes.host.mattermost = {
