@@ -31,7 +31,7 @@
     '';
     peers = [
       {
-        # mjukglass
+        endpoint = "mjukglass.datasektionen.se:51800";
         presharedKeyFile = config.age.secrets.wireguard-preshared-key.path;
         publicKey = "QszePOBh9UBg8v4BNHkY4ZeqBfiLXr5uwDVjTSRqHX0=";
         allowedIPs = [ "10.83.1.1/32" ];
