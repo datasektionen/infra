@@ -14,8 +14,6 @@
       (pkgs.writeText "traefik-cloudflare-config" "CLOUDFLARE_EMAIL=d-sys@datasektionen.se")
     ];
     staticConfigOptions = {
-      entryPoints.mattermost-calls-tcp.address = ":8443/tcp";
-      entryPoints.mattermost-calls-udp.address = ":8443/udp";
       entryPoints.web = {
         address = ":443";
         asDefault = true;
@@ -29,6 +27,10 @@
           permanent = "true";
         };
       };
+
+      entryPoints.mattermost-calls-tcp.address = ":8443/tcp";
+      entryPoints.mattermost-calls-udp.address = ":8443/udp";
+      entryPoints.drifvarkaden-ssh.address = ":2269/tcp";
 
       certificatesresolvers.default.acme = {
         # Good for testing: caserver = "https://acme-staging-v02.api.letsencrypt.org/directory";
@@ -59,6 +61,7 @@
         };
         serversTransports.nomadTransport.rootCAs = "${../files/nomad-agent-ca.pem}";
       };
+      tcp.
       tls.stores.default.defaultGeneratedCert = {
         resolver = "default";
         domain = {
