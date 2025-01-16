@@ -94,7 +94,7 @@ EOH
       }
 
       config {
-        image = "mattermost/mattermost-enterprise-edition:9.11.0"
+        image = "mattermost/mattermost-enterprise-edition:10.3.2"
         ports = ["http", "calls"]
       }
 
