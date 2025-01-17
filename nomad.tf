@@ -47,10 +47,10 @@ resource "nomad_job" "vault" {
 }
 
 resource "nomad_variable" "jobs_vault" {
-  path = "nomad/jobs/vault"
+  path      = "nomad/jobs/vault"
   namespace = "vault"
   items = {
-    db_password = var.vault_db_password
+    db_password   = var.vault_db_password
     smtp_username = aws_iam_access_key.vaultwarden_smtp.id
     smtp_password = aws_iam_access_key.vaultwarden_smtp.ses_smtp_password_v4
   }
@@ -69,7 +69,7 @@ resource "nomad_job" "twenty" {
 # Auth
 
 resource "nomad_namespace" "auth" {
-  name = "auth"
+  name        = "auth"
   description = "Contains jobs that provide auth{entication,orization} for other jobs"
 }
 
