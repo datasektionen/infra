@@ -23,7 +23,7 @@ locals {
       "skywhale",
       "smingo",
       "ston",
-      "styrdokument_bawang",
+      "styrdokument-bawang",
       "taitan",
       "wookieleaks",
       "yoggi",
