@@ -18,6 +18,7 @@ locals {
       "bawang",
       "calypso",
       "dbuggen",
+      "ddagen",
       "methone",
       "skywhale",
       "smingo",
