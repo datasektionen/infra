@@ -73,10 +73,17 @@ resource "nomad_namespace" "auth" {
   description = "Contains jobs that provide auth{entication,orization} for other jobs"
 }
 
+# D-Dagen
+
+resource "nomad_namespace" "ddagen" {
+  name        = "ddagen"
+  description = "Contains jobs for D-Dagen's production and preview environments"
+}
+
 # Policies for humans
 
 locals {
-  namespaces_for_humans = toset(["default", "auth"])
+  namespaces_for_humans = toset(["default", "auth", "ddagen"])
 }
 
 resource "nomad_acl_policy" "manage_jobs" {

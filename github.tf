@@ -12,13 +12,15 @@ locals {
       "pls",
       "sso",
     ],
+    ddagen = [
+      "ddagen",
+    ],
     default = [
       "aaallt2",
       "aurora",
       "bawang",
       "calypso",
       "dbuggen",
-      "ddagen",
       "methone",
       "skywhale",
       "smingo",
