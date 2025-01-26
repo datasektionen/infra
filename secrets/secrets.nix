@@ -14,6 +14,10 @@ let
   hades = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILCFb/uxJljnDlv7QZIqsV8HD337T7bJYWYkGXxf5WCn";
   ares = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOvT+r/mtIDTsTjccGXYpkA/3VQED9WHNU1NB9Hjh0Me";
   artemis = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDiCbmT5XtIMKT62dmg/O+8x8kms6ELc7GCL9zeK8uTD";
+  apollo = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILiHIS7WraYSjBonICrCJqDaM6ROVLt65rMyEKhNWha2";
+
+  nomadServers = [ zeus poseidon hades ];
+  nomadClients = [ ares artemis apollo ];
 in
 {
   "zeus_ssh_host_ed25519_key.age".publicKeys = sysadmins;
@@ -21,17 +25,14 @@ in
   "hades_ssh_host_ed25519_key.age".publicKeys = sysadmins;
   "ares_ssh_host_ed25519_key.age".publicKeys = sysadmins;
   "artemis_ssh_host_ed25519_key.age".publicKeys = sysadmins;
+  "apollo_ssh_host_ed25519_key.age".publicKeys = sysadmins;
 
   # `{"server":{"encrypt":"base64urlkeythatis32byteslong"}}`
-  "nomad-gossip-key.json.age".publicKeys = sysadmins ++ [
-    zeus
-    poseidon
-    hades
-  ];
+  "nomad-gossip-key.json.age".publicKeys = sysadmins ++ nomadServers;
   "nomad-agent-ca-key.pem.age".publicKeys = sysadmins;
 
   # `NOMAD_TOKEN=uuid-with-dashes`
-  "nomad-traefik-acl-token.env.age".publicKeys = sysadmins ++ [ ares artemis ];
+  "nomad-traefik-acl-token.env.age".publicKeys = sysadmins ++ nomadClients;
 
   # `CLOUDFLARE_DNS_API_TOKEN=...`
   "cloudflare-dns-api-token.env.age".publicKeys = sysadmins ++ [ ares ];
