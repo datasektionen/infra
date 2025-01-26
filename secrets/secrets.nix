@@ -20,6 +20,7 @@ in
   "poseidon_ssh_host_ed25519_key.age".publicKeys = sysadmins;
   "hades_ssh_host_ed25519_key.age".publicKeys = sysadmins;
   "ares_ssh_host_ed25519_key.age".publicKeys = sysadmins;
+  "artemis_ssh_host_ed25519_key.age".publicKeys = sysadmins;
 
   # `{"server":{"encrypt":"base64urlkeythatis32byteslong"}}`
   "nomad-gossip-key.json.age".publicKeys = sysadmins ++ [
