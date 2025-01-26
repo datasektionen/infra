@@ -21,6 +21,7 @@ in
       hades = "10.83.0.4";
       ares = "10.83.0.5";
       artemis = "10.83.0.6";
+      apollo = "10.83.0.7";
 
       mjukglass = "10.83.1.1";
       drifvarkaden = "10.83.1.2";
