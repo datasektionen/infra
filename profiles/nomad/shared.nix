@@ -23,7 +23,10 @@
         http = true;
         rpc = true;
       };
-      acl.enabled = true;
+      acl = {
+        enabled = true;
+        token_max_expiration_ttl = "8760h"; # can set no expiry anyway
+      };
     };
   };
   systemd.services.nomad.serviceConfig = {
