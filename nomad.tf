@@ -80,6 +80,12 @@ resource "nomad_namespace" "ddagen" {
   description = "Contains jobs for D-Dagen's production and preview environments"
 }
 
+# Other Third-Party Jobs in Default
+
+resource "nomad_job" "djul-redirect" {
+  jobspec = file("${path.module}/jobs/djul-redirect.nomad.hcl")
+}
+
 # Policies for humans
 
 locals {
