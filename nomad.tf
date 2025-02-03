@@ -86,6 +86,10 @@ resource "nomad_job" "djul-redirect" {
   jobspec = file("${path.module}/jobs/djul-redirect.nomad.hcl")
 }
 
+resource "nomad_job" "planka" {
+  jobspec = file("${path.module}/jobs/planka.nomad.hcl")
+}
+
 # Policies for humans
 
 locals {
