@@ -21,6 +21,7 @@ locals {
       "bawang",
       "calypso",
       "dbuggen",
+      "metasl2",
       "methone",
       "skywhale",
       "smingo",
