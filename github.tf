@@ -23,6 +23,7 @@ locals {
       "dbuggen",
       "femto",
       "metasl2",
+      "metastudent",
       "methone",
       "skywhale",
       "smingo",
