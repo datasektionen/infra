@@ -20,6 +20,7 @@ locals {
       "aurora",
       "bawang",
       "calypso",
+      "darkmode",
       "dbuggen",
       "femto",
       "harmony",
