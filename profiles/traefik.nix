@@ -24,13 +24,14 @@ in
         };
         # TODO: get all namespaces dynamically, e.g. using `nomad namespace list -json | jq '.[].Name' -r`
         namespaces = [
-          "default"
           "auth"
-          "mattermost"
-          "vault"
-          "twenty"
           "ddagen"
+          "default"
+          "djulkalendern"
           "jml"
+          "mattermost"
+          "twenty"
+          "vault"
         ];
       };
 
