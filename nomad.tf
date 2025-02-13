@@ -80,6 +80,13 @@ resource "nomad_namespace" "ddagen" {
   description = "Contains jobs for D-Dagen's production and preview environments"
 }
 
+# JML
+
+resource "nomad_namespace" "jml" {
+  name        = "jml"
+  description = "Contains sensitive JML/SSO jobs that must be isolated"
+}
+
 # Other Third-Party Jobs in Default
 
 resource "nomad_job" "djul-redirect" {
