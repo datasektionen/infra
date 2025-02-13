@@ -38,6 +38,9 @@ locals {
       "zaiko",
       "zfinger",
     ],
+    jml = [
+      "jml",
+    ],
   }
 }
 
