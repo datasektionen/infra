@@ -22,6 +22,7 @@ locals {
       "calypso",
       "darkmode",
       "dbuggen",
+      "djubileet",
       "femto",
       "harmony",
       "metasl2",
