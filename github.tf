@@ -22,6 +22,7 @@ locals {
       "calypso",
       "dbuggen",
       "femto",
+      "harmony",
       "metasl2",
       "metastudent",
       "methone",
