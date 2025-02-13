@@ -41,6 +41,9 @@ locals {
     jml = [
       "jml",
     ],
+    djulkalendern = [
+      "duckbot-jr",
+    ],
   }
 }
 
