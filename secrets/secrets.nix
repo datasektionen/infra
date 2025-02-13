@@ -45,4 +45,8 @@ in
   "wireguard-preshared-key.age".publicKeys = sysadmins ++ [ hades ];
   # Public key: `BTpGRxLRjCYUiti/5A4uNvKYp0biNkA6PTV7Yck/NxM=`
   "wireguard-hades-private-key.age".publicKeys = sysadmins ++ [ hades ];
+
+  # { "auths": { "ghcr.io": { "auth": "$(echo $username:$password | base64)" } } }
+  # Password is a personal access token (classic) with `read:packages`.
+  "nomad-docker-auth.json.age".publicKeys = sysadmins ++ nomadClients;
 }
