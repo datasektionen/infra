@@ -32,6 +32,7 @@ locals {
       "taitan",
       "wookieleaks",
       "yoggi",
+      "zaiko",
       "zfinger",
     ],
   }
