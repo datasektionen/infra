@@ -66,25 +66,26 @@ resource "nomad_job" "twenty" {
   jobspec = file("${path.module}/jobs/twenty.nomad.hcl")
 }
 
-# Auth
+# Other
 
 resource "nomad_namespace" "auth" {
   name        = "auth"
   description = "Contains jobs that provide auth{entication,orization} for other jobs"
 }
 
-# D-Dagen
-
 resource "nomad_namespace" "ddagen" {
   name        = "ddagen"
   description = "Contains jobs for D-Dagen's production and preview environments"
 }
 
-# JML
-
 resource "nomad_namespace" "jml" {
   name        = "jml"
   description = "Contains sensitive JML/SSO jobs that must be isolated"
+}
+
+resource "nomad_namespace" "djulkalendern" {
+  name        = "djulkalendern"
+  description = "Contains jobs for dJulkalendern (but not most challenges as they often run on separate servers)"
 }
 
 # Other Third-Party Jobs in Default
