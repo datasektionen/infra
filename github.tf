@@ -33,6 +33,7 @@ locals {
       "ston",
       "styrdokument-bawang",
       "taitan",
+      "typst-bot",
       "wookieleaks",
       "yoggi",
       "zaiko",
