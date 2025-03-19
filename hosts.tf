@@ -4,7 +4,7 @@ locals {
     zeus     = { role = "server", private_ip_addr = "10.83.0.2", server_type = "cx22" }
     poseidon = { role = "server", private_ip_addr = "10.83.0.3", server_type = "cx22" }
     hades    = { role = "server", private_ip_addr = "10.83.0.4", server_type = "cx22" }
-    ares     = { role = "client", private_ip_addr = "10.83.0.5", server_type = "cx21" }
+    ares     = { role = "client", private_ip_addr = "10.83.0.5", server_type = "cx32" }
     artemis  = { role = "client", private_ip_addr = "10.83.0.6", server_type = "cx22" }
     apollo   = { role = "client", private_ip_addr = "10.83.0.7", server_type = "cx22" }
   }
