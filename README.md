@@ -76,7 +76,7 @@ Maybe the nomad systemd service has to be restarted after that but that should b
 
 The current CA certificate will expire at 2029-04-30 17:24:25 UTC, so it will have to be replaced before then!
 
-## Authentication
+## Authentication required to run tofu
 
 ### AWS
 
@@ -123,6 +123,22 @@ gh auth login -s admin:org
 When asked about preferred protocol for git operations, pick any and then pick `no` or `Skip` on the following option. (And then wonder how they managed to make such a horrible cli tool).
 
 The `admin:org` scope is needed to set GitHub actions secrets and variables.
+
+## Authenticating to Nomad
+
+It is possible to authenticate to the nomad cluster using [sso](https://sso.datasektionen.se/). If you have permission to some namespace, either:
+- type `nomad login`, log in to your account in the web browser that should've opened
+- copy the value following `Secret ID =` and store it as an environment variable (e.g. `export NOMAD_TOKEN=...`). It will be valid for 12 hours.
+- continue using the nomad cli or run `nomad ui -authenticate` to log in to the web ui
+or:
+- go to <https://nomad.datasektionen.se/ui/settings/tokens>
+- click "Sign in with sso"
+- log in to your account in the newly opened tab
+- continue using the nomad web ui or copy the Secret ID and store in an env variable as described above
+
+You will get read/write access to the namespaces described in the nomad group(s) you're added to in [pls](https://pls.datasektionen.se/).
+
+Note however that only namespaces that are defined in `local.namespaces_for_humans` in `nomad.tf` can be given access to via pls.
 
 ## How-to-guide
 
