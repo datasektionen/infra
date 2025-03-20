@@ -101,7 +101,7 @@ resource "nomad_job" "planka" {
 # Policies for humans
 
 locals {
-  namespaces_for_humans = toset(["default", "auth", "ddagen"])
+  namespaces_for_humans = toset(["default", "auth", "ddagen", "djulkalendern"])
 }
 
 resource "nomad_acl_policy" "manage_jobs" {
@@ -120,4 +120,40 @@ resource "nomad_acl_policy" "manage_jobs" {
       policy = "write"
     }
   HCL
+}
+
+variable "nomad_sso_client_secret" {
+  sensitive = true
+}
+
+resource "nomad_acl_auth_method" "sso" {
+  name              = "sso"
+  type              = "OIDC"
+  token_locality    = "global"
+  max_token_ttl     = "12h0m0s"
+  default           = true
+  token_name_format = "kth-$${value.username}"
+
+  config {
+    oidc_discovery_url = "https://sso.datasektionen.se/op"
+    oidc_client_id     = "nomad"
+    oidc_client_secret = var.nomad_sso_client_secret
+    bound_audiences    = ["nomad"]
+    allowed_redirect_uris = [
+      "http://localhost:4649/oidc/callback",
+      "https://nomad.datasektionen.se/ui/settings/tokens",
+    ]
+    oidc_scopes         = ["openid", "profile", "pls_nomad"]
+    claim_mappings      = { "sub" : "username" }
+    list_claim_mappings = { "pls_nomad" : "pls_groups" }
+  }
+}
+
+resource "nomad_acl_binding_rule" "sso_pls_roles" {
+  for_each    = local.namespaces_for_humans
+  description = "get the manage-jobs-in-${each.value} policy from the pls group nomad.${each.value}"
+  auth_method = nomad_acl_auth_method.sso.name
+  selector    = "${each.value} in list.pls_groups"
+  bind_type   = "policy"
+  bind_name   = "manage-jobs-in-${each.value}"
 }
