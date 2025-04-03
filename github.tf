@@ -9,6 +9,7 @@ locals {
   deploy-tokens = {
     auth = [
       "dfunkt",
+      "hive",
       "pls",
       "sso",
     ],
