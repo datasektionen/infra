@@ -30,6 +30,7 @@ in
           "djulkalendern"
           "jml"
           "mattermost"
+          "metaspexet"
           "twenty"
           "vault"
         ];

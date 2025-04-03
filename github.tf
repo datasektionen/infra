@@ -41,12 +41,17 @@ locals {
       "zaiko",
       "zfinger",
     ],
-    jml = [
-      "jml",
-    ],
     djulkalendern = [
       "djulkalendern",
       "duckbot-jr",
+    ],
+    jml = [
+      "jml",
+    ],
+    metaspexet = [
+      "haj",
+      "metaspexet2",
+      "tiki",
     ],
   }
 }

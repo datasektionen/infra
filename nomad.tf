@@ -88,6 +88,11 @@ resource "nomad_namespace" "djulkalendern" {
   description = "Contains jobs for dJulkalendern (but not most challenges as they often run on separate servers)"
 }
 
+resource "nomad_namespace" "metaspexet" {
+  name        = "metaspexet"
+  description = "Contains jobs for METAspexet"
+}
+
 # Other Third-Party Jobs in Default
 
 resource "nomad_job" "djul-redirect" {
@@ -101,7 +106,7 @@ resource "nomad_job" "planka" {
 # Policies for humans
 
 locals {
-  namespaces_for_humans = toset(["default", "auth", "ddagen", "djulkalendern"])
+  namespaces_for_humans = toset(["default", "auth", "ddagen", "djulkalendern", "metaspexet"])
 }
 
 resource "nomad_acl_policy" "manage_jobs" {
