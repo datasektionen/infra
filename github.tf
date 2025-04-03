@@ -35,7 +35,6 @@ locals {
       "styrdokument-bawang",
       "taitan",
       "typst-bot",
-      "tiki",
       "wookieleaks",
       "yoggi",
       "zaiko",
