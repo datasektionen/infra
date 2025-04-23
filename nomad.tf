@@ -103,6 +103,10 @@ resource "nomad_job" "planka" {
   jobspec = file("${path.module}/jobs/planka.nomad.hcl")
 }
 
+resource "nomad_job" "ston-birthdays-to-slack" {
+  jobspec = file("${path.module}/jobs/ston-birthdays-to-slack.nomad.hcl")
+}
+
 # Policies for humans
 
 locals {
