@@ -31,6 +31,7 @@ in
           "jml"
           "mattermost"
           "metaspexet"
+          "money"
           "twenty"
           "vault"
         ];

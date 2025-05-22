@@ -93,6 +93,11 @@ resource "nomad_namespace" "metaspexet" {
   description = "Contains jobs for METAspexet"
 }
 
+resource "nomad_namespace" "money" {
+  name        = "money"
+  description = "Contains sensitive financial/bookkeeping-related jobs"
+}
+
 # Other Third-Party Jobs in Default
 
 resource "nomad_job" "djul-redirect" {
