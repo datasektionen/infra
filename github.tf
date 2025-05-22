@@ -54,6 +54,7 @@ locals {
     ],
     money = [
       "cashflow",
+      "gordian",
     ],
   }
 }
