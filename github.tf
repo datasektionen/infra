@@ -52,6 +52,9 @@ locals {
       "metaspexet2",
       "tiki",
     ],
+    money = [
+      "cashflow",
+    ],
   }
 }
 
