@@ -19,11 +19,11 @@ in
       # specify the hash so it should take a while before it breaks (which is even worse).
       OpenIDConnect = pkgs.fetchzip {
         url = "https://extdist.wmflabs.org/dist/extensions/OpenIDConnect-REL1_44-3c18370.tar.gz";
-        hash = "sha256-X5kUuvxINbuXaLMKRcLOl2L3qbnMT72lg2NA3A9Daj8=";
+        hash = "sha256-3QwCgql8dPTzfS0jf9dhvLb9dbzD7JWWNsH2QhrrzL4=";
       };
       PluggableAuth = pkgs.fetchzip {
         url = "https://extdist.wmflabs.org/dist/extensions/PluggableAuth-REL1_44-1a117ee.tar.gz";
-        hash = "sha256-YHUek3pEM9XH2YLLkbfqEbPHMJBEzKGmJEin7eW91/g=";
+        hash = "sha256-TtU1z5+imZSbNS+7kE1g3ZJpnORNeX6eF8k++YpI6pg=";
       };
       VisualEditor = null;
     };
