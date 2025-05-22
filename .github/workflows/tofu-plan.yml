@@ -46,3 +46,4 @@ jobs:
             hcloud_token = "${{ secrets.TF_HCLOUD_TOKEN }}"
             cloudflare_api_token = "${{ secrets.TF_CLOUDFLARE_TOKEN }}"
             vault_db_password = "${{ secrets.TF_VAULT_DB_PASSWORD }}"
+            nomad_sso_client_secret = "${{ secrets.TF_NOMAD_SSO_CLIENT_SECRET }}"

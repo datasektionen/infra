@@ -27,7 +27,7 @@
     };
 
     backupPrepareCommand = lib.mkOption {
-      type = with lib.types; nullOr str;
+      type = with lib.types; nullOr lines;
       default = null;
       description = lib.mdDoc ''
         Script to run before starting the backup process.

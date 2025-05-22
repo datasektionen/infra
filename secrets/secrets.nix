@@ -49,4 +49,9 @@ in
   # { "auths": { "ghcr.io": { "auth": "$(echo $username:$password | base64)" } } }
   # Password is a personal access token (classic) with `read:packages`.
   "nomad-docker-auth.json.age".publicKeys = sysadmins ++ nomadClients;
+
+  # Plain text format
+  "mediawiki-sso-client-secret.age".publicKeys = sysadmins ++ [ ares ];
+  # This is not even usable since you can't login with username/password with the OIDC plugin, but it is required. Plain text format
+  "mediawiki-password.age".publicKeys = sysadmins ++ [ ares ];
 }
