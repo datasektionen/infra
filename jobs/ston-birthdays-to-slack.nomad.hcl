@@ -10,7 +10,7 @@ job "ston-birthdays-to-slack" {
 
   group "ston-birthdays-to-slack" {
     task "call-ston-birthdays-endpoint" {
-      driver = "exec"
+      driver = "docker" # cannot use exec because no nix-store in chroot = no bash
 
       template {
         data        = <<ENV
@@ -32,14 +32,15 @@ set -eu
 STON_BASE_URL="https://ston.datasektionen.se"
 STON_ENDPOINT="$STON_BASE_URL/api/birthdays"
 
-curl -v --header "Authorization: Bearer $STON_API_TOKEN" "$STON_ENDPOINT"
+wget -O- --header "Authorization: Bearer $STON_API_TOKEN" "$STON_ENDPOINT"
 SHELL
         destination = "local/call-ston-birthdays-endpoint.sh"
         perms       = "500" # r-x------
       }
 
       config {
-        command = "call-ston-birthdays-endpoint.sh"
+        image   = "alpine:3.21"
+        command = "./local/call-ston-birthdays-endpoint.sh"
       }
     }
   }
