@@ -68,7 +68,7 @@ in
     '';
   };
 
-  # TODO: this only works when this is running on the same server as profiles.traefik-external
+  # WARN: this only works when this is running on the same server as profiles.traefik-external
   services.traefik.dynamicConfigOptions.http = {
     routers.mediawiki = {
       rule = "Host(`wiki.datasektionen.se`)";
@@ -80,7 +80,17 @@ in
     };
   };
 
-  # TODO: backup uploads dir & mysql database
+  dsekt.restic = {
+    # TODO: not sure if this works
+    backupPrepareCommand = ''
+      ${pkgs.sudo}/bin/sudo -u mysql ${pkgs.mysql}/bin/mysqldump --all-databases > /root/mysql_dump.sql
+    '';
+
+    paths = [
+      config.services.mediawiki.uploadsDir
+      "/root/mysql_dump.sql"
+    ];
+  };
 
   age.secrets.mediawiki-sso-client-secret = {
     file = secretsDir + "/mediawiki-sso-client-secret.age";
