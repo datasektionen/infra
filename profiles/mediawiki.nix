@@ -83,7 +83,7 @@ in
   dsekt.restic = {
     # TODO: not sure if this works
     backupPrepareCommand = ''
-      ${pkgs.sudo}/bin/sudo -u mysql ${pkgs.mysql}/bin/mysqldump --all-databases > /root/mysql_dump.sql
+      ${pkgs.sudo}/bin/sudo -u mysql ${config.services.mysql.package}/bin/mysqldump --all-databases > /root/mysql_dump.sql
     '';
 
     paths = [
