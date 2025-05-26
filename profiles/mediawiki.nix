@@ -14,16 +14,18 @@ in
     name = "Datasektionen Wiki";
     extensions = {
       # NOTE: these links disappear if they change the commit hash for a version or remove a
-      # version. Check <https://extdist.wmflabs.org/dist/extensions/> and take the latest (or
-      # something) version if this ever breaks. They do however get cached pretty well since we
-      # specify the hash so it should take a while before it breaks (which is even worse).
+      # version. Check <https://extdist.wmflabs.org/dist/extensions/> and copy links from there.
+      # RELX_YZ specifies the version of mediawiki they're made for and you can check which one
+      # we're running using e.g. `nix eval '.#nixosConfigurations.ares.pkgs.mediawiki.version'`.
+      # They do however get cached pretty well since we specify the hash so it should take a while
+      # before it breaks (which is even worse).
       OpenIDConnect = pkgs.fetchzip {
-        url = "https://extdist.wmflabs.org/dist/extensions/OpenIDConnect-REL1_44-3c18370.tar.gz";
-        hash = "sha256-3QwCgql8dPTzfS0jf9dhvLb9dbzD7JWWNsH2QhrrzL4=";
+        url = "https://extdist.wmflabs.org/dist/extensions/OpenIDConnect-REL1_42-6c28c16.tar.gz";
+        hash = "sha256-X5kUuvxINbuXaLMKRcLOl2L3qbnMT72lg2NA3A9Daj8=";
       };
       PluggableAuth = pkgs.fetchzip {
-        url = "https://extdist.wmflabs.org/dist/extensions/PluggableAuth-REL1_44-1a117ee.tar.gz";
-        hash = "sha256-TtU1z5+imZSbNS+7kE1g3ZJpnORNeX6eF8k++YpI6pg=";
+        url = "https://extdist.wmflabs.org/dist/extensions/PluggableAuth-REL1_42-e9f1188.tar.gz";
+        hash = "sha256-c3j/4c93KUEwJIE8FLegTNhmQUTNlMQPJpvGbdUpyjI=";
       };
       VisualEditor = null;
     };
