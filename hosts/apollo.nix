@@ -11,7 +11,8 @@
     userId = 1000;
     dirs = [
       "user-avatars"
-      "project-background-images"
+      "background-images"
+      "favicons"
       "attachments"
     ];
   };

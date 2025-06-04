@@ -29,9 +29,14 @@ job "planka" {
       source = "planka/user-avatars"
     }
 
-    volume "project-background-images" {
+    volume "background-images" {
       type   = "host"
-      source = "planka/project-background-images"
+      source = "planka/background-images"
+    }
+
+    volume "favicons" {
+      type   = "host"
+      source = "planka/favicons"
     }
 
     volume "attachments" {
@@ -58,13 +63,14 @@ DEFAULT_ADMIN_PASSWORD={{ .admin_password }}
 DEFAULT_ADMIN_EMAIL=d-sys@datasektionen.se
 DEFAULT_ADMIN_NAME=Systemansvarig
 DEFAULT_ADMIN_USERNAME=admin
+DEFAULT_LANGUAGE=en-US # for notifications
 ENV
         destination = "local/.env"
         env         = true
       }
 
       config {
-        image = "ghcr.io/plankanban/planka:1.24.4"
+        image = "ghcr.io/plankanban/planka:2.0.0-rc.3"
         ports = ["http"]
       }
 
@@ -74,8 +80,13 @@ ENV
       }
 
       volume_mount {
-        volume      = "project-background-images"
-        destination = "/app/public/project-background-images"
+        volume      = "background-images"
+        destination = "/app/public/background-images"
+      }
+
+      volume_mount {
+        volume      = "favicons"
+        destination = "/app/public/favicons"
       }
 
       volume_mount {
