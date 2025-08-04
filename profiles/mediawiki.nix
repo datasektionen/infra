@@ -20,12 +20,12 @@ in
       # They do however get cached pretty well since we specify the hash so it should take a while
       # before it breaks (which is even worse).
       OpenIDConnect = pkgs.fetchzip {
-        url = "https://extdist.wmflabs.org/dist/extensions/OpenIDConnect-REL1_42-6c28c16.tar.gz";
-        hash = "sha256-X5kUuvxINbuXaLMKRcLOl2L3qbnMT72lg2NA3A9Daj8=";
+        url = "https://extdist.wmflabs.org/dist/extensions/OpenIDConnect-REL1_42-fc86539.tar.gz";
+        hash = "sha256-GIvzRSEQPav4uUn1LPXp+e+3bQCBG79GOqksSHpgV3s=";
       };
       PluggableAuth = pkgs.fetchzip {
-        url = "https://extdist.wmflabs.org/dist/extensions/PluggableAuth-REL1_42-e9f1188.tar.gz";
-        hash = "sha256-c3j/4c93KUEwJIE8FLegTNhmQUTNlMQPJpvGbdUpyjI=";
+        url = "https://extdist.wmflabs.org/dist/extensions/PluggableAuth-REL1_42-1dd63fd.tar.gz";
+        hash = "sha256-3p5gJg4ctTibikk30wkpgtB9d+TS+jJudw3eDk0fJRM=";
       };
       VisualEditor = null;
     };
