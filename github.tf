@@ -41,6 +41,7 @@ locals {
       "zfinger",
     ],
     djulkalendern = [
+      "dhost-chat",
       "djulkalendern",
       "duckbot-jr",
     ],
