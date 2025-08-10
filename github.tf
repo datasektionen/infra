@@ -29,6 +29,7 @@ locals {
       "metasl2",
       "metastudent",
       "methone",
+      "pax2",
       "skywhale",
       "smingo",
       "ston",
