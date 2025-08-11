@@ -104,6 +104,10 @@ resource "nomad_job" "djul-redirect" {
   jobspec = file("${path.module}/jobs/djul-redirect.nomad.hcl")
 }
 
+resource "nomad_job" "jml-redirect" {
+  jobspec = file("${path.module}/jobs/jml-redirect.nomad.hcl")
+}
+
 resource "nomad_job" "planka" {
   jobspec = file("${path.module}/jobs/planka.nomad.hcl")
 }
