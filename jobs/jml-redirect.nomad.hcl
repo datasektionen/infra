@@ -1,5 +1,6 @@
 job "jml-redirect" {
-  type = "service"
+  namespace = "jml"
+  type      = "service"
 
   group "jml-redirect" {
     network {
