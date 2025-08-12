@@ -7,6 +7,7 @@ locals {
     ares     = { role = "client", private_ip_addr = "10.83.0.5", server_type = "cx32" }
     artemis  = { role = "client", private_ip_addr = "10.83.0.6", server_type = "cx22" }
     apollo   = { role = "client", private_ip_addr = "10.83.0.7", server_type = "cx22" }
+    athena   = { role = "client", private_ip_addr = "10.83.0.8", server_type = "cx22" }
   }
 }
 
