@@ -21,6 +21,7 @@ locals {
       "audio",
       "aurora",
       "bawang",
+      "bea",
       "betting",
       "calypso",
       "damm2",
