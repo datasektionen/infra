@@ -49,6 +49,9 @@ locals {
     ],
     djulkalendern = [
       "dhost-chat",
+      "dhost-commoners",
+      "dhost-duckbolt",
+      "dhost-sallad",
       "djulkalendern",
       "duckbot-jr",
     ],
