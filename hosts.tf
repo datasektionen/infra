@@ -34,13 +34,16 @@ resource "hcloud_network_route" "wireguard-router" {
 }
 
 resource "hcloud_server" "cluster_hosts" {
-  for_each    = local.cluster_hosts
-  name        = each.key
-  image       = "debian-12"
-  server_type = each.value.server_type
-  ssh_keys    = [hcloud_ssh_key.bootstrap.id]
+  for_each           = local.cluster_hosts
+  name               = each.key
+  image              = "debian-12"
+  server_type        = each.value.server_type
+  ssh_keys           = [hcloud_ssh_key.bootstrap.id]
+  delete_protection  = true # prevent accidental deletion via web console
+  rebuild_protection = true # prevent accidental erase via web console
   lifecycle {
-    ignore_changes = [ssh_keys]
+    prevent_destroy = true # prevent accidental deletion via tofu
+    ignore_changes  = [ssh_keys]
   }
   network {
     network_id = hcloud_network.cluster.id
