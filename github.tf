@@ -33,6 +33,7 @@ locals {
       "harmony",
       "metasl2",
       "metastudent",
+      "meta-tv-rs",
       "methone",
       "pandora",
       "pax2",
