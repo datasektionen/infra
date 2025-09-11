@@ -37,6 +37,7 @@ locals {
       "methone",
       "pandora",
       "pax2",
+      "rfinger",
       "skywhale",
       "smingo",
       "ston",
