@@ -140,6 +140,15 @@ resource "nomad_acl_policy" "manage_jobs" {
   HCL
 }
 
+resource "nomad_acl_policy" "read_docker_socket" {
+  name      = "read-docker-socket"
+  rules_hcl = <<HCL
+    host_volume "docker-socket-ro" {
+      policy = "read"
+    }
+  HCL
+}
+
 variable "nomad_sso_client_secret" {
   sensitive = true
 }
