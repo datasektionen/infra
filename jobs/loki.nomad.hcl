@@ -116,7 +116,7 @@ EOH
 
         tags = [
           "traefik.enable=true",
-          "traefik.http.routers.loki.rule=Host(`loki.${config.dsekt.domain}`)",
+          "traefik.http.routers.loki.rule=Host(`loki.nomad.dsekt.internal`)",
           "traefik.http.routers.loki.entrypoints=web-internal"
         ]
       }

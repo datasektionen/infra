@@ -1,4 +1,5 @@
 # Vector ships logs from all nodes to Loki
+# Based on https://atodorov.me/2021/07/09/logging-on-nomad-and-log-aggregation-with-loki/
 job "vector" {
   # system job, runs on all nodes
   type = "system"
