@@ -17,11 +17,11 @@
 
   outputs =
     {
-      self,
       nixpkgs,
       disko,
       nixos-anywhere,
       agenix,
+      ...
     }:
     let
       system = "x86_64-linux";
