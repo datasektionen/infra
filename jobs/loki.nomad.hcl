@@ -71,12 +71,14 @@ storage_config:
     active_index_directory: /loki/tsdb-shipper-active
     cache_location: /loki/tsdb-shipper-cache
     shared_store: s3
+{{ with nomadVar "nomad/jobs/grafana" }}
   s3:
     bucketnames: dsekt-loki
     endpoint: https://s3.eu-north-1.amazonaws.com
-    access_key_id: todo!
-    secret_access_key: todo!
+    access_key_id: {{ .aws_access_key_id }}
+    secret_access_key: {{ .aws_secret_access_key }}
     insecure: false
+{{ end }}
 compactor:
   working_directory: /tmp/loki/tsdb-shipper-compactor
   shared_store: s3
