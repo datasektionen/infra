@@ -116,6 +116,18 @@ resource "nomad_job" "ston-birthdays-to-slack" {
   jobspec = file("${path.module}/jobs/ston-birthdays-to-slack.nomad.hcl")
 }
 
+resource "nomad_job" "loki" {
+  jobspec = file("${path.module}/jobs/loki.nomad.hcl")
+}
+
+resource "nomad_job" "grafana" {
+  jobspec = file("${path.module}/jobs/grafana.nomad.hcl")
+}
+
+resource "nomad_job" "vector" {
+  jobspec = file("${path.module}/jobs/vector.nomad.hcl")
+}
+
 # Policies for humans
 
 locals {
@@ -136,15 +148,6 @@ resource "nomad_acl_policy" "manage_jobs" {
         }
       }
       policy = "write"
-    }
-  HCL
-}
-
-resource "nomad_acl_policy" "read_docker_socket" {
-  name      = "read-docker-socket"
-  rules_hcl = <<HCL
-    host_volume "docker-socket-ro" {
-      policy = "read"
     }
   HCL
 }

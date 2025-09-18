@@ -25,9 +25,9 @@ job "vector" {
     }
 
     # docker socket volume
-    volume "docker-sock" {
+    volume "docker-socket" {
       type      = "host"
-      source    = "docker-sock"
+      source    = "docker-socket"
       read_only = true
     }
 
@@ -45,7 +45,7 @@ job "vector" {
 
       # docker socket volume mount
       volume_mount {
-        volume      = "docker-sock"
+        volume      = "docker-socket"
         destination = "/var/run/docker.sock"
         read_only   = true
       }
