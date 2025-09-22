@@ -10,7 +10,7 @@ let
 in
 {
   options.dsekt.addresses.hosts = opt (lib.types.attrsOf lib.types.str);
-  options.dsekt.addresses.groups = opt (lib.types.attrsOf (lib.types.listOf lib.types.str));
+  options.dsekt.addresses.groups = opt (lib.types.attrsOf (lib.types.attrsOf lib.types.str));
   options.dsekt.addresses.subnet = opt lib.types.str;
 
   config.dsekt.addresses = {
@@ -30,10 +30,24 @@ in
       self = self.${config.networking.hostName};
     });
 
-    groups.cluster-servers = with cfg.hosts; [
-      zeus
-      poseidon
-      hades
+    groups.cluster-servers = builtins.listToAttrs (
+      map
+        (k: {
+          name = k;
+          value = cfg.hosts.${k};
+        })
+        [
+          "zeus"
+          "poseidon"
+          "hades"
+        ]
+    );
+
+    # Enables node exporter metrics server on these hosts
+    groups.monitoring = lib.removeAttrs cfg.hosts [
+      "mjukglass"
+      "drifvarkaden"
+      "self"
     ];
 
     # Must be kept in sync with `hcloud_network.cluster.ip_range` in tf

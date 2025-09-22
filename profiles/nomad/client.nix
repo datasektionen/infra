@@ -13,7 +13,7 @@
     settings = {
       client = {
         enabled = true;
-        server_join.retry_join = config.dsekt.addresses.groups.cluster-servers;
+        server_join.retry_join = builtins.attrValues config.dsekt.addresses.groups.cluster-servers;
         network_interface = "{{ GetPrivateInterfaces | include `address` `10[.]83[.]` | attr `name` }}";
 
         host_volume."docker-socket" = {
