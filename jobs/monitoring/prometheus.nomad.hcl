@@ -8,6 +8,11 @@ job "prometheus" {
       port "http" {}
     }
 
+    volume "prometheus" {
+      type = "host"
+      source = "prometheus/prometheus"
+    }
+
     task "prometheus" {
       driver = "docker"
 
@@ -22,6 +27,11 @@ job "prometheus" {
           "local/prometheus.yml:/etc/prometheus/prometheus.yml",
           "local/nomad-ca.pem:/etc/prometheus/nomad-ca.pem"
         ]
+      }
+
+      volume_mount {
+        volume = "prometheus"
+        destination = "/prometheus"
       }
 
       template {
@@ -64,6 +74,7 @@ scrape_configs:
         regex: .*traefik\.http\.routers\.[^\.]+\.rule=Host\(`([^`]+)`\).*
         target_label: __address__
         replacement: $1:80
+      # TODO: Use fields in a good consistent way for the labels
 {{ end }}
 EOF
         destination = "local/prometheus.yml"
