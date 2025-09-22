@@ -50,9 +50,16 @@ scrape_configs:
         tls_config:
           ca_file: /etc/prometheus/nomad-ca.pem
     relabel_configs:
+      # We only scrape targets with "prometheus.scrape=true" label
       - source_labels: [__meta_nomad_tags]
         regex: .*prometheus\.scrape=true.*
         action: keep
+      # We cruedly extract the address from the traefik label and use it as the target.
+      # We need to do this since the address itself is not directly accessable, but only
+      # through the traefik router.
+      #
+      # This means that any service you will want to scrape metrics from also needs to have
+      # a traefik router for it.
       - source_labels: [__meta_nomad_tags]
         regex: .*traefik\.http\.routers\.[^\.]+\.rule=Host\(`([^`]+)`\).*
         target_label: __address__
