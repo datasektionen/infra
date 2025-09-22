@@ -32,7 +32,7 @@ job "vector" {
     }
 
     ephemeral_disk {
-      size   = 500
+      size   = 300
       sticky = true
     }
 
@@ -82,8 +82,8 @@ job "vector" {
             encoding.codec = "json"
           [sinks.loki]
             type = "loki"
-            inputs = ["logs"]
-            endpoint = "http://loki.nomad.dsekt.internal:3100"
+            inputs = [ "logs" ]
+            endpoint = "http://loki.nomad.dsekt.internal"
             encoding.codec = "json"
             healthcheck.enabled = true
             # since . is used by Vector to denote a parent-child relationship, and Nomad's Docker labels contain ".",

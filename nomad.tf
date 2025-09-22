@@ -56,6 +56,24 @@ resource "nomad_variable" "jobs_vault" {
   }
 }
 
+# Monitoring/logs/metrics
+
+resource "nomad_job" "grafana" {
+  jobspec = file("${path.module}/jobs/monitoring/grafana.nomad.hcl")
+}
+
+resource "nomad_job" "prometheus" {
+  jobspec = file("${path.module}/jobs/monitoring/prometheus.nomad.hcl")
+}
+
+resource "nomad_job" "loki" {
+  jobspec = file("${path.module}/jobs/monitoring/loki.nomad.hcl")
+}
+
+resource "nomad_job" "vector" {
+  jobspec = file("${path.module}/jobs/monitoring/vector.nomad.hcl")
+}
+
 # Twenty
 
 resource "nomad_namespace" "twenty" {
@@ -114,18 +132,6 @@ resource "nomad_job" "planka" {
 
 resource "nomad_job" "ston-birthdays-to-slack" {
   jobspec = file("${path.module}/jobs/ston-birthdays-to-slack.nomad.hcl")
-}
-
-resource "nomad_job" "loki" {
-  jobspec = file("${path.module}/jobs/loki.nomad.hcl")
-}
-
-resource "nomad_job" "grafana" {
-  jobspec = file("${path.module}/jobs/grafana.nomad.hcl")
-}
-
-resource "nomad_job" "vector" {
-  jobspec = file("${path.module}/jobs/vector.nomad.hcl")
 }
 
 # Policies for humans

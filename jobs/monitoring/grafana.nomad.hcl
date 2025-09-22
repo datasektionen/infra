@@ -32,6 +32,12 @@ http_port = {{ env "NOMAD_PORT_http" }}
 [security]
 admin_user = admin
 admin_password = {{ .admin_password }}
+[database]
+type = postgres
+host = postgres.dsekt.internal:5432
+name = grafana
+user = grafana
+password = {{ .pg_password }}
 {{ end }}
            EOF
         destination = "local/config.ini"
