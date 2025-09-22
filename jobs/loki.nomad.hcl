@@ -20,9 +20,7 @@ job "loki" {
     }
 
     network {
-      port "loki" {
-        to = 3100
-      }
+      port "http" {}
     }
 
     task "loki" {
@@ -33,14 +31,14 @@ job "loki" {
           "-config.file",
           "local/loki/local-config.yaml",
         ]
-        ports = ["loki"]
+        ports = ["http"]
       }
 
       template {
         data        = <<EOH
 auth_enabled: false
 server:
-  http_listen_port: 3100
+  http_listen_port: {{ env NOMAD_PORT_http }}
 ingester:
   lifecycler:
     address: 127.0.0.1
