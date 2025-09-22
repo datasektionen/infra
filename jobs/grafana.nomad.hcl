@@ -1,7 +1,7 @@
 job "grafana" {
   type = "service"
 
-  group "metrics" {
+  group "grafana" {
     network {
       port "http" {}
     }
@@ -19,19 +19,22 @@ job "grafana" {
       }
 
       env {
-        GF_PATHS_CONFIG = "/local/config.ini"
+        GF_PATHS_CONFIG       = "/local/config.ini"
         GF_PATHS_PROVISIONING = "/local/provisioning"
       }
 
       template {
-               data = <<EOF
+        data        = <<EOF
+[server]
+root_url = "https://grafana.datasektionen.se"
+http_port = {{ env "NOMAD_PORT_http" }}
 {{ with nomadVar "nomad/jobs/grafana" }}
 [security]
 admin_user = admin
 admin_password = {{ .admin_password }}
 {{ end }}
            EOF
-               destination = "local/config.ini"
+        destination = "local/config.ini"
       }
 
       template {
@@ -40,13 +43,18 @@ admin_password = {{ .admin_password }}
 apiVersion: 1
 
 datasources:
-- name: Loki
-  type: loki
+# - name: Loki
+#   type: loki
+#   access: proxy
+#   url: http://loki.nomad.dsekt.internal
+#   editable: false
+- name: Prometheus
+  type: prometheus
   access: proxy
-  url: http://loki.nomad.dsekt.internal:3100
+  url: http://prometheus.nomad.dsekt.internal
   editable: false
 EOF
-      perms = "777"
+        perms       = "777"
       }
 
       service {
