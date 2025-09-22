@@ -9,6 +9,7 @@
     nix
     users
     dns
+    monitoring
     agenix.nixosModules.default
   ];
 

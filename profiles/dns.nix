@@ -61,6 +61,16 @@ in
         )}
         *.nomad  A     ${config.dsekt.addresses.hosts.self}
 
+        ${lib.concatStringsSep "\n" (
+          lib.mapAttrsToList (
+            hostname: address:
+            let
+              inherit (config.services.prometheus.exporters.node) port;
+            in
+            "_node._tcp.monitoring.dsekt.internal. 86400 IN SRV 10 5 ${builtins.toString port} ${hostname}.dsekt.internal."
+          ) config.dsekt.addresses.groups.monitoring
+        )}
+
         postgres   CNAME ares
         ldap-proxy CNAME mjukglass
         mediawiki  CNAME ares

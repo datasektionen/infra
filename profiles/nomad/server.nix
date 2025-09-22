@@ -4,6 +4,9 @@
   secretsDir,
   ...
 }:
+let
+  cluster-servers = builtins.attrValues config.dsekt.addresses.groups.cluster-servers;
+in
 {
   imports = [ profiles.nomad.shared ];
 
@@ -13,8 +16,8 @@
     settings = {
       server = {
         enabled = true;
-        bootstrap_expect = builtins.length config.dsekt.addresses.groups.cluster-servers;
-        server_join.retry_join = config.dsekt.addresses.groups.cluster-servers;
+        bootstrap_expect = builtins.length cluster-servers;
+        server_join.retry_join = cluster-servers;
       };
     };
     credentials."gossip_key.json" = config.age.secrets.nomad-gossip-key.path;
