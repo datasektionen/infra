@@ -15,6 +15,7 @@
   };
 
   dsekt.nomad.volumes.host.prometheus = {
+    userId = 65534; # Runs as nobody?
     dirs = [ "prometheus" ];
   };
 
