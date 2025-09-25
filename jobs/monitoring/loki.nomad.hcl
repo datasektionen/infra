@@ -36,9 +36,11 @@ job "loki" {
 
       template {
         data        = <<EOH
+common:
+  path_prefix: /loki
 auth_enabled: false
 server:
-  http_listen_port: {{ env NOMAD_PORT_http }}
+  http_listen_port: {{ env "NOMAD_PORT_http" }}
 ingester:
   lifecycler:
     address: 127.0.0.1
@@ -64,13 +66,13 @@ schema_config:
       index:
         prefix: index_
         period: 24h
+{{ with nomadVar "nomad/jobs/loki" }}
 storage_config:
   tsdb_shipper:
     active_index_directory: /loki/tsdb-shipper-active
     cache_location: /loki/tsdb-shipper-cache
     shared_store: s3
-{{ with nomadVar "nomad/jobs/grafana" }}
-  s3:
+  aws:
     bucketnames: dsekt-loki
     endpoint: https://s3.eu-north-1.amazonaws.com
     access_key_id: {{ .aws_access_key_id }}
@@ -98,11 +100,12 @@ EOH
       }
       service {
         name = "loki"
-        port = "loki"
+        port = "http"
+        provider = "nomad"
 
         check {
           name     = "Loki healthcheck"
-          port     = "loki"
+          port     = "http"
           type     = "http"
           path     = "/ready"
           interval = "20s"

@@ -49,11 +49,11 @@ password = {{ .pg_password }}
 apiVersion: 1
 
 datasources:
-# - name: Loki
-#   type: loki
-#   access: proxy
-#   url: http://loki.nomad.dsekt.internal
-#   editable: false
+- name: Loki
+  type: loki
+  access: proxy
+  url: http://loki.nomad.dsekt.internal
+  editable: false
 - name: Prometheus
   type: prometheus
   access: proxy
