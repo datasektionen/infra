@@ -21,24 +21,24 @@
           read_only = true;
         };
       };
-      plugin.docker = [
-        {
-          config = [
-            {
-              extra_labels = [
-                "job_name"
-                "task_group_name"
-                "task_name"
-                "namespace"
-                "node_name"
-              ];
-            }
 
-            { auth = [ { config = config.age.secrets.nomad-docker-auth.path; } ]; }
-          ];
-        }
-      ];
+      telemetry = {
+        publish_allocation_metrics = true;
+        publish_node_metrics = true;
+        prometheus_metrics = true;
+      };
 
+      plugin.docker = {
+        extra_labels = [
+          "job_name"
+          "task_group_name"
+          "task_name"
+          "namespace"
+          "node_name"
+        ];
+
+        auth.config = config.age.secrets.nomad-docker-auth.path;
+      };
     };
   };
 

@@ -47,6 +47,9 @@ scrape_configs:
       - names:
           - '_node._tcp.monitoring.dsekt.internal'
         type: SRV
+      - names:
+          - '_nomad._tcp.monitoring.dsekt.internal'
+        type: SRV
   - job_name: nomad
     # For some reason '*' namespace does not work
     # TODO: dynamically generate this for all namespaces
@@ -87,7 +90,7 @@ EOF
       }
 
       template {
-        data        = file("../files/nomad-agent-ca.pem")
+        data        = file("./files/nomad-agent-ca.pem")
         destination = "local/nomad-ca.pem"
       }
 
