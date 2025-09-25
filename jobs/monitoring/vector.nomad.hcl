@@ -13,6 +13,7 @@ job "vector" {
 
   group "vector" {
     count = 1
+
     restart {
       attempts = 3
       interval = "10m"
@@ -99,6 +100,8 @@ job "vector" {
       }
 
       service {
+        provider = "nomad"
+
         check {
           port     = "api"
           type     = "http"
