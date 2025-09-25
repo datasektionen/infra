@@ -7,6 +7,15 @@ let
       inherit type;
       readOnly = true;
     };
+
+  keepAttrs =
+    attrs: keys:
+    builtins.listToAttrs (
+      map (k: {
+        name = k;
+        value = attrs.${k};
+      }) keys
+    );
 in
 {
   options.dsekt.addresses.hosts = opt (lib.types.attrsOf lib.types.str);
@@ -30,18 +39,18 @@ in
       self = self.${config.networking.hostName};
     });
 
-    groups.cluster-servers = builtins.listToAttrs (
-      map
-        (k: {
-          name = k;
-          value = cfg.hosts.${k};
-        })
-        [
-          "zeus"
-          "poseidon"
-          "hades"
-        ]
-    );
+    groups.cluster-servers = keepAttrs cfg.hosts [
+      "zeus"
+      "poseidon"
+      "hades"
+    ];
+
+    groups.cluster-clients = keepAttrs cfg.hosts [
+      "ares"
+      "artemis"
+      "apollo"
+      "athena"
+    ];
 
     # Enables node exporter metrics server on these hosts
     groups.monitoring = lib.removeAttrs cfg.hosts [

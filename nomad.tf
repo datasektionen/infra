@@ -70,9 +70,9 @@ resource "nomad_job" "loki" {
   jobspec = file("${path.module}/jobs/monitoring/loki.nomad.hcl")
 }
 
-resource "nomad_job" "vector" {
-  jobspec = file("${path.module}/jobs/monitoring/vector.nomad.hcl")
-}
+# resource "nomad_job" "vector" {
+#   jobspec = file("${path.module}/jobs/monitoring/vector.nomad.hcl")
+# }
 
 # Twenty
 
