@@ -39,4 +39,6 @@ if [[ "${DONT_MOVE:-"0"}" == "0" ]]; then
     rsync --rsync-path="sudo rsync" --remove-source-files --chown=root:root \
         cert.pem key.pem \
         "$SSH_USER@$host.datasektionen.se":/var/lib/nomad-certs/
+    echo "Success! New cert moved to remote server"
+    echo "    Hint: just restart the Nomad daemon now and all should work"
 fi
