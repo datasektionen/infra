@@ -40,6 +40,7 @@ locals {
       "rfinger",
       "skywhale",
       "smingo",
+      "spam",
       "ston",
       "styrdokument-bawang",
       "taitan",
