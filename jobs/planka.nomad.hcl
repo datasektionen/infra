@@ -53,6 +53,7 @@ TZ=Europe/Stockholm
 BASE_URL=https://${var.domain_name}
 OIDC_ISSUER=https://sso.datasektionen.se/op
 OIDC_USERNAME_ATTRIBUTE=sub
+OIDC_IGNORE_ROLES=true
 {{ with nomadVar "nomad/jobs/planka" }}
 OIDC_CLIENT_ID={{ .oidc_client_id }}
 OIDC_CLIENT_SECRET={{ .oidc_client_secret }}
