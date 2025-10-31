@@ -3,6 +3,7 @@
   pkgs,
   secretsDir,
   profiles,
+  tofu,
   ...
 }:
 {
@@ -20,7 +21,7 @@
       };
       entryPoints.httpredirect = {
         # This port is also used by the web-internal entrypoint, so we need to bind to only the public address.
-        address = "${config.networking.hostName}.datasektionen.se:80";
+        address = "${config.networking.hostName}.${tofu.domainname}:80";
         http.redirections.entryPoint = {
           to = "web";
           scheme = "https";
@@ -45,13 +46,13 @@
     dynamicConfigOptions = {
       http = {
         routers.api-external = {
-          rule = "Host(`traefik.datasektionen.se`)";
+          rule = "Host(`traefik.${tofu.domainname}`)";
           service = "api@internal";
           middlewares = [ "auth" ];
           tls.certresolver = "default";
         };
         routers.nomad = {
-          rule = "Host(`nomad.datasektionen.se`)";
+          rule = "Host(`nomad.${tofu.domainname}`)";
           service = "nomad";
           tls.certresolver = "default";
         };
@@ -74,8 +75,8 @@
       tls.stores.default.defaultGeneratedCert = {
         resolver = "default";
         domain = {
-          main = "datasektionen.se";
-          sans = [ "*.datasektionen.se" ];
+          main = "${tofu.domainname}";
+          sans = [ "*.${tofu.domainname}" ];
         };
       };
     };

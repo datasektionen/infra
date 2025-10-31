@@ -46,6 +46,13 @@ They are stored in `secrets/<name>.age` and encrypted with the ssh/age keys spec
 
 ## Starting the cluster from nothing
 
+We make some values from tofu available in nix through some hackery, which you after cloning the repository need to set up using:
+
+```sh
+git config filter.bogus-generated.clean "echo '(generated file, will be updated by tofu)'"
+git config filter.bogus-generated.smudge "echo 'throw \"This file will be generated when running tofu. Please do so before fiddling with nix.\"'"
+```
+
 Some resources in the OpenTofu configuration are required to start the nomad cluster and some require the nomad cluster to be running but there is no way (?) to bootstrap nomad's ACL system in OpenTofu, so this has to be split up in multiple steps.
 
 First, run
