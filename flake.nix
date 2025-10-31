@@ -46,6 +46,7 @@
               inherit nixpkgs disko agenix;
               profiles = lib.rakeLeaves ./profiles;
               secretsDir = ./secrets;
+              tofu = import ./tofu.nix;
             };
             modules = [
               (./hosts + "/${name}")

@@ -73,6 +73,8 @@ module "nixos_install" {
     host = each.key,
     role = each.value.role,
   }
+
+  depends_on = [local_file.tofu_nix]
 }
 
 resource "cloudflare_record" "server_name" {
@@ -80,7 +82,7 @@ resource "cloudflare_record" "server_name" {
 
   name    = each.key
   type    = "A"
-  zone_id = data.cloudflare_zone.datasektionen.id
+  zone_id = data.cloudflare_zone.main.id
   value   = hcloud_server.cluster_hosts[each.key].ipv4_address
 }
 
@@ -89,7 +91,7 @@ resource "cloudflare_record" "server_wildcard" {
 
   name    = "*.${each.key}"
   type    = "A"
-  zone_id = data.cloudflare_zone.datasektionen.id
+  zone_id = data.cloudflare_zone.main.id
   value   = hcloud_server.cluster_hosts[each.key].ipv4_address
 }
 
