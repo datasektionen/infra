@@ -40,7 +40,7 @@ job "vector" {
     task "vector" {
       driver = "docker"
       config {
-        image = "timberio/vector:0.49.X-alpine"
+        image = "timberio/vector:0.50.0-alpine"
         ports = ["api"]
       }
 
@@ -73,29 +73,24 @@ job "vector" {
           data_dir = "alloc/data/vector/"
           [api]
             enabled = true
-            address = "0.0.0.0:{{ env "NOMAD_PORT_api" }}"
+            address = "0.0.0.0:[[ env "NOMAD_PORT_api" ]]"
             playground = true
           [sources.logs]
             type = "docker_logs"
-          [sinks.out]
-            type = "console"
-            inputs = [ "logs" ]
-            encoding.codec = "json"
           [sinks.loki]
             type = "loki"
             inputs = [ "logs" ]
-            endpoint = "http://loki.nomad.dsekt.internal"
+            endpoint = "http://[[ range service "loki" ]][[ .Address ]]:[[ .Port ]][[ end ]]"
             encoding.codec = "json"
             healthcheck.enabled = true
-            # since . is used by Vector to denote a parent-child relationship, and Nomad's Docker labels contain ".",
-            # we need to escape them twice, once for TOML, once for Vector
-            labels.job = "{{ label.com\\.hashicorp\\.nomad\\.job_name }}"
-            labels.task = "{{ label.com\\.hashicorp\\.nomad\\.task_name }}"
-            labels.group = "{{ label.com\\.hashicorp\\.nomad\\.task_group_name }}"
-            labels.namespace = "{{ label.com\\.hashicorp\\.nomad\\.namespace }}"
-            labels.node = "{{ label.com\\.hashicorp\\.nomad\\.node_name }}"
             # remove fields that have been converted to labels to avoid having the field twice
             remove_label_fields = true
+            [sinks.loki.labels]
+              job = "{{ label.\"com.hashicorp.nomad.job_name\" }}"
+              task = "{{ label.\"com.hashicorp.nomad.task_name\" }}"
+              group = "{{ label.\"com.hashicorp.nomad.task_group_name\" }}"
+              namespace = "{{ label.\"com.hashicorp.nomad.namespace\" }}"
+              node = "{{ label.\"com.hashicorp.nomad.node_name\" }}"
         EOH
       }
 
