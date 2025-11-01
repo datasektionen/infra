@@ -13,22 +13,6 @@ let
     "127.0.0.0/24"
     "172.16.0.0/12"
   ];
-
-  # Creates monitoring DNS records like:
-  #
-  # _node._tcp.monitoring.dsekt.internal. 86400 IN SRV 10 5 9100 node-1.dsekt.internal.
-  # _node._tcp.monitoring.dsekt.internal. 86400 IN SRV 10 5 9100 node-2.dsekt.internal.
-  # ...
-  #
-  # These SRV recors can be used by Prometheus to discover targets for scraping.
-  mkMonitoringRecords =
-    name: group: port:
-    lib.concatStringsSep "\n" (
-      lib.mapAttrsToList (
-        hostname: address:
-        "${name}._tcp.monitoring.dsekt.internal. 86400 IN SRV 10 5 ${builtins.toString port} ${hostname}.dsekt.internal."
-      ) group
-    );
 in
 {
   environment.etc."resolv.conf".text = ''
@@ -76,14 +60,6 @@ in
           lib.mapAttrsToList (hostname: address: "${hostname} A ${address}") config.dsekt.addresses.hosts
         )}
         *.nomad  A     ${config.dsekt.addresses.hosts.self}
-
-        # Prometheus node exporter for all monitoring nodes.
-        ${mkMonitoringRecords "_node" config.dsekt.addresses.groups.monitoring
-          config.services.prometheus.exporters.node.port
-        }
-
-        # Nomad client metrics for all nomad client nodes.
-        ${mkMonitoringRecords "_nomad" config.dsekt.addresses.groups.cluster-clients 4646}
 
         postgres   CNAME ares
         ldap-proxy CNAME mjukglass
