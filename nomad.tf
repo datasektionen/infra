@@ -58,21 +58,21 @@ resource "nomad_variable" "jobs_vault" {
 
 # Monitoring/logs/metrics, we deploy manually for now
 
-# resource "nomad_job" "grafana" {
-#   jobspec = file("${path.module}/jobs/monitoring/grafana.nomad.hcl")
-# }
+resource "nomad_job" "grafana" {
+  jobspec = file("${path.module}/jobs/monitoring/grafana.nomad.hcl")
+}
 
-# resource "nomad_job" "prometheus" {
-#   jobspec = file("${path.module}/jobs/monitoring/prometheus.nomad.hcl")
-# }
+resource "nomad_job" "prometheus" {
+  jobspec = file("${path.module}/jobs/monitoring/prometheus.nomad.hcl")
+}
 
-# resource "nomad_job" "loki" {
-#   jobspec = file("${path.module}/jobs/monitoring/loki.nomad.hcl")
-# }
+resource "nomad_job" "loki" {
+  jobspec = file("${path.module}/jobs/monitoring/loki.nomad.hcl")
+}
 
-# resource "nomad_job" "vector" {
-#   jobspec = file("${path.module}/jobs/monitoring/vector.nomad.hcl")
-# }
+resource "nomad_job" "vector" {
+  jobspec = file("${path.module}/jobs/monitoring/vector.nomad.hcl")
+}
 
 # Twenty
 
