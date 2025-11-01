@@ -58,8 +58,8 @@ job "vector" {
       }
 
       resources {
-        cpu    = 100
-        memory = 100
+        cpu    = 80
+        memory = 50
       }
 
       template {

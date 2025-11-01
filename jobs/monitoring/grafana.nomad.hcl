@@ -18,6 +18,11 @@ job "grafana" {
         ]
       }
 
+      resources {
+        cpu    = 100
+        memory = 300
+      }
+
       env {
         GF_PATHS_CONFIG       = "/local/config.ini"
         GF_PATHS_PROVISIONING = "/local/provisioning"

@@ -16,6 +16,11 @@ job "prometheus" {
     task "prometheus" {
       driver = "docker"
 
+      resources {
+        cpu    = 60
+        memory = 100
+      }
+
       config {
         image = "prom/prometheus:v3.6.0"
         ports = ["http"]

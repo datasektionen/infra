@@ -73,7 +73,7 @@ job "twenty" {
       }
 
       resources {
-        memory = 2048 # OH MY GOD!!!! what bloat this is?!!!
+        memory = 1024 # OH MY GOD!!!! what bloat this is?!!!
       }
     }
 
