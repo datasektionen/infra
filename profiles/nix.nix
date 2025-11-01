@@ -1,4 +1,4 @@
-{ pkgs, nixpkgs, ... }:
+{ nixpkgs, ... }:
 {
   nix.registry.nixpkgs.flake = nixpkgs;
   nix.nixPath = [ "nixpkgs=${nixpkgs}" ];

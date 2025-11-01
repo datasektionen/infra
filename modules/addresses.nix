@@ -7,10 +7,19 @@ let
       inherit type;
       readOnly = true;
     };
+
+  keepAttrs =
+    attrs: keys:
+    builtins.listToAttrs (
+      map (k: {
+        name = k;
+        value = attrs.${k};
+      }) keys
+    );
 in
 {
   options.dsekt.addresses.hosts = opt (lib.types.attrsOf lib.types.str);
-  options.dsekt.addresses.groups = opt (lib.types.attrsOf (lib.types.listOf lib.types.str));
+  options.dsekt.addresses.groups = opt (lib.types.attrsOf (lib.types.attrsOf lib.types.str));
   options.dsekt.addresses.subnet = opt lib.types.str;
 
   config.dsekt.addresses = {
@@ -30,10 +39,24 @@ in
       self = self.${config.networking.hostName};
     });
 
-    groups.cluster-servers = with cfg.hosts; [
-      zeus
-      poseidon
-      hades
+    groups.cluster-servers = keepAttrs cfg.hosts [
+      "zeus"
+      "poseidon"
+      "hades"
+    ];
+
+    groups.cluster-clients = keepAttrs cfg.hosts [
+      "ares"
+      "artemis"
+      "apollo"
+      "athena"
+    ];
+
+    # Enables node exporter metrics server on these hosts
+    groups.monitoring = lib.removeAttrs cfg.hosts [
+      "mjukglass"
+      "drifvarkaden"
+      "self"
     ];
 
     # Must be kept in sync with `hcloud_network.cluster.ip_range` in tf
