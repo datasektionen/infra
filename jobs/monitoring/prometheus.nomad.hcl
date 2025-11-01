@@ -40,16 +40,8 @@ job "prometheus" {
 global:
   scrape_interval: 30s
 
+# TODO: Also scrape node metrics
 scrape_configs:
-  # We use dns based service discovery of node exporter metrics, see `profiles/monitoring.nix` and `profiles/dns.nix`
-  - job_name: node-exporter
-    dns_sd_configs:
-      - names:
-          - '_node._tcp.monitoring.dsekt.internal'
-        type: SRV
-      - names:
-          - '_nomad._tcp.monitoring.dsekt.internal'
-        type: SRV
   - job_name: nomad
     # For some reason '*' namespace does not work
     # TODO: dynamically generate this for all namespaces
