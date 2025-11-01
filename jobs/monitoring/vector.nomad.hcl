@@ -58,8 +58,8 @@ job "vector" {
       }
 
       resources {
-        cpu    = 300
-        memory = 128
+        cpu    = 100
+        memory = 100
       }
 
       template {
@@ -80,7 +80,7 @@ job "vector" {
           [sinks.loki]
             type = "loki"
             inputs = [ "logs" ]
-            endpoint = "http://[[ range service "loki" ]][[ .Address ]]:[[ .Port ]][[ end ]]"
+            endpoint = "http://loki.nomad.dsekt.internal"
             encoding.codec = "json"
             healthcheck.enabled = true
             # remove fields that have been converted to labels to avoid having the field twice

@@ -104,20 +104,6 @@ EOH
         port = "http"
         provider = "nomad"
 
-        check {
-          name     = "Loki healthcheck"
-          port     = "http"
-          type     = "http"
-          path     = "/ready"
-          interval = "20s"
-          timeout  = "5s"
-          check_restart {
-            limit           = 3
-            grace           = "60s"
-            ignore_warnings = false
-          }
-        }
-
         tags = [
           "traefik.enable=true",
           "traefik.http.routers.loki.rule=Host(`loki.nomad.dsekt.internal`)",
