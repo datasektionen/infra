@@ -16,7 +16,7 @@
 
   dsekt.nomad.volumes.host.prometheus = {
     userId = 65534; # Runs as nobody?
-    dirs = [ "prometheus" ];
+    dirs = [ "data" ];
   };
 
   # Change this if you want to lose all data on this machine!

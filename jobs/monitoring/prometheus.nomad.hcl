@@ -8,9 +8,9 @@ job "prometheus" {
       port "http" {}
     }
 
-    volume "prometheus" {
+    volume "data" {
       type = "host"
-      source = "prometheus/prometheus"
+      source = "prometheus/data"
     }
 
     task "prometheus" {
@@ -30,7 +30,7 @@ job "prometheus" {
       }
 
       volume_mount {
-        volume = "prometheus"
+        volume = "data"
         destination = "/prometheus"
       }
 
