@@ -26,7 +26,7 @@ job "loki" {
     task "loki" {
       driver = "docker"
       config {
-        image = "grafana/loki:2.9.15"
+        image = "grafana/loki:3.5.7"
         args = [
           "-config.file",
           "local/loki/local-config.yaml",
@@ -61,7 +61,6 @@ ingester:
   chunk_target_size: 1048576
   # Must be greater than index read cache TTL if using an index cache (Default index read cache TTL is 5m)
   chunk_retain_period: 30s
-  max_transfer_retries: 0     # Chunk transfers disabled
 schema_config:
   configs:
     - from: 2025-09-13
@@ -76,23 +75,22 @@ storage_config:
   tsdb_shipper:
     active_index_directory: /loki/tsdb-shipper-active
     cache_location: /loki/tsdb-shipper-cache
-    shared_store: s3
   aws:
     bucketnames: dsekt-loki
     endpoint: https://s3.eu-north-1.amazonaws.com
     access_key_id: {{ .aws_access_key_id }}
     secret_access_key: {{ .aws_secret_access_key }}
     insecure: false
+    region: eu-north-1
 {{ end }}
 compactor:
   working_directory: /tmp/loki/tsdb-shipper-compactor
-  shared_store: s3
 limits_config:
   reject_old_samples: true
   reject_old_samples_max_age: 168h
   volume_enabled: true
-chunk_store_config:
-  max_look_back_period: 0s
+  retention_period: "720h" # 30 days
+  max_query_lookback: "720h" # 30 days
 table_manager:
   retention_deletes_enabled: false
   retention_period: 0s
@@ -100,10 +98,6 @@ EOH
         destination = "local/loki/local-config.yaml"
       }
 
-      resources {
-        cpu    = 256
-        memory = 256
-      }
       service {
         name = "loki"
         port = "http"
