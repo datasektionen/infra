@@ -28,7 +28,7 @@
         prometheus_metrics = true;
       };
 
-      plugin.docker = {
+      plugin.docker.config = {
         extra_labels = [
           "job_name"
           "task_group_name"
