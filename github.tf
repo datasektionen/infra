@@ -41,6 +41,7 @@ locals {
       "skywhale",
       "smingo",
       "spam",
+      "spam-rs",
       "ston",
       "styrdokument-bawang",
       "taitan",
