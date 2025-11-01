@@ -34,6 +34,11 @@ job "loki" {
         ports = ["http"]
       }
 
+      resources {
+        cpu    = 100
+        memory = 200
+      }
+
       template {
         data        = <<EOH
 common:
