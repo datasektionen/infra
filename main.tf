@@ -67,25 +67,25 @@ variable "hcloud_token" {
 
 variable "ssh_user" {}
 
-data "cloudflare_zone" "betasektionen" {
-  name = "betasektionen.se"
+variable "domainname" {
+  default = "datasektionen.se"
 }
 
-data "cloudflare_zone" "datasektionen" {
-  name = "datasektionen.se"
+data "cloudflare_zone" "main" {
+  name = "${var.domainname}"
 }
 
 resource "cloudflare_record" "zone_apex" {
   name    = "@"
   type    = "A"
-  zone_id = data.cloudflare_zone.datasektionen.id
+  zone_id = data.cloudflare_zone.main.id
   value   = hcloud_server.cluster_hosts["ares"].ipv4_address
 }
 
 resource "cloudflare_record" "zone_wildcard" {
   name    = "*"
   type    = "A"
-  zone_id = data.cloudflare_zone.datasektionen.id
+  zone_id = data.cloudflare_zone.main.id
   value   = hcloud_server.cluster_hosts["ares"].ipv4_address
 }
 
@@ -108,4 +108,13 @@ resource "cloudflare_api_token" "acme_dns_challenge" {
     BASH
     working_dir = "./secrets"
   }
+}
+
+resource "local_file" "tofu_nix" {
+  filename = "${path.module}/tofu.nix"
+  content = <<NIX
+{
+  domainname = "${var.domainname}";
+}
+NIX
 }
