@@ -56,8 +56,8 @@ module "nixos_install" {
   for_each = local.cluster_hosts
 
   source                 = "github.com/nix-community/nixos-anywhere//terraform/all-in-one"
-  nixos_system_attr      = ".#nixosConfigurations.${each.key}.config.system.build.toplevel"
-  nixos_partitioner_attr = ".#nixosConfigurations.${each.key}.config.system.build.diskoScript"
+  nixos_system_attr      = ".#nixosConfigurations.${terraform.workspace}.${each.key}.config.system.build.toplevel"
+  nixos_partitioner_attr = ".#nixosConfigurations.${terraform.workspace}.${each.key}.config.system.build.diskoScript"
 
   target_host = hcloud_server.cluster_hosts[each.key].ipv4_address
   instance_id = hcloud_server.cluster_hosts[each.key].id
