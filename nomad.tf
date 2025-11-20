@@ -137,7 +137,7 @@ resource "nomad_job" "ston-birthdays-to-slack" {
 # Policies for humans
 
 locals {
-  namespaces_for_humans = toset(["default", "auth", "ddagen", "djulkalendern", "metaspexet"])
+  namespaces_for_humans = toset(["default", "auth", "ddagen", "djulkalendern", "metaspexet", "money"])
 }
 
 resource "nomad_acl_policy" "manage_jobs" {
