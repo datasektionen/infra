@@ -118,10 +118,6 @@ resource "nomad_namespace" "money" {
 
 # Other Third-Party Jobs in Default
 
-resource "nomad_job" "djul-redirect" {
-  jobspec = file("${path.module}/jobs/djul-redirect.nomad.hcl")
-}
-
 resource "nomad_job" "jml-redirect" {
   jobspec = file("${path.module}/jobs/jml-redirect.nomad.hcl")
 }
