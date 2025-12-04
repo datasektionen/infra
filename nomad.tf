@@ -216,7 +216,7 @@ resource "nomad_acl_binding_rule" "sso_hive_roles_manage_jobs" {
 resource "nomad_acl_binding_rule" "sso_hive_roles_read_cluster_data" {
   description = "get the read-cluster-data policy when authenticating through sso"
   auth_method = nomad_acl_auth_method.sso.name
-  selector    = "\"read-cluster\" in list.permissions"
+  selector    = "list.permissions is not empty"
   bind_type   = "policy"
   bind_name   = "read-cluster-data"
 }
