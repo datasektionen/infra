@@ -57,6 +57,7 @@ locals {
       "dhost-duckbolt",
       "dhost-sallad",
       "djulkalendern",
+      "duckbot",
       "duckbot-jr",
     ],
     jml = [
