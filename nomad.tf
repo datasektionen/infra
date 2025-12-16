@@ -179,17 +179,17 @@ resource "nomad_acl_auth_method" "sso" {
       "http://localhost:4649/oidc/callback",
       "https://nomad.datasektionen.se/ui/settings/tokens",
     ]
-    oidc_scopes         = ["openid", "profile", "pls_nomad"]
+    oidc_scopes         = ["openid", "profile", "permissions_flat"]
     claim_mappings      = { "sub" : "username" }
-    list_claim_mappings = { "pls_nomad" : "pls_groups" }
+    list_claim_mappings = { "permissions_flat" : "permissions" }
   }
 }
 
-resource "nomad_acl_binding_rule" "sso_pls_roles" {
+resource "nomad_acl_binding_rule" "sso_hive_roles" {
   for_each    = local.namespaces_for_humans
-  description = "get the manage-jobs-in-${each.value} policy from the pls group nomad.${each.value}"
+  description = "get the manage-jobs-in-${each.value} policy from the hive permisson manage:${each.value}"
   auth_method = nomad_acl_auth_method.sso.name
-  selector    = "${each.value} in list.pls_groups"
+  selector    = "\"manage-jobs-in:${each.value}\" in list.permissions or \"manage-jobs-in:*\" in list.permissions"
   bind_type   = "policy"
   bind_name   = "manage-jobs-in-${each.value}"
 }
