@@ -63,7 +63,9 @@ resource "nomad_job" "grafana" {
 }
 
 resource "nomad_job" "prometheus" {
-  jobspec = file("${path.module}/jobs/monitoring/prometheus.nomad.hcl")
+  jobspec = templatefile("${path.module}/jobs/monitoring/prometheus.nomad.hcl", {
+    nomad_ca = file("${path.module}/files/nomad-agent-ca.pem")
+  })
 }
 
 resource "nomad_job" "loki" {
@@ -82,6 +84,11 @@ resource "nomad_namespace" "twenty" {
 
 resource "nomad_job" "twenty" {
   jobspec = file("${path.module}/jobs/twenty.nomad.hcl")
+}
+
+# n8n
+resource "nomad_job" "n8n" {
+  jobspec = file("${path.module}/jobs/n8n.nomad.hcl")
 }
 
 # Other
