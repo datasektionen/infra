@@ -37,13 +37,13 @@ in
           "providerURL" => "https://sso.datasektionen.se/op",
           "clientID" => "wiki",
           "clientsecret" => trim(file_get_contents("${config.age.secrets.mediawiki-sso-client-secret.path}")),
-          "scope" => ["openid", "profile", "email", "pls_wiki"],
+          "scope" => ["openid", "profile", "email", "permissions_flat"],
         ],
         "groupsyncs" => [
           [
             "type" => "mapped",
             "map" => [
-              "bureaucrat" => [ "pls_wiki" => "bureaucrat" ], // jag ÄLSKAR byråkrati
+              "bureaucrat" => [ "permissions_flat" => "bureaucrat" ], // jag ÄLSKAR byråkrati
             ],
           ]
         ],
