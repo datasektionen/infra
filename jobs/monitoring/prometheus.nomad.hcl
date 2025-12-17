@@ -25,7 +25,7 @@ job "prometheus" {
         image = "prom/prometheus:v3.6.0"
         ports = ["http"]
         args = [
-          "--web.listen-address=0.0.0.0:${NOMAD_PORT_http}",
+          "--web.listen-address=0.0.0.0:$${NOMAD_PORT_http}", # Escaping because we need to use tofu template file
           "--config.file=/etc/prometheus/prometheus.yml"
         ]
         volumes = [
@@ -87,8 +87,10 @@ EOF
       }
 
       template {
-        data        = file("./files/nomad-agent-ca.pem")
         destination = "local/nomad-ca.pem"
+        data        = <<EOF
+          ${nomad_ca}
+        EOF
       }
 
       service {
