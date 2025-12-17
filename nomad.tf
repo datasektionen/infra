@@ -154,6 +154,22 @@ resource "nomad_acl_policy" "manage_jobs" {
   HCL
 }
 
+resource "nomad_acl_policy" "read_cluster_data" {
+  name = "read-cluster-data"
+  description = "Can read data about the cluster"
+  rules_hcl = <<HCL
+    node {
+      policy = "read"
+    }
+    agent {
+      policy = "read"
+    }
+    plugin {
+      policy = "read"
+    }
+  HCL
+}
+
 variable "nomad_sso_client_secret" {
   sensitive = true
 }
@@ -181,11 +197,19 @@ resource "nomad_acl_auth_method" "sso" {
   }
 }
 
-resource "nomad_acl_binding_rule" "sso_pls_roles" {
+resource "nomad_acl_binding_rule" "sso_pls_roles_manage_jobs" {
   for_each    = local.namespaces_for_humans
   description = "get the manage-jobs-in-${each.value} policy from the pls group nomad.${each.value}"
   auth_method = nomad_acl_auth_method.sso.name
   selector    = "${each.value} in list.pls_groups"
   bind_type   = "policy"
-  bind_name   = "manage-jobs-in-${each.value}"
+  bind_name   = nomad_acl_policy.manage_jobs[each.value]
+}
+
+resource "nomad_acl_binding_rule" "sso_pls_roles_read_cluster_data" {
+  description = "get the read-cluster-data policy when authenticating through sso"
+  auth_method = nomad_acl_auth_method.sso.name
+  selector    = "list.pls_groups is not empty"
+  bind_type   = "policy"
+  bind_name   = "read-cluster-data"
 }
