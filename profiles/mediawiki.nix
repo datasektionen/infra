@@ -2,6 +2,7 @@
   config,
   secretsDir,
   pkgs,
+  deployment,
   ...
 }:
 let
@@ -10,7 +11,7 @@ in
 {
   services.mediawiki = {
     enable = true;
-    url = "https://wiki.datasektionen.se";
+    url = "https://wiki.${deployment.domainname}";
     name = "Datasektionen Wiki";
     extensions = {
       # NOTE: these links disappear if they change the commit hash for a version or remove a
@@ -34,7 +35,7 @@ in
       $wgPluggableAuth_Config[] = [
         "plugin" => "OpenIDConnect",
         "data" => [
-          "providerURL" => "https://sso.datasektionen.se/op",
+          "providerURL" => "https://sso.${deployment.domainname}/op",
           "clientID" => "wiki",
           "clientsecret" => trim(file_get_contents("${config.age.secrets.mediawiki-sso-client-secret.path}")),
           "scope" => ["openid", "profile", "email", "permissions_flat"],
@@ -73,7 +74,7 @@ in
   # WARN: this only works when this is running on the same server as profiles.traefik-external
   services.traefik.dynamicConfigOptions.http = {
     routers.mediawiki = {
-      rule = "Host(`wiki.datasektionen.se`)";
+      rule = "Host(`wiki.${deployment.domainname}`)";
       service = "mediawiki";
       tls.certresolver = "default";
     };
