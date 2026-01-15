@@ -3,6 +3,7 @@
   pkgs,
   profiles,
   secretsDir,
+  deployment,
   ...
 }:
 {
@@ -31,7 +32,7 @@
     '';
     peers = [
       {
-        endpoint = "mjukglass.datasektionen.se:51800";
+        endpoint = "mjukglass.${deployment.domainname}:51800";
         presharedKeyFile = config.age.secrets.wireguard-preshared-key.path;
         publicKey = "QszePOBh9UBg8v4BNHkY4ZeqBfiLXr5uwDVjTSRqHX0=";
         allowedIPs = [ "${config.dsekt.addresses.hosts.mjukglass}/32" ];

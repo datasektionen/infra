@@ -67,10 +67,6 @@ variable "hcloud_token" {
 
 variable "ssh_user" {}
 
-data "cloudflare_zone" "betasektionen" {
-  name = "betasektionen.se"
-}
-
 data "cloudflare_zone" "datasektionen" {
   name = "datasektionen.se"
 }
