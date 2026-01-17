@@ -31,7 +31,7 @@ job "vault" {
       driver = "docker"
 
       config {
-        image = "vaultwarden/server:1.32.0-alpine"
+        image = "vaultwarden/server:1.35.2-alpine"
         ports = ["http"]
       }
 
