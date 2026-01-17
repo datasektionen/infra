@@ -53,7 +53,11 @@ TZ=Europe/Stockholm
 BASE_URL=https://${var.domain_name}
 OIDC_ISSUER=https://sso.datasektionen.se/op
 OIDC_USERNAME_ATTRIBUTE=sub
-OIDC_IGNORE_ROLES=true
+OIDC_IGNORE_ROLES=false
+OIDC_SCOPES="openid profile email permissions_flat"
+OIDC_ADMIN_ROLES=admin
+OIDC_PROJECT_OWNER_ROLES=project-owner
+OIDC_ROLES_ATTRIBUTE=permissions_flat
 {{ with nomadVar "nomad/jobs/planka" }}
 OIDC_CLIENT_ID={{ .oidc_client_id }}
 OIDC_CLIENT_SECRET={{ .oidc_client_secret }}
