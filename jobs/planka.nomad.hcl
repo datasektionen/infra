@@ -71,7 +71,7 @@ ENV
       }
 
       config {
-        image = "ghcr.io/plankanban/planka:2.0.0-rc.3"
+        image = "ghcr.io/plankanban/planka:2.0.0-rc.4"
         ports = ["http"]
       }
 
