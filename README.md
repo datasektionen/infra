@@ -136,9 +136,9 @@ or:
 - log in to your account in the newly opened tab
 - continue using the nomad web ui or copy the Secret ID and store in an env variable as described above
 
-You will get read/write access to the namespaces described in the nomad group(s) you're added to in [pls](https://pls.datasektionen.se/).
+You will get read/write access to the namespaces described in the nomad group(s) you're added to in [Hive](https://hive.datasektionen.se/).
 
-Note however that only namespaces that are defined in `local.namespaces_for_humans` in `nomad.tf` can be given access to via pls.
+Note however that only namespaces that are defined in `local.namespaces_for_humans` in `nomad.tf` can be given access to via Hive.
 
 ## How-to-guide
 
@@ -169,9 +169,10 @@ The purpose of this section is to have one sub-section for every thing that an a
     description = "Cool shit"
   }
   ```
-  to `nomad.tf` by the others
-- add its name to `services.traefik.staticConfigOptions.providers.nomad.namespaces` in `/profiles/traefik.nix`
-- run `tofu apply`
+  to `nomad.tf` close to the other namespace definitions,
+- add its name to `services.traefik.staticConfigOptions.providers.nomad.namespaces` in `/profiles/traefik.nix`,
+- if it makes sence to give out access to this namespace through Hive, add it to `local.namespaces_for_humans` in `nomad.tf`, and
+- run `tofu apply`.
 
 ### Deploy some open source thing
 
