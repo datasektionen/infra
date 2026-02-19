@@ -38,6 +38,10 @@ variable "vault_db_password" {
   sensitive = true
 }
 
+variable "vault_oidc_secret" {
+  sensitive = true
+}
+
 resource "nomad_namespace" "vault" {
   name = "vault"
 }
@@ -53,6 +57,7 @@ resource "nomad_variable" "jobs_vault" {
     db_password   = var.vault_db_password
     smtp_username = aws_iam_access_key.vaultwarden_smtp.id
     smtp_password = aws_iam_access_key.vaultwarden_smtp.ses_smtp_password_v4
+    oidc_secret   = var.vault_oidc_secret
   }
 }
 
