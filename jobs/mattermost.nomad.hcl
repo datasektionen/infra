@@ -42,11 +42,6 @@ job "mattermost" {
       source = "mattermost/config"
     }
 
-    volume "data" {
-      type = "host"
-      source = "mattermost/data"
-    }
-
     volume "logs" {
       type = "host"
       source = "mattermost/logs"
@@ -62,11 +57,6 @@ job "mattermost" {
       source = "mattermost/client/plugins"
     }
 
-    volume "bleve-indexes" {
-      type = "host"
-      source = "mattermost/bleve-indexes"
-    }
-
     task "mattermost" {
       driver = "docker"
 
@@ -79,6 +69,8 @@ MM_SQLSETTINGS_DRIVERNAME=postgres
 MM_SQLSETTINGS_DATASOURCE=postgres://mattermost:{{ .database_password }}@postgres.dsekt.internal:5432/mattermost?sslmode=disable&connect_timeout=10
 MM_EMAILSETTINGS_SMTPPASSWORD={{ .smtp_password }}
 MM_EMAILSETTINGS_SMTPUSERNAME={{ .smtp_username }}
+MM_FILESETTINGS_AMAZONS3ACCESSKEYID={{ .aws_id }}
+MM_FILESETTINGS_AMAZONS3SECRETACCESSKEY={{ .aws_secret }}
 {{ end }}
 MM_SERVICESETTINGS_SITEURL=https://${var.domain_name}
 MM_SERVICESETTINGS_LISTENADDRESS=:{{ env "NOMAD_PORT_http" }}
@@ -88,6 +80,10 @@ MM_EMAILSETTINGS_CONNECTIONSECURITY=TLS
 MM_EMAILSETTINGS_ENABLESMTPAUTH=true
 MM_EMAILSETTINGS_FEEDBACKEMAIL=mattermost@datasektionen.se
 MM_EMAILSETTINGS_REPLYTOADDRESS=no-reply@datasektionen.se
+MM_FILESETTINGS_DRIVERNAME=amazons3
+MM_FILESETTINGS_AMAZONS3BUCKET=dsekt-mattermost
+MM_FILESETTINGS_AMAZONS3REGION=eu-west-1
+MM_FILESETTINGS_AMAZONS3SSL=true
 EOH
         destination = "local/.env"
         env = true
@@ -104,11 +100,6 @@ EOH
       }
 
       volume_mount {
-        volume = "data"
-        destination = "/mattermost/data"
-      }
-
-      volume_mount {
         volume = "logs"
         destination = "/mattermost/logs"
       }
@@ -121,11 +112,6 @@ EOH
       volume_mount {
         volume = "client/plugins"
         destination = "/mattermost/client/plugins"
-      }
-
-      volume_mount {
-        volume = "bleve-indexes"
-        destination = "/mattermost/bleve-indexes"
       }
 
       resources {

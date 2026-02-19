@@ -19,11 +19,9 @@
     userId = 2000;
     dirs = [
       "config"
-      "data"
       "logs"
       "plugins"
       "client/plugins"
-      "bleve-indexes"
     ];
   };
 
