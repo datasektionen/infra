@@ -34,12 +34,12 @@
 
   dsekt.restic = {
     backupPrepareCommand = ''
-      ${pkgs.sudo}/bin/sudo -u postgres ${pkgs.postgresql}/bin/pg_dumpall > /root/postgres_dump.sql
+      ${pkgs.sudo}/bin/sudo -u postgres ${config.services.postgresql.package}/bin/pg_dumpall > /root/postgres_dump.sql
     '';
 
     paths = [
       "/root/postgres_dump.sql"
-      "/var/lib/mattermost"
+      "/var/lib/nomad-volumes/mattermost"
     ];
 
     passwordFile = config.age.secrets.restic-repo-pwd-ares.path;
