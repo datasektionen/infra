@@ -47,6 +47,24 @@ global:
 
 # TODO: Also scrape node metrics
 scrape_configs:
+  - job_name: "nomad-clients"
+    metrics_path: /v1/metrics
+    params:
+      format: ["prometheus"]
+    scheme: https
+    tls_config:
+      ca_file: /etc/prometheus/nomad-ca.pem
+
+    static_configs:
+      - targets:
+        - ares.dsekt.internal:4646
+        - artemis.dsekt.internal:4646
+        - athena.dsekt.internal:4646
+        - apollo.dsekt.internal:4646
+    metric_relabel_configs:
+      - source_labels: [__name__]
+        regex: nomad_client_allocs_(cpu|memory)_.*
+        action: keep
   - job_name: nomad
     # For some reason '*' namespace does not work
     # TODO: dynamically generate this for all namespaces
