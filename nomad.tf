@@ -108,6 +108,11 @@ resource "nomad_namespace" "ddagen" {
   description = "Contains jobs for D-Dagen's production and preview environments"
 }
 
+resource "nomad_namespace" "dive" {
+  name        = "dive"
+  description = "Contains jobs for Dive"
+}
+
 resource "nomad_namespace" "jml" {
   name        = "jml"
   description = "Contains sensitive JML/SSO jobs that must be isolated"
@@ -149,7 +154,7 @@ resource "nomad_job" "immich" {
 # Policies for humans
 
 locals {
-  namespaces_for_humans = toset(["default", "auth", "ddagen", "djulkalendern", "metaspexet", "money"])
+  namespaces_for_humans = toset(["default", "auth", "ddagen", "dive", "djulkalendern", "metaspexet", "money"])
 }
 
 resource "nomad_acl_policy" "manage_jobs" {

@@ -28,6 +28,7 @@ in
           "ddagen"
           "default"
           "djulkalendern"
+          "dive"
           "jml"
           "mattermost"
           "metaspexet"

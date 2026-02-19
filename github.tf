@@ -51,6 +51,9 @@ locals {
       "zaiko",
       "zfinger",
     ],
+    dive = [
+      "dive-workshop",
+    ],
     djulkalendern = [
       "dhost-chat",
       "dhost-commoners",
