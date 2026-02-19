@@ -137,6 +137,10 @@ resource "nomad_job" "ston-birthdays-to-slack" {
   jobspec = file("${path.module}/jobs/ston-birthdays-to-slack.nomad.hcl")
 }
 
+resource "nomad_job" "immich" {
+  jobspec = file("${path.module}/jobs/immich.nomad.hcl")
+}
+
 # Policies for humans
 
 locals {

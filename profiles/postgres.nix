@@ -1,5 +1,11 @@
 { config, lib, pkgs, ... }:
 {
+  # nixpkgs.config.packageOverrides = pkgs: with pkgs; {
+  #   postgresqlExtensions = postgresqlExtensions // {
+  #     pgvector = postgresql18Extensions.pgvector;
+  #   };
+  # };
+
   services.postgresql = {
     enable = true;
     package = pkgs.postgresql_18;
@@ -11,6 +17,11 @@
 
       local all all      peer map=m
     '';
+
+    extensions = [
+      pkgs.postgresql18Packages.pgvector
+    ];
+
     # Allow all unix users in the group `wheel` to authenticate as any database
     # user. (Since they can become root this is only for convenience). Also
     # allow any unix user to authenticate as the database user with the same

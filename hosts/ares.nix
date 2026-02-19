@@ -25,6 +25,13 @@
     ];
   };
 
+  dsekt.nomad.volumes.host.immich = {
+    userId = 3000;
+    dirs = [
+      "uploads"
+    ];
+  };
+
   dsekt.restic = {
     backupPrepareCommand = ''
       ${pkgs.sudo}/bin/sudo -u postgres ${pkgs.postgresql}/bin/pg_dumpall > /root/postgres_dump.sql
