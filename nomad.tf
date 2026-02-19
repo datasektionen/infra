@@ -96,6 +96,17 @@ resource "nomad_job" "n8n" {
   jobspec = file("${path.module}/jobs/n8n.nomad.hcl")
 }
 
+# Metaspexet
+
+resource "nomad_namespace" "metaspexet" {
+  name        = "metaspexet"
+  description = "Contains jobs for METAspexet"
+}
+
+resource "nomad_job" "dionysus" {
+  jobspec = file("${path.module}/jobs/dionysus.nomad.hcl")
+}
+
 # Other
 
 resource "nomad_namespace" "auth" {
@@ -121,11 +132,6 @@ resource "nomad_namespace" "jml" {
 resource "nomad_namespace" "djulkalendern" {
   name        = "djulkalendern"
   description = "Contains jobs for dJulkalendern (but not most challenges as they often run on separate servers)"
-}
-
-resource "nomad_namespace" "metaspexet" {
-  name        = "metaspexet"
-  description = "Contains jobs for METAspexet"
 }
 
 resource "nomad_namespace" "money" {
