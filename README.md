@@ -178,3 +178,26 @@ The purpose of this section is to have one sub-section for every thing that an a
 Most such services have a docker compose file which can be used for deployment. These often configure everything, including reverse proxy and databases themselves. Using other nomad job specs as reference, convert the compose file to a nomad job spec. Of course, it should use our centralized database and register itself with our centralized traefik instance rather than creating such things as more containers. This requires that the program is published as a docker image in some public registry. Also add a `nomad_job` resource to `nomad.tf` so that `tofu apply` will run it.
 
 It is also possible to fork the thing and create a job spec and deployment action in the repository, which I did with [mattfbacon/typst-bot](https://github.com/datasektionen/typst-bot) since it wasn't published as a docker image anywhere.
+
+### Deploy to the META-TV machine
+
+This deploys the NixOS configuration to the META-TV machine (the computer running in META, not the backend server running in a Hetzner instance).
+
+> The following commands are assumed to be ran on your local machine. Your SSH key needs to have been added to META-TV.
+
+Currently the configuration isn't integrated with OpenTofu, so you're just going to push the NixOS configuration manually:
+
+```shell
+nixos-rebuild switch --flake .#meta-tv --target-host "meta-tv@tv.meta.datasektionen.se"
+```
+
+#### Installing NixOS
+
+If the META-TV machine doesn't have NixOS installed already you'll first have to install it with nixos-anywhere. The below command should Just Work™ with basically any preexisting OS.
+
+```shell
+nix run github:nix-community/nixos-anywhere -- --flake .#meta-tv --target-host tv@tv.meta.datasektionen.se
+```
+
+
+

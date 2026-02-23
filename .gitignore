@@ -3,3 +3,4 @@
 .env
 secrets/identity*
 *-key.pem
+/result
