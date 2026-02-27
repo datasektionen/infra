@@ -22,6 +22,7 @@ locals {
       "aurora",
       "bawang",
       "bea",
+      "chilibea",
       "betting",
       "calypso",
       "damm2",
