@@ -46,10 +46,7 @@ provider "cloudflare" {
 }
 
 provider "hcloud" {
-  token = {
-    default = var.hcloud_token_default
-    beta = var.hcloud_token_beta
-  }[terraform.workspace]
+  token = var.hcloud_token
 }
 
 provider "github" {
@@ -64,11 +61,7 @@ locals {
   aws_region = "eu-north-1"
 }
 
-variable "hcloud_token_default" {
-  sensitive = true
-}
-
-variable "hcloud_token_beta" {
+variable "hcloud_token" {
   sensitive = true
 }
 
@@ -108,9 +101,9 @@ resource "cloudflare_api_token" "acme_dns_challenge" {
   }
   provisioner "local-exec" {
     command     = <<BASH
-      rm cloudflare-dns-api-token.env.age
+      rm cloudflare-dns-api-token-${terraform.workspace}.env.age
       echo "CLOUDFLARE_DNS_API_TOKEN=${self.value}" | \
-        agenix -e cloudflare-dns-api-token.env.age
+        agenix -e cloudflare-dns-api-token-${terraform.workspace}.env.age
     BASH
     working_dir = "./secrets"
   }

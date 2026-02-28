@@ -64,7 +64,7 @@ Lastly, apply the rest of the OpenTofu configuration:
 tofu apply
 ```
 
-But this will override `secrets/nomad-traefik-acl-token.env.age`, so you must now run the last command again :^)
+But this will override some files in `secrets/`, so you must now run the last command again :^)
 
 ## Certificates
 

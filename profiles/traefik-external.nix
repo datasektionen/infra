@@ -89,5 +89,5 @@
   ];
   networking.firewall.allowedUDPPorts = [ 8443 ];
 
-  age.secrets.cloudflare-dns-api-token.file = secretsDir + "/cloudflare-dns-api-token.env.age";
+  age.secrets.cloudflare-dns-api-token.file = secretsDir + "/cloudflare-dns-api-token-${workspace.name}.env.age";
 }

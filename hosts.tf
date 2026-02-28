@@ -12,7 +12,7 @@ locals {
 }
 
 resource "hcloud_network" "cluster" {
-  name     = "nomad-cluster-network"
+  name     = "nomad-cluster-network-${terraform.workspace}"
   ip_range = "10.83.0.0/16" # NOTE: Must be kept in sync with `config.dsekt.addresses.subnet` in nix
 }
 
@@ -35,7 +35,7 @@ resource "hcloud_network_route" "wireguard-router" {
 
 resource "hcloud_server" "cluster_hosts" {
   for_each           = local.cluster_hosts
-  name               = each.key
+  name               = "${each.key}-${terraform.workspace}"
   image              = "debian-12"
   server_type        = each.value.server_type
   ssh_keys           = [hcloud_ssh_key.bootstrap.id]

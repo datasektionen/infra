@@ -14,9 +14,9 @@ resource "nomad_acl_token" "traefik" {
   type     = "client"
   provisioner "local-exec" {
     command     = <<BASH
-      rm nomad-traefik-acl-token.env.age
+      rm nomad-traefik-acl-token-${terraform.workspace}.env.age
       echo NOMAD_TOKEN=${self.secret_id} | \
-        agenix -e nomad-traefik-acl-token.env.age
+        agenix -e nomad-traefik-acl-token-${terraform.workspace}.env.age
     BASH
     working_dir = "./secrets"
   }
