@@ -69,8 +69,8 @@ variable "ssh_user" {}
 
 data "cloudflare_zone" "main" {
   name = {
-    default = "dalumn.se"
-    beta = "ettansfest.se"
+    default = "datasektionen.se"
+    beta = "betasektionen.se"
   }[terraform.workspace]
 }
 
