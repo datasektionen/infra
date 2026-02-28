@@ -46,7 +46,10 @@ provider "cloudflare" {
 }
 
 provider "hcloud" {
-  token = var.hcloud_token
+  token = {
+    default = var.hcloud_token_default
+    beta = var.hcloud_token_beta
+  }[terraform.workspace]
 }
 
 provider "github" {
@@ -61,31 +64,34 @@ locals {
   aws_region = "eu-north-1"
 }
 
-variable "hcloud_token" {
+variable "hcloud_token_default" {
+  sensitive = true
+}
+
+variable "hcloud_token_beta" {
   sensitive = true
 }
 
 variable "ssh_user" {}
 
-data "cloudflare_zone" "betasektionen" {
-  name = "betasektionen.se"
-}
-
-data "cloudflare_zone" "datasektionen" {
-  name = "datasektionen.se"
+data "cloudflare_zone" "main" {
+  name = {
+    default = "dalumn.se"
+    beta = "ettansfest.se"
+  }[terraform.workspace]
 }
 
 resource "cloudflare_record" "zone_apex" {
   name    = "@"
   type    = "A"
-  zone_id = data.cloudflare_zone.datasektionen.id
+  zone_id = data.cloudflare_zone.main.id
   value   = hcloud_server.cluster_hosts["ares"].ipv4_address
 }
 
 resource "cloudflare_record" "zone_wildcard" {
   name    = "*"
   type    = "A"
-  zone_id = data.cloudflare_zone.datasektionen.id
+  zone_id = data.cloudflare_zone.main.id
   value   = hcloud_server.cluster_hosts["ares"].ipv4_address
 }
 

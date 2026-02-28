@@ -1,8 +1,3 @@
-variable "domain_name" {
-  type    = string
-  default = "mattermost.datasektionen.se"
-}
-
 job "mattermost" {
   namespace = "mattermost"
 
@@ -20,7 +15,7 @@ job "mattermost" {
       provider = "nomad"
       tags = [
         "traefik.enable=true",
-        "traefik.http.routers.mattermost.rule=Host(`${var.domain_name}`)",
+        "traefik.http.routers.mattermost.rule=Host(`${domain_name}`)",
         "traefik.http.routers.mattermost.tls.certresolver=default",
       ]
     }
@@ -63,7 +58,7 @@ job "mattermost" {
       template {
         data = <<EOH
 TZ=Europe/Stockholm
-DOMAIN=${var.domain_name}
+DOMAIN=${domain_name}
 MM_SQLSETTINGS_DRIVERNAME=postgres
 {{ with nomadVar "nomad/jobs/mattermost" }}
 MM_SQLSETTINGS_DATASOURCE=postgres://mattermost:{{ .database_password }}@postgres.dsekt.internal:5432/mattermost?sslmode=disable&connect_timeout=10
@@ -72,7 +67,7 @@ MM_EMAILSETTINGS_SMTPUSERNAME={{ .smtp_username }}
 MM_FILESETTINGS_AMAZONS3ACCESSKEYID={{ .aws_id }}
 MM_FILESETTINGS_AMAZONS3SECRETACCESSKEY={{ .aws_secret }}
 {{ end }}
-MM_SERVICESETTINGS_SITEURL=https://${var.domain_name}
+MM_SERVICESETTINGS_SITEURL=https://${domain_name}
 MM_SERVICESETTINGS_LISTENADDRESS=:{{ env "NOMAD_PORT_http" }}
 MM_EMAILSETTINGS_SMTPSERVER=email-smtp.eu-north-1.amazonaws.com
 MM_EMAILSETTINGS_SMTPPORT=2465

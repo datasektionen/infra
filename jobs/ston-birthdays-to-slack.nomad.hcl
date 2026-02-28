@@ -29,7 +29,7 @@ ENV
 #!/bin/sh
 set -eu
 
-STON_BASE_URL="https://ston.datasektionen.se"
+STON_BASE_URL="https://ston.${base_domain}"
 STON_ENDPOINT="$STON_BASE_URL/api/birthdays"
 
 wget -O- --header "Authorization: Bearer $STON_API_TOKEN" "$STON_ENDPOINT"

@@ -31,7 +31,7 @@ job "grafana" {
       template {
         data        = <<EOF
 [server]
-root_url = "https://grafana.datasektionen.se"
+root_url = "https://${domain_name}"
 http_port = {{ env "NOMAD_PORT_http" }}
 {{ with nomadVar "nomad/jobs/grafana" }}
 [security]
@@ -74,7 +74,7 @@ EOF
         provider = "nomad"
         tags = [
           "traefik.enable=true",
-          "traefik.http.routers.grafana.rule=Host(`grafana.datasektionen.se`)",
+          "traefik.http.routers.grafana.rule=Host(`${domain_name}`)",
           "traefik.http.routers.grafana.tls.certresolver=default"
         ]
       }

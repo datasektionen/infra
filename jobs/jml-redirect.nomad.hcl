@@ -13,11 +13,12 @@ job "jml-redirect" {
       provider = "nomad"
       tags = [
         "traefik.enable=true",
-        "traefik.http.routers.jml-redirect.rule=Host(`jml.datasektionen.se`)",
+        "traefik.http.routers.jml-redirect.rule=Host(`jml.${base_domain}`)",
         "traefik.http.routers.jml-redirect.tls.certresolver=default",
         "traefik.http.routers.jml-redirect.middlewares=redirect-to-anmal",
-        "traefik.http.middlewares.redirect-to-anmal.redirectregex.regex=https?://jml\\.datasektionen\\.se/(.*)",
-        "traefik.http.middlewares.redirect-to-anmal.redirectregex.replacement=https://anmal.datasektionen.se/$${1}",
+        # slightly wrong because base_domain contains an unescaped dot, but ehh ¯\_(ツ)_/¯
+        "traefik.http.middlewares.redirect-to-anmal.redirectregex.regex=https?://jml\\.${base_domain}/(.*)",
+        "traefik.http.middlewares.redirect-to-anmal.redirectregex.replacement=https://anmal.${base_domain}/$$${1}",
       ]
     }
 

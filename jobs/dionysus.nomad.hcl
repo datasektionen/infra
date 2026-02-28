@@ -1,8 +1,3 @@
-variable "domain_name" {
-  type    = string
-  default = "manus.metaspexet.se"
-}
-
 job "dionysus" {
   type = "service"
   namespace = "metaspexet"
@@ -20,7 +15,7 @@ job "dionysus" {
       provider = "nomad"
       tags = [
         "traefik.enable=true",
-        "traefik.http.routers.dionysus.rule=Host(`${var.domain_name}`)",
+        "traefik.http.routers.dionysus.rule=Host(`${domain_name}`)",
         "traefik.http.routers.dionysus.tls.certresolver=default",
       ]
     }

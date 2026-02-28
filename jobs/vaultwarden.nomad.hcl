@@ -1,8 +1,3 @@
-variable "domain_name" {
-  type    = string
-  default = "vault.datasektionen.se"
-}
-
 job "vault" {
   namespace = "vault"
 
@@ -17,7 +12,7 @@ job "vault" {
       provider = "nomad"
       tags = [
         "traefik.enable=true",
-        "traefik.http.routers.vault.rule=Host(`${var.domain_name}`)",
+        "traefik.http.routers.vault.rule=Host(`${domain_name}`)",
         "traefik.http.routers.vault.tls.certresolver=default",
       ]
     }
@@ -37,7 +32,7 @@ job "vault" {
 
       template {
         data = <<EOF
-DOMAIN=https://${var.domain_name}
+DOMAIN=https://${domain_name}
 ROCKET_PORT={{ env "NOMAD_PORT_http" }}
 {{ with nomadVar "nomad/jobs/vault" }}
 DATABASE_URL=postgres://vaultwarden:{{ .db_password }}@postgres.dsekt.internal:5432/vaultwarden?sslmode=disable&connect_timeout=10

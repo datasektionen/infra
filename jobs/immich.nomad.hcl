@@ -15,7 +15,7 @@ job "immich" {
       provider = "nomad"
       tags = [
         "traefik.enable=true",
-        "traefik.http.routers.immich.rule=Host(`immich.datasektionen.se`)",
+        "traefik.http.routers.immich.rule=Host(`${domain_name}`)",
         "traefik.http.routers.immich.tls.certresolver=default",
       ]
     }
