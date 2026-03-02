@@ -50,24 +50,24 @@
             modules = [
               (./hosts + "/${name}")
               (_: { networking.hostName = hostname; })
-            ] ++ (nixpkgs.lib.collect builtins.isPath (lib.rakeLeaves ./modules));
+            ]
+            ++ (nixpkgs.lib.collect builtins.isPath (lib.rakeLeaves ./modules));
           };
         }
       ) (builtins.readDir ./hosts);
       devShells.${system}.default = pkgs.mkShellNoCC {
-        packages =
-          [
-            nixos-anywhere.packages.${system}.default
-            agenix.packages.${system}.default
-          ]
-          ++ (with pkgs; [
-            age
-            age-plugin-yubikey
-            opentofu
-            nomad
-            gh
-            jq
-          ]);
+        packages = [
+          nixos-anywhere.packages.${system}.default
+          agenix.packages.${system}.default
+        ]
+        ++ (with pkgs; [
+          age
+          age-plugin-yubikey
+          opentofu
+          nomad
+          gh
+          jq
+        ]);
       };
     };
 }
