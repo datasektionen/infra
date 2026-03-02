@@ -179,3 +179,31 @@ The purpose of this section is to have one sub-section for every thing that an a
 Most such services have a docker compose file which can be used for deployment. These often configure everything, including reverse proxy and databases themselves. Using other nomad job specs as reference, convert the compose file to a nomad job spec. Of course, it should use our centralized database and register itself with our centralized traefik instance rather than creating such things as more containers. This requires that the program is published as a docker image in some public registry. Also add a `nomad_job` resource to `nomad.tf` so that `tofu apply` will run it.
 
 It is also possible to fork the thing and create a job spec and deployment action in the repository, which I did with [mattfbacon/typst-bot](https://github.com/datasektionen/typst-bot) since it wasn't published as a docker image anywhere.
+
+### Deploy to the META-TV machine
+
+> Since SSH access currently doesn't work I haven't been able to test this.
+
+This deploys the NixOS configuration to the META-TV machine (the computer running in META, not the backend server running in a Hetzner instance).
+
+> The following command is assumed to be run on your local machine. Your SSH key needs to have been added to META-TV (see [meta-tv.nix](./hosts/meta-tv.nix)).
+
+Currently the configuration isn't integrated with OpenTofu, so you're just going to push the NixOS configuration manually:
+
+```shell
+nixos-rebuild switch --flake .#meta-tv --target-host "meta-tv@tv.meta.datasektionen.se"
+```
+
+#### Installing NixOS
+
+If the META-TV machine doesn't have NixOS installed already you'll first have to install it manually. I built an installer ISO based on the system configuration, which I then flashed to a USB drive. This can be achieved with the following command:
+```shell
+nixos-rebuild build-image --flake .#meta-tv --image-variant iso-installer
+```
+The ISO can then be found at `./result/iso/nixos-*-x86_64-linux.iso`.
+
+A side effect of building the image from the system configuration is that the USB drive will actually boot into the complete OS, with browsers and all. This isn't persistent though, so you'll still have to continue with the installation. You can use the default Hyprland shortcuts to open a terminal and then follow the steps from the NixOS wiki: https://nixos.wiki/wiki/NixOS_Installation_Guide#Booting_the_installation_media. Make sure to name the boot and root partitions "NIXBOOT" and "NIXROOT", as in the guide.
+
+You should ignore the step where you create a NixOS config. Instead clone this repo to `/mnt/infra` and run `sudo nixos-install --flake /mnt/infra#meta-tv`.
+
+> In principle you should also be able to use `nixos-anywhere`, but I haven't been able to get that to work.
