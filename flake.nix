@@ -33,41 +33,49 @@
     in
     {
       formatter.${system} = pkgs.nixfmt-rfc-style;
-      nixosConfigurations = nixpkgs.lib.mapAttrs' (
-        name: _:
-        let
-          hostname = nixpkgs.lib.removeSuffix ".nix" name;
-        in
-        {
-          name = hostname;
-          value = nixpkgs.lib.nixosSystem {
-            inherit system pkgs;
-            specialArgs = {
-              inherit nixpkgs disko agenix;
-              profiles = lib.rakeLeaves ./profiles;
-              secretsDir = ./secrets;
+      nixosConfigurations = builtins.mapAttrs (
+        _: workspace:
+        nixpkgs.lib.mapAttrs' (
+          name: _:
+          let
+            hostname = nixpkgs.lib.removeSuffix ".nix" name;
+          in
+          {
+            name = hostname;
+            value = nixpkgs.lib.nixosSystem {
+              inherit system pkgs;
+              specialArgs = {
+                inherit
+                  nixpkgs
+                  disko
+                  agenix
+                  workspace
+                  ;
+                profiles = lib.rakeLeaves ./profiles;
+                secretsDir = ./secrets;
+              };
+              modules = [
+                (./hosts + "/${name}")
+                (_: { networking.hostName = hostname; })
+              ]
+              ++ (nixpkgs.lib.collect builtins.isPath (lib.rakeLeaves ./modules));
             };
-            modules = [
-              (./hosts + "/${name}")
-              (_: { networking.hostName = hostname; })
-            ] ++ (nixpkgs.lib.collect builtins.isPath (lib.rakeLeaves ./modules));
-          };
-        }
-      ) (builtins.readDir ./hosts);
+          }
+        ) (builtins.readDir ./hosts)
+      ) (import ./workspaces.nix);
       devShells.${system}.default = pkgs.mkShellNoCC {
-        packages =
-          [
-            nixos-anywhere.packages.${system}.default
-            agenix.packages.${system}.default
-          ]
-          ++ (with pkgs; [
-            age
-            age-plugin-yubikey
-            opentofu
-            nomad
-            gh
-            jq
-          ]);
+        packages = [
+          nixos-anywhere.packages.${system}.default
+          agenix.packages.${system}.default
+        ]
+        ++ (with pkgs; [
+          age
+          age-plugin-yubikey
+          opentofu
+          nomad
+          gh
+          jq
+        ]);
       };
     };
 }

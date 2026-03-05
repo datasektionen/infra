@@ -1,8 +1,3 @@
-variable "domain_name" {
-  type    = string
-  default = "planka.datasektionen.se"
-}
-
 job "planka" {
   type = "service"
 
@@ -19,7 +14,7 @@ job "planka" {
       provider = "nomad"
       tags = [
         "traefik.enable=true",
-        "traefik.http.routers.planka.rule=Host(`${var.domain_name}`)",
+        "traefik.http.routers.planka.rule=Host(`${domain_name}`)",
         "traefik.http.routers.planka.tls.certresolver=default",
       ]
     }
@@ -50,7 +45,7 @@ job "planka" {
       template {
         data        = <<ENV
 TZ=Europe/Stockholm
-BASE_URL=https://${var.domain_name}
+BASE_URL=https://${domain_name}
 OIDC_ISSUER=https://sso.datasektionen.se/op
 OIDC_USERNAME_ATTRIBUTE=sub
 OIDC_IGNORE_ROLES=false

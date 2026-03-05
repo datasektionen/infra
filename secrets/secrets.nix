@@ -37,10 +37,12 @@ in
   "nomad-agent-ca-key.pem.age".publicKeys = sysadmins;
 
   # `NOMAD_TOKEN=uuid-with-dashes`
-  "nomad-traefik-acl-token.env.age".publicKeys = sysadmins ++ nomadClients;
+  "nomad-traefik-acl-token-default.env.age".publicKeys = sysadmins ++ nomadClients;
+  "nomad-traefik-acl-token-beta.env.age".publicKeys = sysadmins ++ nomadClients;
 
   # `CLOUDFLARE_DNS_API_TOKEN=...`
-  "cloudflare-dns-api-token.env.age".publicKeys = sysadmins ++ [ ares ];
+  "cloudflare-dns-api-token-default.env.age".publicKeys = sysadmins ++ [ ares ];
+  "cloudflare-dns-api-token-beta.env.age".publicKeys = sysadmins ++ [ ares ];
 
   "restic-repo-pwd-ares.age".publicKeys = sysadmins ++ [ ares ];
 

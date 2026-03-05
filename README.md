@@ -64,13 +64,13 @@ Lastly, apply the rest of the OpenTofu configuration:
 tofu apply
 ```
 
-But this will override `secrets/nomad-traefik-acl-token.env.age`, so you must now run the last command again :^)
+But this will override some files in `secrets/`, so you must now run the last command again :^)
 
 ## Certificates
 
 Nomad needs certificates to communicate within a cluster securely. There is a CA created by the nomad cli located at `files/nomad-agent-ca.pem` with the key at `secrets/nomad-agent-ca-key.pem.age` (encrypted). When a server is created anew by OpenTofu, a certificate for it will automatically be created and moved to the correct place, but it will need to be renewed after some time, which can be done by running:
 ```sh
-./scripts/provision-cert.sh <"client"|"server"> <hostname>
+./scripts/provision-cert.sh <"client"|"server"> <hostname> <base domain, e.g. "datasektionen.se">
 ```
 Maybe the nomad systemd service has to be restarted after that but that should be all.
 

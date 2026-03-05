@@ -1,8 +1,3 @@
-variable "domain_name" {
-  type = string
-  default = "n8n.datasektionen.se"
-}
-
 job "n8n" {
   namespace = "default"
 
@@ -17,7 +12,7 @@ job "n8n" {
       provider = "nomad"
       tags = [
         "traefik.enable=true",
-        "traefik.http.routers.n8n.rule=Host(`${var.domain_name}`)",
+        "traefik.http.routers.n8n.rule=Host(`${domain_name}`)",
         "traefik.http.routers.n8n.tls.certresolver=default"
       ]
     }
@@ -53,8 +48,8 @@ DB_POSTGRESDB_USER=n8n
 # Basic Configuration
 N8N_PORT={{ env "NOMAD_PORT_http" }}
 N8N_PROTOCOL="https"
-N8N_HOST="${var.domain_name}"
-WEBHOOK_URL="https://${var.domain_name}/"
+N8N_HOST="${domain_name}"
+WEBHOOK_URL="https://${domain_name}/"
 
 # User Management & Security
 N8N_USER_MANAGEMENT_DISABLED="false"

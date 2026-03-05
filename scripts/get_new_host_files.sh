@@ -17,7 +17,7 @@ if [ -f "$encrypted_host_key_path" ]; then
 fi
 
 if [ -n "$role" ]; then
-    DONT_MOVE=1 $repo/scripts/provision-cert.sh "$role" "$host"
+    DONT_MOVE=1 $repo/scripts/provision-cert.sh "$role" "$host" "$base_domain"
 
     mkdir -p ./var/lib/nomad-certs
 

@@ -67,25 +67,24 @@ variable "hcloud_token" {
 
 variable "ssh_user" {}
 
-data "cloudflare_zone" "betasektionen" {
-  name = "betasektionen.se"
-}
-
-data "cloudflare_zone" "datasektionen" {
-  name = "datasektionen.se"
+data "cloudflare_zone" "main" {
+  name = {
+    default = "datasektionen.se"
+    beta = "betasektionen.se"
+  }[terraform.workspace]
 }
 
 resource "cloudflare_record" "zone_apex" {
   name    = "@"
   type    = "A"
-  zone_id = data.cloudflare_zone.datasektionen.id
+  zone_id = data.cloudflare_zone.main.id
   value   = hcloud_server.cluster_hosts["ares"].ipv4_address
 }
 
 resource "cloudflare_record" "zone_wildcard" {
   name    = "*"
   type    = "A"
-  zone_id = data.cloudflare_zone.datasektionen.id
+  zone_id = data.cloudflare_zone.main.id
   value   = hcloud_server.cluster_hosts["ares"].ipv4_address
 }
 
@@ -102,9 +101,9 @@ resource "cloudflare_api_token" "acme_dns_challenge" {
   }
   provisioner "local-exec" {
     command     = <<BASH
-      rm cloudflare-dns-api-token.env.age
+      rm cloudflare-dns-api-token-${terraform.workspace}.env.age
       echo "CLOUDFLARE_DNS_API_TOKEN=${self.value}" | \
-        agenix -e cloudflare-dns-api-token.env.age
+        agenix -e cloudflare-dns-api-token-${terraform.workspace}.env.age
     BASH
     working_dir = "./secrets"
   }

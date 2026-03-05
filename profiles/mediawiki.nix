@@ -2,6 +2,7 @@
   config,
   secretsDir,
   pkgs,
+  workspace,
   ...
 }:
 let
@@ -10,7 +11,7 @@ in
 {
   services.mediawiki = {
     enable = true;
-    url = "https://wiki.datasektionen.se";
+    url = "https://wiki.${workspace.baseDomain}";
     name = "Datasektionen Wiki";
     extensions = {
       # NOTE: these links disappear if they change the commit hash for a version or remove a
@@ -20,12 +21,12 @@ in
       # They do however get cached pretty well since we specify the hash so it should take a while
       # before it breaks (which is even worse).
       OpenIDConnect = pkgs.fetchzip {
-        url = "https://extdist.wmflabs.org/dist/extensions/OpenIDConnect-REL1_44-438d993.tar.gz";
-        hash = "sha256-TpFEToogaN76Ll6jkbU0CMfNQT/+Zl7xny8woPr7Oh8=";
+        url = "https://extdist.wmflabs.org/dist/extensions/OpenIDConnect-REL1_44-7c11d7c.tar.gz";
+        hash = "sha256-MUIecFKdIMNqm1gJWB+y4l2hkO9NKpKne1bTXzdJ4UM=";
       };
       PluggableAuth = pkgs.fetchzip {
-        url = "https://extdist.wmflabs.org/dist/extensions/PluggableAuth-REL1_44-9cf6960.tar.gz";
-        hash = "sha256-jx3Pw4jZ86WO0jwNyIBguNLCpwzxKEDJDAzm5I7YtNM=";
+        url = "https://extdist.wmflabs.org/dist/extensions/PluggableAuth-REL1_44-1d4ee47.tar.gz";
+        hash = "sha256-lA54aZajBqZadYEgaOW6EEHD1OiR4JIs91w6wMhv6KQ=";
       };
       VisualEditor = null;
     };
@@ -34,7 +35,7 @@ in
       $wgPluggableAuth_Config[] = [
         "plugin" => "OpenIDConnect",
         "data" => [
-          "providerURL" => "https://sso.datasektionen.se/op",
+          "providerURL" => "https://sso.${workspace.baseDomain}/op",
           "clientID" => "wiki",
           "clientsecret" => trim(file_get_contents("${config.age.secrets.mediawiki-sso-client-secret.path}")),
           "scope" => ["openid", "profile", "email", "permissions_flat"],
@@ -73,7 +74,7 @@ in
   # WARN: this only works when this is running on the same server as profiles.traefik-external
   services.traefik.dynamicConfigOptions.http = {
     routers.mediawiki = {
-      rule = "Host(`wiki.datasektionen.se`)";
+      rule = "Host(`wiki.${workspace.baseDomain}`)";
       service = "mediawiki";
       tls.certresolver = "default";
     };

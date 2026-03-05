@@ -16,8 +16,8 @@ variable "env" {
   type    = string
   default = <<EOF
 PORT={{ env "NOMAD_PORT_http" }}
-SERVER_URL=https://twenty.datasektionen.se
-FRONT_BASE_URL=https://twenty.datasektionen.se
+SERVER_URL=https://${domain_name}
+FRONT_BASE_URL=https://${domain_name}
 
 STORAGE_TYPE=s3
 STORAGE_S3_REGION=eu-north-1
@@ -53,7 +53,7 @@ job "twenty" {
       provider = "nomad"
       tags = [
         "traefik.enable=true",
-        "traefik.http.routers.twenty.rule=Host(`twenty.datasektionen.se`)",
+        "traefik.http.routers.twenty.rule=Host(`${domain_name}`)",
         "traefik.http.routers.twenty.tls.certresolver=default",
       ]
     }
@@ -62,7 +62,7 @@ job "twenty" {
       driver = "docker"
 
       config {
-        image = "twentycrm/twenty:${var.image_tag}"
+        image = "twentycrm/twenty:$${var.image_tag}"
         ports = ["http"]
       }
 
@@ -81,7 +81,7 @@ job "twenty" {
       driver = "docker"
 
       config {
-        image   = "twentycrm/twenty:${var.image_tag}"
+        image   = "twentycrm/twenty:$${var.image_tag}"
         command = "yarn"
         args    = ["worker:prod"]
       }

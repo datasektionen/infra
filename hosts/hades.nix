@@ -3,6 +3,8 @@
   pkgs,
   profiles,
   secretsDir,
+  workspace,
+  lib,
   ...
 }:
 {
@@ -14,7 +16,7 @@
 
   # Requires `hcloud_network_route.wireguard-router` in tf for `10.83.0.0/24`
   # to route packets to `10.83.1.0/24` to here.
-  networking.wg-quick.interfaces.wg-dsekt = {
+  networking.wg-quick.interfaces.wg-dsekt = lib.mkIf workspace.enableWireguard {
     address = [ "10.83.1.0/24" ];
     listenPort = 51800;
     privateKeyFile = config.age.secrets.wireguard-hades-private-key.path;

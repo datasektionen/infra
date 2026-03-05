@@ -14,9 +14,9 @@ resource "nomad_acl_token" "traefik" {
   type     = "client"
   provisioner "local-exec" {
     command     = <<BASH
-      rm nomad-traefik-acl-token.env.age
+      rm nomad-traefik-acl-token-${terraform.workspace}.env.age
       echo NOMAD_TOKEN=${self.secret_id} | \
-        agenix -e nomad-traefik-acl-token.env.age
+        agenix -e nomad-traefik-acl-token-${terraform.workspace}.env.age
     BASH
     working_dir = "./secrets"
   }
@@ -29,7 +29,9 @@ resource "nomad_namespace" "mattermost" {
 }
 
 resource "nomad_job" "mattermost" {
-  jobspec = file("${path.module}/jobs/mattermost.nomad.hcl")
+  jobspec = templatefile("${path.module}/jobs/mattermost.nomad.hcl", {
+    domain_name = "mattermost.${data.cloudflare_zone.main.name}",
+  })
 }
 
 # Vault
@@ -47,7 +49,9 @@ resource "nomad_namespace" "vault" {
 }
 
 resource "nomad_job" "vault" {
-  jobspec = file("${path.module}/jobs/vaultwarden.nomad.hcl")
+  jobspec = templatefile("${path.module}/jobs/vaultwarden.nomad.hcl", {
+    domain_name = "vault.${data.cloudflare_zone.main.name}",
+  })
 }
 
 resource "nomad_variable" "jobs_vault" {
@@ -64,7 +68,9 @@ resource "nomad_variable" "jobs_vault" {
 # Monitoring/logs/metrics, we deploy manually for now
 
 resource "nomad_job" "grafana" {
-  jobspec = file("${path.module}/jobs/monitoring/grafana.nomad.hcl")
+  jobspec = templatefile("${path.module}/jobs/monitoring/grafana.nomad.hcl", {
+    domain_name = "grafana.${data.cloudflare_zone.main.name}",
+  })
 }
 
 resource "nomad_job" "prometheus" {
@@ -88,12 +94,16 @@ resource "nomad_namespace" "twenty" {
 }
 
 resource "nomad_job" "twenty" {
-  jobspec = file("${path.module}/jobs/twenty.nomad.hcl")
+  jobspec = templatefile("${path.module}/jobs/twenty.nomad.hcl", {
+    domain_name = "twenty.${data.cloudflare_zone.main.name}",
+  })
 }
 
 # n8n
 resource "nomad_job" "n8n" {
-  jobspec = file("${path.module}/jobs/n8n.nomad.hcl")
+  jobspec = templatefile("${path.module}/jobs/n8n.nomad.hcl", {
+    domain_name = "n8n.${data.cloudflare_zone.main.name}",
+  })
 }
 
 # Metaspexet
@@ -104,7 +114,9 @@ resource "nomad_namespace" "metaspexet" {
 }
 
 resource "nomad_job" "dionysus" {
-  jobspec = file("${path.module}/jobs/dionysus.nomad.hcl")
+  jobspec = templatefile("${path.module}/jobs/dionysus.nomad.hcl", {
+    domain_name = "manus.${data.cloudflare_zone.main.name}", # TODO: betaspexet???
+  })
 }
 
 # Other
@@ -142,19 +154,27 @@ resource "nomad_namespace" "money" {
 # Other Third-Party Jobs in Default
 
 resource "nomad_job" "jml-redirect" {
-  jobspec = file("${path.module}/jobs/jml-redirect.nomad.hcl")
+  jobspec = templatefile("${path.module}/jobs/jml-redirect.nomad.hcl", {
+    base_domain = data.cloudflare_zone.main.name,
+  })
 }
 
 resource "nomad_job" "planka" {
-  jobspec = file("${path.module}/jobs/planka.nomad.hcl")
+  jobspec = templatefile("${path.module}/jobs/planka.nomad.hcl", {
+    domain_name = "planka.${data.cloudflare_zone.main.name}",
+  })
 }
 
 resource "nomad_job" "ston-birthdays-to-slack" {
-  jobspec = file("${path.module}/jobs/ston-birthdays-to-slack.nomad.hcl")
+  jobspec = templatefile("${path.module}/jobs/ston-birthdays-to-slack.nomad.hcl", {
+    base_domain = data.cloudflare_zone.main.name,
+  })
 }
 
 resource "nomad_job" "immich" {
-  jobspec = file("${path.module}/jobs/immich.nomad.hcl")
+  jobspec = templatefile("${path.module}/jobs/immich.nomad.hcl", {
+    domain_name = "immich.${data.cloudflare_zone.main.name}",
+  })
 }
 
 # Policies for humans
@@ -210,13 +230,13 @@ resource "nomad_acl_auth_method" "sso" {
   token_name_format = "kth-$${value.username}"
 
   config {
-    oidc_discovery_url = "https://sso.datasektionen.se/op"
+    oidc_discovery_url = "https://sso.${data.cloudflare_zone.main.name}/op"
     oidc_client_id     = "nomad"
     oidc_client_secret = var.nomad_sso_client_secret
     bound_audiences    = ["nomad"]
     allowed_redirect_uris = [
       "http://localhost:4649/oidc/callback",
-      "https://nomad.datasektionen.se/ui/settings/tokens",
+      "https://nomad.${data.cloudflare_zone.main.name}/ui/settings/tokens",
     ]
     oidc_scopes         = ["openid", "profile", "permissions_flat"]
     claim_mappings      = { "sub" : "username" }

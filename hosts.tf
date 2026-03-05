@@ -12,7 +12,7 @@ locals {
 }
 
 resource "hcloud_network" "cluster" {
-  name     = "nomad-cluster-network"
+  name     = "nomad-cluster-network-${terraform.workspace}"
   ip_range = "10.83.0.0/16" # NOTE: Must be kept in sync with `config.dsekt.addresses.subnet` in nix
 }
 
@@ -35,7 +35,7 @@ resource "hcloud_network_route" "wireguard-router" {
 
 resource "hcloud_server" "cluster_hosts" {
   for_each           = local.cluster_hosts
-  name               = each.key
+  name               = "${each.key}-${terraform.workspace}"
   image              = "debian-12"
   server_type        = each.value.server_type
   ssh_keys           = [hcloud_ssh_key.bootstrap.id]
@@ -56,8 +56,8 @@ module "nixos_install" {
   for_each = local.cluster_hosts
 
   source                 = "github.com/nix-community/nixos-anywhere//terraform/all-in-one"
-  nixos_system_attr      = ".#nixosConfigurations.${each.key}.config.system.build.toplevel"
-  nixos_partitioner_attr = ".#nixosConfigurations.${each.key}.config.system.build.diskoScript"
+  nixos_system_attr      = ".#nixosConfigurations.${terraform.workspace}.${each.key}.config.system.build.toplevel"
+  nixos_partitioner_attr = ".#nixosConfigurations.${terraform.workspace}.${each.key}.config.system.build.diskoScript"
 
   target_host = hcloud_server.cluster_hosts[each.key].ipv4_address
   instance_id = hcloud_server.cluster_hosts[each.key].id
@@ -72,6 +72,7 @@ module "nixos_install" {
   extra_environment = {
     host = each.key,
     role = each.value.role,
+    base_domain = data.cloudflare_zone.main.name
   }
 }
 
@@ -80,7 +81,7 @@ resource "cloudflare_record" "server_name" {
 
   name    = each.key
   type    = "A"
-  zone_id = data.cloudflare_zone.datasektionen.id
+  zone_id = data.cloudflare_zone.main.id
   value   = hcloud_server.cluster_hosts[each.key].ipv4_address
 }
 
@@ -89,7 +90,7 @@ resource "cloudflare_record" "server_wildcard" {
 
   name    = "*.${each.key}"
   type    = "A"
-  zone_id = data.cloudflare_zone.datasektionen.id
+  zone_id = data.cloudflare_zone.main.id
   value   = hcloud_server.cluster_hosts[each.key].ipv4_address
 }
 
@@ -112,6 +113,7 @@ resource "random_pet" "stage1_nomad_cluster" {
       [for name, _ in local.cluster_hosts : cloudflare_record.server_name[name].value],
       [for name, _ in local.cluster_hosts : cloudflare_record.server_wildcard[name].value],
       [for name, _ in local.cluster_hosts : module.nixos_install[name].result.out],
+      [cloudflare_record.zone_apex.value, cloudflare_record.zone_wildcard.value]
     )), 0, 0)
   }
 }

@@ -3,13 +3,14 @@
 set -euo pipefail
 
 function usage() {
-    echo "Usage: $0 <server|client> <host>"
+    echo "Usage: $0 <server|client> <host> <base domain>"
     exit 1
 }
 
-(( $# == 2 )) || usage
 kind="$1"
 host="$2"
+base_domain="$3"
+(( $# == 3 )) || usage
 
 case "$kind" in
     server) ;;
@@ -27,7 +28,7 @@ repo=$(realpath "$(dirname $0)/..")
 
 nomad tls cert create \
     -ca=$repo/files/nomad-agent-ca.pem -key=$repo/nomad-agent-ca-key.pem \
-    -additional-dnsname="$host.datasektionen.se" -additional-dnsname="$host.dsekt.internal" \
+    -additional-dnsname="$host.$base_domain" -additional-dnsname="$host.dsekt.internal" \
     $([ "$kind" = "server" ] && echo "-server" || echo "-client")
 
 mv global-$([ "$kind" = "server" ] && echo server || echo client)-nomad.pem \
@@ -38,7 +39,7 @@ mv global-$([ "$kind" = "server" ] && echo server || echo client)-nomad-key.pem 
 if [[ "${DONT_MOVE:-"0"}" == "0" ]]; then
     rsync --rsync-path="sudo rsync" --remove-source-files --chown=root:root \
         cert.pem key.pem \
-        "$SSH_USER@$host.datasektionen.se":/var/lib/nomad-certs/
+        "$SSH_USER@$host.$base_domain":/var/lib/nomad-certs/
     echo "Success! New cert moved to remote server"
     echo "    Hint: just restart the Nomad daemon now and all should work"
 fi

@@ -1,4 +1,4 @@
-{ config, secretsDir, ... }:
+{ config, secretsDir, workspace, ... }:
 let
   inherit (config.networking) hostName;
 in
@@ -57,5 +57,5 @@ in
   };
   networking.firewall.allowedTCPPorts = [ 80 ];
 
-  age.secrets.nomad-traefik-acl-token.file = secretsDir + "/nomad-traefik-acl-token.env.age";
+  age.secrets.nomad-traefik-acl-token.file = secretsDir + "/nomad-traefik-acl-token-${workspace.name}.env.age";
 }
