@@ -20,8 +20,17 @@ let
   apollo = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILiHIS7WraYSjBonICrCJqDaM6ROVLt65rMyEKhNWha2";
   athena = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIN/vUc3wJARnek+VX5JeopG2Xf+uam1OCuG40toQ02r";
 
-  nomadServers = [ zeus poseidon hades ];
-  nomadClients = [ ares artemis apollo athena ];
+  nomadServers = [
+    zeus
+    poseidon
+    hades
+  ];
+  nomadClients = [
+    ares
+    artemis
+    apollo
+    athena
+  ];
 in
 {
   "zeus_ssh_host_ed25519_key.age".publicKeys = sysadmins;
