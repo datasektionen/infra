@@ -87,7 +87,7 @@
 
     bind = Super, T, exec, $terminal
     # For some reason the default config configures Super+Q to launch a
-    # terminal... Make sure were consistent with it.
+    # terminal... Make sure we're consistent with it.
     bind = Super, Q, exec, $terminal
 
     # Configure Swedish keyboard layout.
@@ -95,9 +95,14 @@
       kb_layout = se
     }
 
-    # Only use the anime wallpaper :)
-    misc {
-      force_default_wallpaper = 2
+    # Use orange Catppuccin unicat wallpaper. :)
+    # It is MIT licensed, so it should be fine.
+    exec-once = ${pkgs.swaybg}/bin/swaybg --mode fill --image ${
+      pkgs.fetchurl {
+        url = "https://github.com/VipinVIP/wallpapers/blob/283af350981b2335f50239096927fd6cf553a82d/minimalistic/peach_unicat.png?raw=true";
+        name = "peach_unicat.png";
+        hash = "sha256-p00U9t32Zy7Dfa4HOJz3MX7wyd4Fk96YrVrvpiGiCPY=";
+      }
     }
   '';
 
