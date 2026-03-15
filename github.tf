@@ -36,6 +36,7 @@ locals {
       "metastudent",
       "meta-tv-rs",
       "methone",
+      "nymblan",
       "pandora",
       "pax2",
       "rfinger",
