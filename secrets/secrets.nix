@@ -31,6 +31,7 @@ let
     artemis
     apollo
     athena
+    meta-tv
   ];
 in
 {

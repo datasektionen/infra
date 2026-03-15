@@ -10,6 +10,8 @@
   imports = with profiles; [
     nix
     users
+    dns
+    monitoring
     agenix.nixosModules.default
   ];
 
