@@ -9,10 +9,12 @@
 }:
 {
   imports = with profiles; [
-    base-standalone
+    base
     nomad.client
     traefik
   ];
+
+  networking.networkmanager.enable = true;
 
   # Configuration for the VM build of this NixOS configuration, built with
   # `nixos-rebuild build-vm --flake .#meta-tv`.
@@ -70,7 +72,7 @@
   programs.hyprland.enable = true;
   xdg.portal.enable = true;
   xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-hyprland ];
-  environment.systemPackages = with pkgs; [ alacritty ];
+  environment.systemPackages = with pkgs; [ alacritty git ];
 
   # Configure Swedish keyboard layout for TTYs.
   console.keyMap = "sv-latin1";
