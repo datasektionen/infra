@@ -67,6 +67,7 @@
           nomad
           gh
           jq
+          nixos-rebuild
         ]);
       };
     };

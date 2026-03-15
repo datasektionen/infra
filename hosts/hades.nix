@@ -41,6 +41,11 @@
         publicKey = "9O+wjIbvxZq3sVk6gxfoI4jhSCfPOte0dWnMbG3obT0=";
         allowedIPs = [ "${config.dsekt.addresses.hosts.drifvarkaden}/32" ];
       }
+      {
+        presharedKeyFile = config.age.secrets.wireguard-preshared-key.path;
+        publicKey = "HibcPcaxmPs1QKSh97r2/CpLId0IkEo94pwgFvg+lXs=";
+        allowedIPs = [ "${config.dsekt.addresses.hosts.meta-tv}/32" ];
+      }
     ];
   };
   networking.firewall.allowedUDPPorts = [ 51800 ];
