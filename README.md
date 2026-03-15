@@ -181,17 +181,9 @@ It is also possible to fork the thing and create a job spec and deployment actio
 
 ### Deploy to the META-TV machine
 
-> Since SSH access currently doesn't work I haven't been able to test this.
+#### Provisioning certificate
 
-This deploys the NixOS configuration to the META-TV machine (the computer running in META, not the backend server running in a Hetzner instance).
-
-> The following command is assumed to be run on your local machine. Your SSH key needs to have been added to META-TV (see [meta-tv.nix](./hosts/meta-tv.nix)).
-
-Currently the configuration isn't integrated with OpenTofu, so you're just going to push the NixOS configuration manually:
-
-```shell
-nixos-rebuild switch --flake .#meta-tv --target-host "meta-tv@tv.meta.datasektionen.se"
-```
+To connect to the nomad cluster, it needs a certificate. This should be done through `./scripts/provision-cert.sh` through `./scripts/get_new_host_files.sh`, but those scripts are not (yet) compatible with hosts that do not exist on `$hostname.datasektionen.se`. Instead I ran basically `./scripts/provision-cert.sh` but with different hostnames and stuff.
 
 #### Installing NixOS
 
