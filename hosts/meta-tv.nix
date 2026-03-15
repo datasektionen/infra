@@ -48,6 +48,23 @@
   # Force the configured password to be used.
   users.mutableUsers = false;
 
+  networking.wg-quick.interfaces.wg-dsekt = {
+    address = [ "10.83.1.3/32" ];
+    privateKeyFile = config.age.secrets.wireguard-meta-tv-private-key.path;
+    peers = [
+      {
+        endpoint = "hades.datasektionen.se:51800";
+        presharedKeyFile = config.age.secrets.wireguard-preshared-key.path;
+        publicKey = "BTpGRxLRjCYUiti/5A4uNvKYp0biNkA6PTV7Yck/NxM=";
+        allowedIPs = [ "10.83.0.0/16" ];
+        persistentKeepalive = 25;
+      }
+    ];
+  };
+
+  age.secrets.wireguard-meta-tv-private-key.file = secretsDir + "/wireguard-meta-tv-private-key.age";
+  age.secrets.wireguard-preshared-key.file = secretsDir + "/wireguard-preshared-key.age";
+
   programs.hyprland.enable = true;
   xdg.portal.enable = true;
   xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-hyprland ];
