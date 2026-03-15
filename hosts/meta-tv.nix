@@ -10,6 +10,8 @@
 {
   imports = with profiles; [
     base-standalone
+    nomad.client
+    traefik
   ];
 
   # Configuration for the VM build of this NixOS configuration, built with
