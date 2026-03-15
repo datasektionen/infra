@@ -115,6 +115,20 @@
   # Change this if you want to lose all data on this machine!
   system.stateVersion = "25.11";
 
+  services.cloudflare-ddns = {
+    enable = true;
+    domains = [ "meta.datasektionen.se" ];
+    recordComment = "Updated dynamically by meta tv";
+    credentialsFile = config.age.secrets.cloudflare-ddns-api-token.path;
+  };
+
+  age.secrets.cloudflare-ddns-api-token = {
+    file = secretsDir + "/cloudflare-dns-api-token.env.age";
+    inherit (config.services.cloudflare-ddns) group;
+    owner = config.services.cloudflare-ddns.user;
+    mode = "0440";
+  };
+
   ## Hardware configuration
 
   boot.initrd.availableKernelModules = [

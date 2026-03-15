@@ -103,7 +103,7 @@ resource "cloudflare_api_token" "acme_dns_challenge" {
   provisioner "local-exec" {
     command     = <<BASH
       rm cloudflare-dns-api-token.env.age
-      echo "CLOUDFLARE_DNS_API_TOKEN=${self.value}" | \
+      echo "CLOUDFLARE_API_TOKEN=${self.value}" | \
         agenix -e cloudflare-dns-api-token.env.age
     BASH
     working_dir = "./secrets"
