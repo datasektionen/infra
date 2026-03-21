@@ -150,6 +150,25 @@
     mode = "0440";
   };
 
+  # ## NVIDIA GPU support (for Nomad jobs requiring GPU access)
+  #
+  # # Enable NVIDIA drivers.
+  services.xserver.videoDrivers = [ "nvidia" ];
+  hardware.nvidia = {
+    open = false;
+    modesetting.enable = true;
+  };
+
+  # Enable the NVIDIA Container Toolkit so Docker containers can access the GPU.
+  hardware.nvidia-container-toolkit.enable = true;
+
+  # # Configure the Nomad nvidia-gpu device plugin so Nomad can fingerprint
+  # # and allocate GPU resources to jobs.
+  # services.nomad.settings.plugin.nvidia-gpu.config = {
+  #   enabled = true;
+  #   fingerprint_period = "1m";
+  # };
+
   ## Hardware configuration
 
   boot.initrd.availableKernelModules = [
@@ -160,7 +179,7 @@
     "sd_mod"
   ];
   boot.initrd.kernelModules = [ ];
-  boot.kernelModules = [ "kvm-amd" ];
+  boot.kernelModules = [ "kvm-amd" ]; # ++ [ "nvidia" "nvidia_modeset" "nvidia_uvm" "nvidia_drm" ];
   boot.extraModulePackages = [ ];
 
   fileSystems."/" = {
