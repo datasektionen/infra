@@ -52,6 +52,12 @@
   # Force the configured password to be used.
   users.mutableUsers = false;
 
+  environment.etc."resolv.conf".text = lib.mkForce ''
+    nameserver ${config.dsekt.addresses.hosts.self}
+    nameserver 1.1.1.1
+    options edns0
+  '';
+
   networking.wg-quick.interfaces.wg-dsekt = {
     address = [ "10.83.1.3/32" ];
     privateKeyFile = config.age.secrets.wireguard-meta-tv-private-key.path;
