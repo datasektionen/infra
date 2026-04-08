@@ -29,9 +29,22 @@ job "dionysus" {
       driver = "docker"
 
       template {
+    		data        = <<TOML
+[oidc.providers.dsekt]
+issuer = "https://sso.datasektionen.se/op"
+scopes = ["openid", "profile", "email"]
+TOML
+        destination = "local/config.toml"
+      }
+
+      template {
         data        = <<ENV
 {{ with nomadVar "nomad/jobs/dionysus" }}
-DATABASE_URL=postgres://dionysus:{{ .db_password }}@postgres.dsekt.internal:5432/dionysus
+DIONYSUS_CONFIG=/local/config.toml
+DIONYSUS_DATABASE__URL=postgres://dionysus:{{ .db_password }}@postgres.dsekt.internal:5432/dionysus
+DIONYSUS_OIDC__PROVIDERS__DSEKT__CLIENT_ID={{ .oidc_id }}
+DIONYSUS_OIDC__PROVIDERS__DSEKT__CLIENT_SECRET={{ .oidc_secret }}
+DIONYSUS_OIDC__BASE_EXTERNAL_ID=https://manus.metaspexet.se
 {{ end }}
 ENV
         destination = "local/.env"
