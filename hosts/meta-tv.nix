@@ -78,7 +78,10 @@
   programs.hyprland.enable = true;
   xdg.portal.enable = true;
   xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-hyprland ];
-  environment.systemPackages = with pkgs; [ alacritty git ];
+  environment.systemPackages = with pkgs; [
+    alacritty
+    git
+  ];
 
   # Configure Swedish keyboard layout for TTYs.
   console.keyMap = "sv-latin1";
@@ -154,6 +157,44 @@
     inherit (config.services.cloudflare-ddns) group;
     owner = config.services.cloudflare-ddns.user;
     mode = "0440";
+  };
+
+  # Ensure that the nomad service doesn't start until the WireGuard interface is
+  # up.
+  systemd.services.nomad = {
+    after = [
+      "network-online.target"
+      "wg-quick-wg-dsekt.service"
+    ];
+    wants = [
+      "network-online.target"
+      "wg-quick-wg-dsekt.service"
+    ];
+    serviceConfig.ExecStartPre =
+      let
+        waitForWgDsekt = pkgs.writeShellScript "wait-for-wg-dsekt" ''
+          set -eu
+
+          for _ in $(${pkgs.coreutils}/bin/seq 1 60); do
+            if ${pkgs.iproute2}/bin/ip link show dev wg-dsekt up >/dev/null 2>&1; then
+              latest_handshake="$(${pkgs.wireguard-tools}/bin/wg show wg-dsekt latest-handshakes \
+                | ${pkgs.gawk}/bin/awk '($2 > max) { max = $2 } END { print max + 0 }')"
+
+              if [ "$latest_handshake" -gt 0 ]; then
+                exit 0
+              fi
+            fi
+
+            ${pkgs.coreutils}/bin/sleep 2
+          done
+
+          echo "wg-dsekt did not establish a WireGuard handshake in time" >&2
+          exit 1
+        '';
+      in
+      [
+        waitForWgDsekt
+      ];
   };
 
   ## Hardware configuration
