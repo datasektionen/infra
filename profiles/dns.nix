@@ -16,7 +16,7 @@ let
 in
 {
   environment.etc."resolv.conf".text = ''
-    nameserver ${config.dsekt.addresses.hosts.self}
+    nameserver 127.0.0.1
     options edns0
   '';
 
@@ -29,9 +29,6 @@ in
   services.bind = {
     enable = true;
 
-    # All queries must be made to the ip address in the private "cluster" network. This is also the
-    # only network that works from both the host and docker containers.
-    listenOn = [ config.dsekt.addresses.subnet ];
     ipv4Only = true;
     cacheNetworks = allowedNetworks;
 

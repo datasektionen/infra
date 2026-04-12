@@ -52,6 +52,9 @@
   # Force the configured password to be used.
   users.mutableUsers = false;
 
+  systemd.services.nomad.after = [ "wg-quick-wg-dsekt.service" ];
+  systemd.services.nomad.requires = [ "wg-quick-wg-dsekt.service" ];
+
   networking.wg-quick.interfaces.wg-dsekt = {
     address = [ "10.83.1.3/32" ];
     privateKeyFile = config.age.secrets.wireguard-meta-tv-private-key.path;
