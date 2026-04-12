@@ -2,12 +2,8 @@ locals {
   # NOTE: Must be kept in sync with `config.dsekt.addresses.hosts` in nix
   cluster_hosts = {
     zeus     = { role = "server", private_ip_addr = "10.83.0.2", server_type = "cx22" }
-    poseidon = { role = "server", private_ip_addr = "10.83.0.3", server_type = "cx22" }
-    hades    = { role = "server", private_ip_addr = "10.83.0.4", server_type = "cx22" }
-    ares     = { role = "client", private_ip_addr = "10.83.0.5", server_type = "cx32" }
-    artemis  = { role = "client", private_ip_addr = "10.83.0.6", server_type = "cx22" }
-    apollo   = { role = "client", private_ip_addr = "10.83.0.7", server_type = "cx22" }
-    athena   = { role = "client", private_ip_addr = "10.83.0.8", server_type = "cx22" }
+    ares     = { role = "client", private_ip_addr = "10.83.0.5", server_type = "cx33" }
+    athena   = { role = "client", private_ip_addr = "10.83.0.8", server_type = "cx43" }
   }
 }
 
@@ -23,12 +19,12 @@ resource "hcloud_network_subnet" "cluster-main" {
   network_zone = "eu-central"
 }
 
-# See `hosts/hades.nix` for more
+# See `hosts/zeus.nix` for more
 resource "hcloud_network_route" "wireguard-router" {
   network_id  = hcloud_network.cluster.id
   destination = "10.83.1.0/24"
   gateway = [
-    for n in hcloud_server.cluster_hosts["hades"].network : n.ip
+    for n in hcloud_server.cluster_hosts["zeus"].network : n.ip
     if tostring(n.network_id) == hcloud_network.cluster.id
   ][0]
 }

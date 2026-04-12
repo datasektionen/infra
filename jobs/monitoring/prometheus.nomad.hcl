@@ -58,9 +58,7 @@ scrape_configs:
     static_configs:
       - targets:
         - ares.dsekt.internal:4646
-        - artemis.dsekt.internal:4646
         - athena.dsekt.internal:4646
-        - apollo.dsekt.internal:4646
     metric_relabel_configs:
       - source_labels: [__name__]
         regex: nomad_client_allocs_(cpu|memory)_.*
