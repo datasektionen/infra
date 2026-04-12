@@ -1,6 +1,6 @@
 locals {
   hosts = {
-    meta-tv = { role = "client", private_ip_addr = "10.83.1.3"}
+    meta-tv = { private_ip_addr = "10.83.1.3"}
   }
 }
 
@@ -13,10 +13,10 @@ resource "null_resource" "bare_metal_install" {
 
   provisioner "local-exec" {
     command = <<EOT
-NIX_SSHOPTS="-J ${var.ssh_user}@hades.datasektionen.se" nixos-rebuild \
-  --target-host ${var.ssh_user}@meta-tv.dsekt.internal \
+NIX_SSHOPTS="-J ${var.ssh_user}@zeus.datasektionen.se" nixos-rebuild \
+  --target-host ${var.ssh_user}@${each.key}.dsekt.internal \
   --sudo \
-  --flake .#meta-tv switch
+  --flake .#${each.key} switch
 EOT
   }
 }
