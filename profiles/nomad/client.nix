@@ -42,6 +42,8 @@
     };
   };
 
+  virtualisation.docker.daemon.settings.dns = [ config.dsekt.addresses.hosts.self ];
+
   # Let any docker containers access the host through it's local IP address
   networking.firewall.extraCommands = ''
     iptables -I INPUT -s 172.16.0.0/12 -d ${config.dsekt.addresses.hosts.self} -j ACCEPT
