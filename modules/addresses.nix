@@ -26,11 +26,7 @@ in
     hosts = lib.fix (self: {
       # Must be kept in sync with `local.cluster_hosts` tf
       zeus = "10.83.0.2";
-      poseidon = "10.83.0.3";
-      hades = "10.83.0.4";
       ares = "10.83.0.5";
-      artemis = "10.83.0.6";
-      apollo = "10.83.0.7";
       athena = "10.83.0.8";
 
       mjukglass = "10.83.1.1";
@@ -42,14 +38,10 @@ in
 
     groups.cluster-servers = keepAttrs cfg.hosts [
       "zeus"
-      "poseidon"
-      "hades"
     ];
 
     groups.cluster-clients = keepAttrs cfg.hosts [
       "ares"
-      "artemis"
-      "apollo"
       "athena"
     ];
 

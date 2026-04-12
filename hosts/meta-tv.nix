@@ -57,7 +57,7 @@
     privateKeyFile = config.age.secrets.wireguard-meta-tv-private-key.path;
     peers = [
       {
-        endpoint = "hades.datasektionen.se:51800";
+        endpoint = "zeus.datasektionen.se:51800";
         presharedKeyFile = config.age.secrets.wireguard-preshared-key.path;
         publicKey = "BTpGRxLRjCYUiti/5A4uNvKYp0biNkA6PTV7Yck/NxM=";
         allowedIPs = [ "10.83.0.0/16" ];

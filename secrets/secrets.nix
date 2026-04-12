@@ -13,34 +13,22 @@ let
   ];
 
   zeus = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAkpV+cZwuMbo/v1iSBMvBThnVoSnY8qxlUU9/wHtrmh";
-  poseidon = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKepaQJNM9zJO/MkX9yju1urpYouTSElz1M01lCeH3Ef";
-  hades = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILCFb/uxJljnDlv7QZIqsV8HD337T7bJYWYkGXxf5WCn";
   ares = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOvT+r/mtIDTsTjccGXYpkA/3VQED9WHNU1NB9Hjh0Me";
-  artemis = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDiCbmT5XtIMKT62dmg/O+8x8kms6ELc7GCL9zeK8uTD";
-  apollo = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILiHIS7WraYSjBonICrCJqDaM6ROVLt65rMyEKhNWha2";
   athena = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIN/vUc3wJARnek+VX5JeopG2Xf+uam1OCuG40toQ02r";
   meta-tv = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIK5P9VvJd1FP1SaGb1fAuqezlFVEUZH4FBhCaFfu/DzS";
 
   nomadServers = [
     zeus
-    poseidon
-    hades
   ];
   nomadClients = [
     ares
-    artemis
-    apollo
     athena
     meta-tv
   ];
 in
 {
   "zeus_ssh_host_ed25519_key.age".publicKeys = sysadmins;
-  "poseidon_ssh_host_ed25519_key.age".publicKeys = sysadmins;
-  "hades_ssh_host_ed25519_key.age".publicKeys = sysadmins;
   "ares_ssh_host_ed25519_key.age".publicKeys = sysadmins;
-  "artemis_ssh_host_ed25519_key.age".publicKeys = sysadmins;
-  "apollo_ssh_host_ed25519_key.age".publicKeys = sysadmins;
   "athena_ssh_host_ed25519_key.age".publicKeys = sysadmins;
 
   # `{"server":{"encrypt":"base64urlkeythatis32byteslong"}}`
@@ -58,9 +46,9 @@ in
   # `AWS_DEFAULT_REGION`, `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `RESTIC_PASSWORD`
   "restic-s3-creds-ares.env.age".publicKeys = sysadmins ++ [ ares ];
 
-  "wireguard-preshared-key.age".publicKeys = sysadmins ++ [ hades meta-tv ];
+  "wireguard-preshared-key.age".publicKeys = sysadmins ++ [ zeus meta-tv ];
   # Public key: `BTpGRxLRjCYUiti/5A4uNvKYp0biNkA6PTV7Yck/NxM=`
-  "wireguard-hades-private-key.age".publicKeys = sysadmins ++ [ hades ];
+  "wireguard-zeus-private-key.age".publicKeys = sysadmins ++ [ zeus ];
 
   # Public key: `HibcPcaxmPs1QKSh97r2/CpLId0IkEo94pwgFvg+lXs=`
   "wireguard-meta-tv-private-key.age".publicKeys = sysadmins ++ [ meta-tv ];
