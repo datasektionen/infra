@@ -119,6 +119,10 @@
       kb_layout = se
     }
 
+    cursor {
+      inactive_timeout = 5
+    }
+
     # Use orange Catppuccin unicat wallpaper. :)
     # It is MIT licensed, so it should be fine.
     exec-once = ${pkgs.swaybg}/bin/swaybg --mode fill --image ${
