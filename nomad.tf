@@ -81,16 +81,6 @@ resource "nomad_job" "vector" {
   jobspec = file("${path.module}/jobs/monitoring/vector.nomad.hcl")
 }
 
-# Twenty
-
-resource "nomad_namespace" "twenty" {
-  name = "twenty"
-}
-
-resource "nomad_job" "twenty" {
-  jobspec = file("${path.module}/jobs/twenty.nomad.hcl")
-}
-
 # n8n
 resource "nomad_job" "n8n" {
   jobspec = file("${path.module}/jobs/n8n.nomad.hcl")
