@@ -1,4 +1,5 @@
 {
+  pkgs,
   config,
   profiles,
   secretsDir,
@@ -6,6 +7,24 @@
 }:
 {
   imports = [ profiles.nomad.shared ];
+
+  environment.systemPackages = [ pkgs.cifs-utils ];
+
+  fileSystems."/mnt/immich" = {
+    device = "//u620148-sub1.your-storagebox.de/u620148-sub1";
+    fsType = "cifs";
+    options = [
+      "credentials=${config.age.secrets.immich-storagebox-credentials.path}"
+      "seal"
+      "uid=0"
+      "gid=0"
+      "file_mode=0644"
+      "dir_mode=0755"
+      "nofail"
+      "x-systemd.automount"
+      "x-systemd.idle-timeout=60"
+    ];
+  };
 
   services.nomad = {
     dropPrivileges = false;
@@ -16,9 +35,16 @@
         server_join.retry_join = builtins.attrValues config.dsekt.addresses.groups.cluster-servers;
         network_interface = "{{ GetPrivateInterfaces | include `address` `10[.]83[.]` | attr `name` }}";
 
-        host_volume."docker-socket" = {
-          path = "/var/run/docker.sock";
-          read_only = true;
+        host_volume = {
+          "docker-socket" = {
+            path = "/var/run/docker.sock";
+            read_only = true;
+          };
+
+          "immich" = {
+            path = "/mnt/immich";
+            read_only = false;
+          };
         };
       };
 
@@ -53,4 +79,5 @@
   '';
 
   age.secrets.nomad-docker-auth.file = secretsDir + "/nomad-docker-auth.json.age";
+  age.secrets.immich-storagebox-credentials.file = secretsDir + "/immich-storagebox-credentials.age";
 }

@@ -26,9 +26,9 @@ job "immich" {
       port     = "redis"
     }
 
-    volume "uploads" {
+    volume "immich_data" {
       type      = "host"
-      source    = "immich/uploads"
+      source    = "immich"
     }
 
     task "immich-server" {
@@ -62,12 +62,12 @@ ENV
       }
 
       volume_mount {
-        volume      = "uploads"
+        volume      = "immich_data"
         destination = "/data"
       }
 
       resources {
-        memory = 1536
+        memory = 1024
       }
     }
 
@@ -80,7 +80,7 @@ ENV
       }
 
       resources {
-        memory = 64
+        memory = 128
       }
     }
   }

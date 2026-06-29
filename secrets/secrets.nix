@@ -61,4 +61,7 @@ in
   "mediawiki-sso-client-secret.age".publicKeys = sysadmins ++ [ ares ];
   # This is not even usable since you can't login with username/password with the OIDC plugin, but it is required. Plain text format
   "mediawiki-password.age".publicKeys = sysadmins ++ [ ares ];
+
+  # Username and password for immich storagebox
+  "immich-storagebox-credentials.age".publicKeys = sysadmins ++ nomadClients;
 }
