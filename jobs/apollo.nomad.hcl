@@ -32,7 +32,7 @@ job "apollo" {
 
     volume "data" {
       type = "host"
-      source = "apollo/data"
+      source = "apollo"
     }
 
     task "apollo-web" {

@@ -42,6 +42,22 @@
     ];
   };
 
+  fileSystems."/mnt/apollo" = {
+    device = "//u620148-sub3.your-storagebox.de/u620148-sub3";
+    fsType = "cifs";
+    options = [
+      "credentials=${config.age.secrets.apollo-storagebox-credentials.path}"
+      "seal"
+      "uid=0"
+      "gid=0"
+      "file_mode=0644"
+      "dir_mode=0755"
+      "nofail"
+      "x-systemd.automount"
+      "x-systemd.idle-timeout=60"
+    ];
+  };
+
   services.nomad = {
     dropPrivileges = false;
     enableDocker = true;
@@ -81,6 +97,11 @@
             path = "/mnt/planka/attachments";
             read_only = false;
           };
+
+          "apollo" = {
+            path = "/mnt/apollo";
+            read_only = false;
+          };
         };
       };
 
@@ -117,4 +138,5 @@
   age.secrets.nomad-docker-auth.file = secretsDir + "/nomad-docker-auth.json.age";
   age.secrets.immich-storagebox-credentials.file = secretsDir + "/immich-storagebox-credentials.age";
   age.secrets.planka-storagebox-credentials.file = secretsDir + "/planka-storagebox-credentials.age";
+  age.secrets.apollo-storagebox-credentials.file = secretsDir + "/apollo-storagebox-credentials.age";
 }

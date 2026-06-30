@@ -35,11 +35,6 @@
     dirs = [ "data" ];
   };
 
-  dsekt.nomad.volumes.host.apollo = {
-    userId = 65533; # Runs as nobody?
-    dirs = [ "data" ];
-  };
-
   dsekt.restic = {
     backupPrepareCommand = ''
       ${pkgs.sudo}/bin/sudo -u postgres ${config.services.postgresql.package}/bin/pg_dumpall > /root/postgres_dump.sql

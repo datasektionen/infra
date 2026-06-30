@@ -67,4 +67,7 @@ in
 
   # Username and password for immich storagebox
   "planka-storagebox-credentials.age".publicKeys = sysadmins ++ nomadClients;
+
+  # Username and password for immich storagebox
+  "apollo-storagebox-credentials.age".publicKeys = sysadmins ++ nomadClients;
 }
