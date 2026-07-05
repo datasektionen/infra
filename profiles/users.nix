@@ -2,32 +2,6 @@
 {
   users.mutableUsers = false;
 
-  users.users.mathm = {
-    isNormalUser = true;
-    group = "users";
-    extraGroups = [ "wheel" ];
-    openssh.authorizedKeys.keys = [
-      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPC69ml72mqbn7L3QkpsCJuWdrKFYFNd0MaS5xERbuSF mathm-desktop"
-      "ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBEdUe7mxGdV/Q37RKndPzDHisFb7q/xm+L97jcGluSDOA8MGt/+wTxpyGxfyEqaMvwV2bakaMVHTB3711dDu5kE= mathm5nfc"
-      "ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBLZ6OVyjTvWx9gvS+/DvkQW5VvLBbykq/0AV5mYDLADDtIOaDVscQ3lGOcUsga1ODNSl14MSV63bE8VtHfG1HOc= mathm5nano"
-    ];
-    hashedPassword = "$y$j9T$JKUgC8EQsXkh08UQaB/ZA1$SH/lW5hNQqgHfhIdB/8si3tWpwYMy4gm6GgV6CcaWxC";
-    shell = pkgs.fish;
-  };
-
-  users.users.rmfseo = {
-    isNormalUser = true;
-    group = "users";
-    extraGroups = [ "wheel" ];
-    openssh.authorizedKeys.keys = [
-      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIG5LP3Zg7IfsuPElwU/QTYG1Mz5WROTKP7h4cT2MQeza raf@amsterdam"
-      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOwaEu0TGRXhxjk1+Pz2LP66Vfvvgr3IvxkRfkcRiP0Y raf@rotterdam"
-      "ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBJJWUTzd1uLY77F7ka6hLIygt1eocwrSLzQtZ9b6wRTf+6900Pfc2XyQvEMYjJd+ZqINbXN6mVnvlKtcaC6Nv2o= gazelle" # mobile
-    ];
-    hashedPassword = "$y$j9T$wGjTUbozJn.GeZyKWYgBc/$U9zB.YZUX5jbmN429t46UmLeFp/CNMf1GMoKOFoUG25";
-    shell = pkgs.zsh;
-  };
-
   users.users.viktoe = {
     isNormalUser = true;
     group = "users";
@@ -37,6 +11,17 @@
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIgXz9nG1X3rA3LK5djAgE/FBv7tDIJZ8G07pHKDoSe6 viktoe@datasektionen.se"
     ];
     hashedPassword = "$6$4EBcX90yrnAQBnFf$84Sz2ZnarQljfdwLKYO3ZjeMq4MRVTM3EWtuILr1QsDsYnXXafHEh7yM145MpswQTqoc2Surh7BseTT4Ki4ML0";
+    shell = pkgs.zsh;
+  };
+
+  users.users.osen = {
+    isNormalUser = true;
+    group = "users";
+    extraGroups = [ "wheel" ];
+    openssh.authorizedKeys.keys = [
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICDbk+jGRrhHKrGyLxEqoMFAXngWyX3xGulpHF1iiRdW oskar@Oskars-MacBook-Air.local"
+    ];
+    hashedPassword = "$2y$05$17FdPswVL2vg/N3YKKGPw.KrZ7JCRSZGqtAVnSHukofRB2WRZ/Kzu";
     shell = pkgs.zsh;
   };
 
