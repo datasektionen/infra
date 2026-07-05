@@ -31,6 +31,11 @@ job "immich" {
       source    = "immich"
     }
 
+    volume "immich_thumbs" {
+      type      = "host"
+      source    = "immich/thumbs"
+    }
+
     task "immich-server" {
       driver = "docker"
 
@@ -66,6 +71,11 @@ ENV
         destination = "/data"
       }
 
+      volume_mount {
+        volume      = "immich_thumbs"
+        destination = "/data/thumbs"
+      }
+
       resources {
         memory = 1024
       }
@@ -88,10 +98,10 @@ ENV
 
 variable "server_image" {
   type    = string
-  default = "ghcr.io/immich-app/immich-server:release"
+  default = "ghcr.io/immich-app/immich-server:v3"
 }
 
 variable "redis" {
   type    = string
-  default = "valkey/valkey:latest"
+  default = "valkey/valkey:9"
 }

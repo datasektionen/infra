@@ -58,6 +58,14 @@
     ];
   };
 
+  dsekt.nomad.volumes.host.immich = {
+    userId = 0;
+    dirs = [
+      "thumbs"
+    ];
+  };
+
+
   services.nomad = {
     dropPrivileges = false;
     enableDocker = true;
