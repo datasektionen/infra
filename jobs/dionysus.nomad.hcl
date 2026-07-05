@@ -44,7 +44,7 @@ DIONYSUS_CONFIG=/local/config.toml
 DIONYSUS_DATABASE__URL=postgres://dionysus:{{ .db_password }}@postgres.dsekt.internal:5432/dionysus
 DIONYSUS_OIDC__PROVIDERS__DSEKT__CLIENT_ID={{ .oidc_id }}
 DIONYSUS_OIDC__PROVIDERS__DSEKT__CLIENT_SECRET={{ .oidc_secret }}
-DIONYSUS_OIDC__BASE_EXTERNAL_ID=https://manus.metaspexet.se
+DIONYSUS_OIDC__EXTERNAL_BASE_URL=https://manus.metaspexet.se
 {{ end }}
 ENV
         destination = "local/.env"
@@ -63,3 +63,4 @@ ENV
     }
   }
 }
+
