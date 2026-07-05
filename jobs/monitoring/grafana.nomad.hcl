@@ -43,6 +43,20 @@ host = postgres.dsekt.internal:5432
 name = grafana
 user = grafana
 password = {{ .pg_password }}
+[auth.generic_oauth]
+enabled = true
+validate_id_token = true
+jwk_set_url = https://sso.datasektionen.se/op/.well-known/jwks.json
+client_id = grafana
+client_secret = {{ .oidc_secret }}
+scopes = openid profile email permissions
+auth_url = https://sso.datasektionen.se/op/authorize
+token_url = https://sso.datasektionen.se/op/oauth/token
+api_url = https://sso.datasektionen.se/op/userinfo
+
+role_attribute_path = contains(permissions[*].id, 'admin') && 'Admin' || 'Viewer'
+login_attribute_path = sub
+allow_assign_grafana_admin = true
 {{ end }}
            EOF
         destination = "local/config.ini"
@@ -81,3 +95,4 @@ EOF
     }
   }
 }
+
