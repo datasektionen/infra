@@ -49,7 +49,7 @@ job "planka" {
 
       template {
         data        = <<ENV
-TZ=Europe/Stockholm
+TZ=UTC
 BASE_URL=https://${var.domain_name}
 OIDC_ISSUER=https://sso.datasektionen.se/op
 OIDC_USERNAME_ATTRIBUTE=sub
