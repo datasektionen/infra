@@ -69,6 +69,7 @@ locals {
       "jml",
     ],
     metaspexet = [
+      "apollo",
       "haj",
       "metaspexet2",
       "tiki",
@@ -78,6 +79,15 @@ locals {
       "gordian",
     ],
   }
+
+  repo_host_volumes = {
+    "apollo" = {
+      workspace    = "metaspexet"
+      host_volumes = ["apollo"]
+    }
+  }
+
+  base_repo_to_workspace = { for repo, ws in transpose(local.deploy-tokens) : repo => ws[0] }
 }
 
 resource "nomad_acl_policy" "deploy" {
@@ -90,6 +100,23 @@ resource "nomad_acl_policy" "deploy" {
   HCL
 }
 
+resource "nomad_acl_policy" "repo_deploy" {
+  for_each = local.repo_host_volumes
+  name     = "deploy-repo-${each.key}"
+
+  rules_hcl = <<-HCL
+    namespace "${each.value.workspace}" {
+      capabilities = ["read-job", "submit-job", "parse-job"]
+    }
+
+    %{ for vol in each.value.host_volumes ~}
+    host_volume "${vol}" {
+      capabilities = ["mount-readwrite"]
+    }
+    %{ endfor ~}
+  HCL
+}
+
 resource "nomad_acl_token" "deploy" {
   for_each = local.deploy-tokens
   name     = "deploy-${each.key}"
@@ -97,9 +124,21 @@ resource "nomad_acl_token" "deploy" {
   type     = "client"
 }
 
+resource "nomad_acl_token" "repo_deploy" {
+  for_each = local.repo_host_volumes
+  name     = "deploy-repo-${each.key}"
+  policies = [nomad_acl_policy.repo_deploy[each.key].name]
+  type     = "client"
+}
+
 resource "github_actions_secret" "nomad_deploy_token" {
-  for_each        = { for repo, ws in transpose(local.deploy-tokens) : repo => ws[0] }
-  repository      = each.key
-  secret_name     = "NOMAD_TOKEN"
-  plaintext_value = nomad_acl_token.deploy[each.value].secret_id
+  for_each   = local.base_repo_to_workspace
+  repository = each.key
+  secret_name = "NOMAD_TOKEN"
+
+  plaintext_value = contains(keys(local.repo_host_volumes), each.key) ? (
+    nomad_acl_token.repo_deploy[each.key].secret_id
+  ) : (
+    nomad_acl_token.deploy[each.value].secret_id
+  )
 }
