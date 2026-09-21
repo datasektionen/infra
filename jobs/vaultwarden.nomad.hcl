@@ -52,7 +52,6 @@ SMTP_FROM_NAME="Datasektionen Vault"
 INVITATION_ORG_NAME="Datasektionen Vault"
 SIGNUPS_ALLOWED=false
 SIGNUPS_VERIFY=true
-SIGNUPS_DOMAINS_WHITELIST=datasektionen.se,kth.se
 ORG_CREATION_USERS=d-sys@datasektionen.se
 ORG_GROUPS_ENABLED=true
 ADMIN_TOKEN=$argon2id$v=19$m=65540,t=3,p=4$Eq5XC4/9uPFrvVadxrAEBD3+cvaUjZaXWuJkxMAGiQQ$BDzKBz53KMb+e8hIaiCca42ZRak8RFW09qVCXjqgfPk
