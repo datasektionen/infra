@@ -97,10 +97,6 @@ resource "nomad_job" "dionysus" {
   jobspec = file("${path.module}/jobs/dionysus.nomad.hcl")
 }
 
-resource "nomad_job" "apollo" {
-  jobspec = file("${path.module}/jobs/apollo.nomad.hcl")
-}
-
 # Other
 
 resource "nomad_namespace" "auth" {
