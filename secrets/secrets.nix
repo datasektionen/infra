@@ -42,6 +42,7 @@ in
   "restic-s3-creds-ares.env.age".publicKeys = sysadmins ++ [ ares ];
 
   "wireguard-preshared-key.age".publicKeys = sysadmins ++ [ zeus meta-tv ];
+
   # Public key: `BTpGRxLRjCYUiti/5A4uNvKYp0biNkA6PTV7Yck/NxM=`
   "wireguard-zeus-private-key.age".publicKeys = sysadmins ++ [ zeus ];
 
@@ -60,9 +61,12 @@ in
   # Username and password for immich storagebox
   "immich-storagebox-credentials.age".publicKeys = sysadmins ++ nomadClients;
 
-  # Username and password for immich storagebox
+  # Username and password for planka storagebox
   "planka-storagebox-credentials.age".publicKeys = sysadmins ++ nomadClients;
 
-  # Username and password for immich storagebox
+  # Username and password for apollo storagebox
   "apollo-storagebox-credentials.age".publicKeys = sysadmins ++ nomadClients;
+
+  # Username and password for mattermost storagebox
+  "mattermost-storagebox-credentials.age".publicKeys = sysadmins ++ nomadClients;
 }

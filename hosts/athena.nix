@@ -4,6 +4,8 @@
     hetzner-cloud
     base
     nomad.client
+    nomad.mounts
+    # patroni
     traefik
   ];
 

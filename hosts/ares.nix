@@ -10,6 +10,7 @@
     hetzner-cloud
     base
     nomad.client
+    nomad.mounts
     postgres
     traefik-external
     mediawiki

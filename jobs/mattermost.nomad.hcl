@@ -42,6 +42,11 @@ job "mattermost" {
       source = "mattermost/config"
     }
 
+    volume "data" {
+      type = "host"
+      source = "mattermost/data"
+    }
+
     volume "logs" {
       type = "host"
       source = "mattermost/logs"
@@ -69,8 +74,6 @@ MM_SQLSETTINGS_DRIVERNAME=postgres
 MM_SQLSETTINGS_DATASOURCE=postgres://mattermost:{{ .database_password }}@postgres.dsekt.internal:5432/mattermost?sslmode=disable&connect_timeout=10
 MM_EMAILSETTINGS_SMTPPASSWORD={{ .smtp_password }}
 MM_EMAILSETTINGS_SMTPUSERNAME={{ .smtp_username }}
-MM_FILESETTINGS_AMAZONS3ACCESSKEYID={{ .aws_id }}
-MM_FILESETTINGS_AMAZONS3SECRETACCESSKEY={{ .aws_secret }}
 {{ end }}
 MM_SERVICESETTINGS_SITEURL=https://${var.domain_name}
 MM_SERVICESETTINGS_LISTENADDRESS=:{{ env "NOMAD_PORT_http" }}
@@ -80,10 +83,6 @@ MM_EMAILSETTINGS_CONNECTIONSECURITY=TLS
 MM_EMAILSETTINGS_ENABLESMTPAUTH=true
 MM_EMAILSETTINGS_FEEDBACKEMAIL=mattermost@datasektionen.se
 MM_EMAILSETTINGS_REPLYTOADDRESS=no-reply@datasektionen.se
-MM_FILESETTINGS_DRIVERNAME=amazons3
-MM_FILESETTINGS_AMAZONS3BUCKET=dsekt-mattermost
-MM_FILESETTINGS_AMAZONS3REGION=eu-west-1
-MM_FILESETTINGS_AMAZONS3SSL=true
 EOH
         destination = "local/.env"
         env = true
@@ -92,6 +91,11 @@ EOH
       config {
         image = "mattermost/mattermost-enterprise-edition:11.2.2"
         ports = ["http", "calls"]
+      }
+
+      volume_mount {
+        volume = "data"
+        destination = "/mattermost/data"
       }
 
       volume_mount {
