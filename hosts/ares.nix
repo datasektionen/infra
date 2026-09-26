@@ -38,11 +38,21 @@
 
   dsekt.restic = {
     backupPrepareCommand = ''
-      ${pkgs.sudo}/bin/sudo -u postgres ${config.services.postgresql.package}/bin/pg_dumpall > /root/postgres_dump.sql
+      #!/bin/bash
+
+      EXCLUDE_DB="jml"
+      BACKUP_DIR="/root/db_dump"
+
+      ${pkgs.sudo}/bin/sudo -u postgres ${config.services.postgresql.package}/bin/pg_dumpall --globals-only > "$BACKUP_DIR/globals.sql"
+      DB_LIST=$(${pkgs.sudo}/bin/sudo -u postgres ${config.services.postgresql.package}/bin/psql -At -c "SELECT datname FROM pg_database WHERE NOT datistemplate AND datname != '$EXCLUDE_DB';")
+
+      for DB in $DB_LIST; do
+        ${pkgs.sudo}/bin/sudo -u postgres ${config.services.postgresql.package}/bin/pg_dump -F c -b -v "$DB" > "$BACKUP_DIR/$DB.dump"
+      done
     '';
 
     paths = [
-      "/root/postgres_dump.sql"
+      "/root/db_dump"
       "/var/lib/nomad-volumes/mattermost"
     ];
 
