@@ -26,6 +26,7 @@ locals {
       "betting",
       "calypso",
       "damm2",
+      "dare",
       "darkmode",
       "dbuggen",
       "djubileet",
