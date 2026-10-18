@@ -3,6 +3,7 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-25.11";
+    nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
 
     disko.url = "github:nix-community/disko";
     disko.inputs.nixpkgs.follows = "nixpkgs";
@@ -18,57 +19,104 @@
   outputs =
     {
       nixpkgs,
+      nixpkgs-unstable,
       disko,
       nixos-anywhere,
       agenix,
       ...
     }:
     let
-      system = "x86_64-linux";
-      pkgs = import nixpkgs {
-        inherit system;
-        config.allowUnfree = true;
-      };
       lib = import ./lib.nix { inherit (nixpkgs) lib; };
+
+      mkHost = hostname: path: {
+        inherit hostname path;
+        machineInfo = import (path + "/machine-info.nix");
+        configuration = import (path + "/default.nix");
+      };
+      hostnames = (
+        lib.filterAttrs (
+          name: type: type == "directory" && lib.pathExists (./hosts + "/${name}/machine-info.nix")
+        ) (builtins.readDir ./hosts)
+      );
+      hosts = builtins.mapAttrs (hostname: _: mkHost hostname (./hosts + "/${hostname}")) hostnames;
+
+      systems = [
+        "aarch64-linux"
+        "x86_64-linux"
+      ];
+      forAllSystems =
+        f:
+        lib.genAttrs systems (
+          system:
+          f (
+            import nixpkgs {
+              inherit system;
+            }
+          )
+        );
     in
     {
-      formatter.${system} = pkgs.nixfmt-rfc-style;
-      nixosConfigurations = nixpkgs.lib.mapAttrs' (
-        name: _:
+      formatter = forAllSystems (pkgs: pkgs.nixfmt-rfc-style);
+      nixosConfigurations =
         let
-          hostname = nixpkgs.lib.removeSuffix ".nix" name;
-        in
-        {
-          name = hostname;
-          value = nixpkgs.lib.nixosSystem {
-            inherit system pkgs;
-            specialArgs = {
-              inherit nixpkgs disko agenix;
-              profiles = lib.rakeLeaves ./profiles;
-              secretsDir = ./secrets;
+          mkConfiguration =
+            _: m:
+            let
+              nixpkgs-impl = if (m.machineInfo.unstable or false) then nixpkgs-unstable else nixpkgs;
+            in
+            nixpkgs-impl.lib.nixosSystem {
+              system = m.machineInfo.arch;
+              pkgs = import nixpkgs-impl {
+                system = m.machineInfo.arch;
+                config.allowUnfree = true;
+              };
+              specialArgs = {
+                inherit
+                  agenix
+                  disko
+                  nixpkgs-unstable
+                  ;
+                # even unstable-default hosts can access stable through this
+                nixpkgs-stable = nixpkgs;
+                nixpkgs = nixpkgs-impl;
+
+                profiles = lib.rakeLeaves ./profiles;
+                secretsDir = ./secrets;
+              };
+              modules = [
+                {
+                  networking = {
+                    hostName = m.hostname;
+                    domain = lib.mkDefault "dsekt.internal";
+                  };
+                }
+                m.configuration
+              ]
+              ++ (lib.collect builtins.isPath (lib.rakeLeaves ./modules));
             };
-            modules = [
-              (./hosts + "/${name}")
-              (_: { networking.hostName = hostname; })
+        in
+        builtins.mapAttrs mkConfiguration hosts;
+
+      devShells = forAllSystems (pkgs: {
+        default = pkgs.mkShellNoCC {
+          packages =
+            let
+              inherit (pkgs.stdenv.hostPlatform) system;
+            in
+            [
+              nixos-anywhere.packages.${system}.default
+              agenix.packages.${system}.default
             ]
-            ++ (nixpkgs.lib.collect builtins.isPath (lib.rakeLeaves ./modules));
-          };
-        }
-      ) (builtins.readDir ./hosts);
-      devShells.${system}.default = pkgs.mkShellNoCC {
-        packages = [
-          nixos-anywhere.packages.${system}.default
-          agenix.packages.${system}.default
-        ]
-        ++ (with pkgs; [
-          age
-          age-plugin-yubikey
-          opentofu
-          nomad
-          gh
-          jq
-          nixos-rebuild
-        ]);
-      };
+            ++ (with pkgs; [
+              age
+              age-plugin-yubikey
+              opentofu
+              nomad
+              gh
+              jq
+              nixos-rebuild
+            ]);
+        };
+      });
     };
 }

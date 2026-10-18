@@ -1,6 +1,6 @@
 # Infra(structure) 🛣️
 
-Each server runs NixOS and is defined by the file called `hosts/$hostname.nix` and those that are VMs on Hetzner Cloud have their existence defined at the top of `hosts.tf`. They all live in the cloud project called "Informationsorganet".
+Each server runs NixOS and is defined by the files called `default.nix` and `machine-info.nix` in `hosts/$hostname` and those that are VMs on Hetzner Cloud have their existence defined at the top of `hosts.tf`. They all live in the cloud project called "Informationsorganet".
 
 They are all on the same private network with the network prefix `10.83.0.0/16`. (Chosen because obviously class A private networks must be better than class B and C and 1983 is the chapter's birthyear). It is defined within Hetzner, which means that `10.83.0.1` is reserved by them. The servers is then put in the `10.83.0.0/24` subnet, so that we can put other stuff in other `10.38.?.0/24` subnets, which we do with `10.83.1.0/24` which contains hosts that are bridged via the host _zeus_ using wireguard.
 

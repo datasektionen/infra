@@ -15,6 +15,7 @@ let
   ];
 in
 {
+  networking.resolvconf.enable = lib.mkForce false;
   environment.etc."resolv.conf".text = ''
     nameserver 127.0.0.1
     options edns0
