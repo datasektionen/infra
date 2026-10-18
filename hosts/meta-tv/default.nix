@@ -20,10 +20,9 @@
   virtualisation.vmVariant = {
     imports = [ "${modulesPath}/virtualisation/qemu-vm.nix" ];
 
+    virtualisation.memorySize = 4096;
     virtualisation.qemu = {
       options = [
-        # Increase available memory.
-        "-m 4096"
         # Configure three connected 1920x1080 screens.
         "-vga none"
         "-device virtio-gpu-pci,max_outputs=3,xres=1920,yres=1080"
@@ -84,7 +83,10 @@
   programs.hyprland.enable = true;
   xdg.portal.enable = true;
   xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-hyprland ];
-  environment.systemPackages = with pkgs; [ alacritty git ];
+  environment.systemPackages = with pkgs; [
+    alacritty
+    git
+  ];
 
   # Configure Swedish keyboard layout for TTYs.
   console.keyMap = "sv-latin1";
