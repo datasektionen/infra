@@ -5,6 +5,11 @@
     nixpkgs.url = "github:nixos/nixpkgs/nixos-25.11";
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
 
+    nixos-hardware-unstable = {
+      url = "github:nixos/nixos-hardware/master";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
+    };
+
     disko.url = "github:nix-community/disko";
     disko.inputs.nixpkgs.follows = "nixpkgs";
 
@@ -18,8 +23,10 @@
 
   outputs =
     {
+      self,
       nixpkgs,
       nixpkgs-unstable,
+      nixos-hardware-unstable,
       disko,
       nixos-anywhere,
       agenix,
@@ -74,6 +81,7 @@
                 inherit
                   agenix
                   disko
+                  nixos-hardware-unstable
                   nixpkgs-unstable
                   ;
                 # even unstable-default hosts can access stable through this

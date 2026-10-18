@@ -1,4 +1,9 @@
-{ modulesPath, disko, ... }:
+{
+  modulesPath,
+  disko,
+  lib,
+  ...
+}:
 {
   imports = [
     (modulesPath + "/profiles/qemu-guest.nix")
@@ -7,7 +12,7 @@
   ];
 
   boot.loader.grub = {
-    enable = true;
+    enable = lib.mkDefault true;
     efiSupport = true;
     efiInstallAsRemovable = true;
   };

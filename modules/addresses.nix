@@ -32,6 +32,7 @@ in
       mjukglass = "10.83.1.1";
       drifvarkaden = "10.83.1.2";
       meta-tv = "10.83.1.3";
+      jr = "10.83.1.4";
 
       self = self.${config.networking.hostName};
     });
