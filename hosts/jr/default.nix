@@ -10,7 +10,6 @@
 {
   imports = with profiles; [
     base
-    nomad.client
   ];
 
   networking.networkmanager.enable = true;
@@ -42,6 +41,7 @@
     ];
     openssh.authorizedKeys.keys = [
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHeGrsaYii/5yiM3hL3DUGanxTWCaw9+rsvYLDJcj/en ekby@laptop"
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICDbk+jGRrhHKrGyLxEqoMFAXngWyX3xGulpHF1iiRdW oskar@Oskars-MacBook-Air.local"
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIy8Um/ysc1Or8r6t39qz97HEFmfRRFfWCEUJKN/m9Dk rasmus@nixos"
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIO4o+kiVWP3EBrNOvRzxv4wJZXTHnlo3UkijIShC8xRZ emma@krlsg.se"
     ];
@@ -50,9 +50,6 @@
   };
   # Force the configured password to be used.
   users.mutableUsers = false;
-
-  systemd.services.nomad.after = [ "wg-quick-wg-dsekt.service" ];
-  systemd.services.nomad.requires = [ "wg-quick-wg-dsekt.service" ];
 
   networking.firewall.checkReversePath = "loose";
 
@@ -70,11 +67,11 @@
     ];
 
     postUp = ''
-      ${pkgs.networkmanager}/bin/nmcli d modify enp2s0 ipv4.dns "127.0.0.1"
+      ${pkgs.networkmanager}/bin/nmcli d modify wlan0 ipv4.dns "127.0.0.1"
     '';
 
     preDown = ''
-      ${pkgs.networkmanager}/bin/nmcli d modify enp2s0 ipv4.dns "1.1.1.1";
+      ${pkgs.networkmanager}/bin/nmcli d modify wlan0 ipv4.dns "1.1.1.1";
     '';
   };
 
