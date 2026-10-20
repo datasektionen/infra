@@ -95,10 +95,7 @@
               };
               modules = [
                 {
-                  networking = {
-                    hostName = m.hostname;
-                    domain = lib.mkDefault "dsekt.internal";
-                  };
+                  networking.hostName = m.hostname;
                 }
                 m.configuration
               ]
