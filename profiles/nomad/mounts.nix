@@ -72,6 +72,22 @@
     ];
   };
 
+  fileSystems."/mnt/loki" = {
+    device = "//u620148-sub5.your-storagebox.de/u620148-sub5";
+    fsType = "cifs";
+    options = [
+      "credentials=${config.age.secrets.loki-storagebox-credentials.path}"
+      "seal"
+      "uid=10001"
+      "gid=10001"
+      "file_mode=0644"
+      "dir_mode=0755"
+      "nofail"
+      "x-systemd.automount"
+      "x-systemd.idle-timeout=60"
+    ];
+  };
+
   services.nomad.settings.client.host_volume = {
     "docker-socket" = {
       path = "/var/run/docker.sock";
@@ -112,5 +128,16 @@
       path = "/mnt/mattermost";
       read_only = false;
     };
+
+    "loki" = {
+      path = "/mnt/loki";
+      read_only = false;
+    };
   };
+
+  age.secrets.immich-storagebox-credentials.file = secretsDir + "/immich-storagebox-credentials.age";
+  age.secrets.planka-storagebox-credentials.file = secretsDir + "/planka-storagebox-credentials.age";
+  age.secrets.apollo-storagebox-credentials.file = secretsDir + "/apollo-storagebox-credentials.age";
+  age.secrets.mattermost-storagebox-credentials.file = secretsDir + "/mattermost-storagebox-credentials.age";
+  age.secrets.loki-storagebox-credentials.file = secretsDir + "/loki-storagebox-credentials.age";
 }

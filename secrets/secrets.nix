@@ -69,4 +69,7 @@ in
 
   # Username and password for mattermost storagebox
   "mattermost-storagebox-credentials.age".publicKeys = sysadmins ++ nomadClients;
+
+  # Username and password for loki storagebox
+  "loki-storagebox-credentials.age".publicKeys = sysadmins ++ nomadClients;
 }

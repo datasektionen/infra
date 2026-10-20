@@ -49,8 +49,4 @@
   '';
 
   age.secrets.nomad-docker-auth.file = secretsDir + "/nomad-docker-auth.json.age";
-  age.secrets.immich-storagebox-credentials.file = secretsDir + "/immich-storagebox-credentials.age";
-  age.secrets.planka-storagebox-credentials.file = secretsDir + "/planka-storagebox-credentials.age";
-  age.secrets.apollo-storagebox-credentials.file = secretsDir + "/apollo-storagebox-credentials.age";
-  age.secrets.mattermost-storagebox-credentials.file = secretsDir + "/mattermost-storagebox-credentials.age";
 }

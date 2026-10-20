@@ -23,6 +23,12 @@ job "loki" {
       port "http" {}
     }
 
+    volume "loki" {
+      type      = "host"
+      read_only = false
+      source    = "loki"
+    }
+
     task "loki" {
       driver = "docker"
       config {
@@ -37,6 +43,12 @@ job "loki" {
       resources {
         cpu    = 100
         memory = 200
+      }
+
+      volume_mount {
+        volume      = "loki"
+        destination = "/loki"
+        read_only   = false
       }
 
       template {
@@ -70,8 +82,17 @@ schema_config:
       index:
         prefix: index_
         period: 24h
+    - from: 2026-10-07
+      store: tsdb
+      object_store: filesystem
+      schema: v13
+      index:
+        prefix: index_
+        period: 24h
 {{ with nomadVar "nomad/jobs/loki" }}
 storage_config:
+  filesystem:
+    directory: /loki/chunks
   tsdb_shipper:
     active_index_directory: /loki/tsdb-shipper-active
     cache_location: /loki/tsdb-shipper-cache
