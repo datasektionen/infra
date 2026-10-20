@@ -41,6 +41,8 @@ locals {
       "meta-tv-rs",
       "methone",
       "nymblan",
+      "OG-template",
+      "GO-auth-yourself",
       "pandora",
       "pax2",
       "rfinger",
