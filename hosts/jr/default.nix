@@ -102,41 +102,57 @@
     };
   };
 
-  environment.etc."xdg/hypr/hyprland.conf".text = ''
-    # Import the default configuration.
-    source = ${pkgs.hyprland}/share/hypr/hyprland.conf
+  environment.etc."xdg/hypr/hyprland.lua".text = ''
+    -- Import the default configuration.
+    require("${pkgs.hyprland}/share/hypr/hyprland.lua")
 
-    monitor = , 1920x1080@60, auto, 1
-    #monitor = DVI-D-1, 1920x1080@60, auto, 1
-
-    #workspace = 1, monitor:DVI-D-1
-
-    exec-once = [workspace 1 silent] ${pkgs.firefox}/bin/firefox --kiosk "https://sl.datasektionen.se/tv"
-
-    $terminal = ${pkgs.alacritty}/bin/alacritty
-
-    bind = Super, T, exec, $terminal
-    # For some reason the default config configures Super+Q to launch a
-    # terminal... Make sure we're consistent with it.
-    bind = Super, Q, exec, $terminal
-
-    # Configure Swedish keyboard layout.
-    input {
-      kb_layout = se
+    hl.monitor{
+      output   = "",
+      mode     = "1920x1080@60",
+      position = "auto",
+      scale    = "1",
+    }
+    hl.monitor{
+      output   = "HDMI-A-1",
+      mode     = "1920x1080@60",
+      position = "auto",
+      scale    = 1,
     }
 
-    cursor {
-      inactive_timeout = 5
-    }
+    hl.workspace_rule{ workspace = "1", monitor = "HDMI-A-1" }
 
-    # Use orange Catppuccin unicat wallpaper. :)
-    # It is MIT licensed, so it should be fine.
-    exec-once = ${pkgs.swaybg}/bin/swaybg --mode fill --image ${
-      pkgs.fetchurl {
-        url = "https://github.com/VipinVIP/wallpapers/blob/283af350981b2335f50239096927fd6cf553a82d/minimalistic/peach_unicat.png?raw=true";
-        name = "peach_unicat.png";
-        hash = "sha256-p00U9t32Zy7Dfa4HOJz3MX7wyd4Fk96YrVrvpiGiCPY=";
-      }
+    hl.on("hyprland.start", function()
+      -- Use orange Catppuccin unicat wallpaper. :)
+      -- It is MIT licensed, so it should be fine.
+      hl.exec_cmd("${pkgs.swaybg}/bin/swaybg --mode fill --image ${
+        pkgs.fetchurl {
+          url = "https://github.com/VipinVIP/wallpapers/blob/283af350981b2335f50239096927fd6cf553a82d/minimalistic/peach_unicat.png?raw=true";
+          name = "peach_unicat.png";
+          hash = "sha256-p00U9t32Zy7Dfa4HOJz3MX7wyd4Fk96YrVrvpiGiCPY=";
+        }
+      }")
+
+      -- Launch METAclock
+      hl.exec_cmd("${pkgs.firefox}/bin/firefox --kiosk https://sl.datasektionen.se/tv", { workspace = "1 silent" })
+    end)
+
+    local terminal = "${pkgs.alacritty}/bin/alacritty"
+
+    hl.bind("SUPER + T", hl.dsp.exec_cmd(terminal))
+    -- For some reason the default config configures Super+Q to launch a
+    -- terminal... Make sure we're consistent with it.
+    hl.bind("SUPER + Q", hl.dsp.exec_cmd(terminal))
+
+    hl.config{
+      -- Configure Swedish keyboard layout.
+      input = {
+        kb_layout = "se"
+      },
+
+      -- Hide cursor when inactive
+      cursor = {
+        inactive_timeout = 5
+      },
     }
   '';
 
