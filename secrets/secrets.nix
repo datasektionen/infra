@@ -11,6 +11,7 @@ let
   ares = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOvT+r/mtIDTsTjccGXYpkA/3VQED9WHNU1NB9Hjh0Me";
   athena = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIN/vUc3wJARnek+VX5JeopG2Xf+uam1OCuG40toQ02r";
   meta-tv = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIK5P9VvJd1FP1SaGb1fAuqezlFVEUZH4FBhCaFfu/DzS";
+  jr = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGxrlq/Qt+Vbv5vd6KiPsFq4kTRA9JLZoZCI93fNuET3";
 
   nomadServers = [
     zeus
@@ -41,13 +42,20 @@ in
   # `AWS_DEFAULT_REGION`, `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `RESTIC_PASSWORD`
   "restic-s3-creds-ares.env.age".publicKeys = sysadmins ++ [ ares ];
 
-  "wireguard-preshared-key.age".publicKeys = sysadmins ++ [ zeus meta-tv ];
+  "wireguard-preshared-key.age".publicKeys = sysadmins ++ [
+    zeus
+    meta-tv
+    jr
+  ];
 
   # Public key: `BTpGRxLRjCYUiti/5A4uNvKYp0biNkA6PTV7Yck/NxM=`
   "wireguard-zeus-private-key.age".publicKeys = sysadmins ++ [ zeus ];
 
   # Public key: `HibcPcaxmPs1QKSh97r2/CpLId0IkEo94pwgFvg+lXs=`
   "wireguard-meta-tv-private-key.age".publicKeys = sysadmins ++ [ meta-tv ];
+
+  # Public key: `8kB8/xeT4jQCW301tWBInh8EbXN0Ls4q+PTlwBC4Lwg=`
+  "wireguard-jr-private-key.age".publicKeys = sysadmins ++ [ jr ];
 
   # { "auths": { "ghcr.io": { "auth": "$(echo $username:$password | base64)" } } }
   # Password is a personal access token (classic) with `read:packages`.
