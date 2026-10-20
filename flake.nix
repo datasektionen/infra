@@ -50,6 +50,7 @@
       systems = [
         "aarch64-linux"
         "x86_64-linux"
+        "aarch64-darwin"
       ];
       forAllSystems =
         f:
@@ -58,6 +59,7 @@
           f (
             import nixpkgs {
               inherit system;
+              config.allowUnfree = true;
             }
           )
         );
