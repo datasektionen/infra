@@ -50,6 +50,9 @@ in
       ];
       $wgOpenIDConnect_UseRealNameAsUserName = true;
 
+      $wgGroupPermissions['*']['edit'] = false;
+      $wgGroupPermissions['*']['createaccount'] = false;
+
       // $wgDebugToolbar = true;
     '';
     passwordSender = "d-sys@datasektionen.se";
